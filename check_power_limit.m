@@ -1,3 +1,4 @@
+%Checks for the converter's power limitations
 function pass = check_power_limit(Vac, Iac, rated_power)
     if abs(Vac * conj(Iac)) <= rated_power
         pass = 1;

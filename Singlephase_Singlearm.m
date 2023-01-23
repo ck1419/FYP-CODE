@@ -23,16 +23,18 @@ Xarm_PU = 0.1;
 R_PU = 0.1;
 
 %Converter Limits
-rated_current = 10e6;
-rated_voltage = 10e6;
+rated_voltage = 500e3;
+rated_current = 10e3;
 rated_power = 1000e6;
 
 
-%% PU CONVERSION
+%% PRE-ITERATION CALCULATIONS
 
+%Combines imaginary and real components
 Vgrid = Vgrid_RE + (Vgrid_IM * 1i);
 Sgrid = Pgrid + (Qgrid * 1i);
 
+%PU Conversion
 Z_PUBase = abs(Vgrid)^2 / abs(Sgrid);
 Xarm = Xarm_PU * Z_PUBase;
 R = R_PU * Z_PUBase;
@@ -98,6 +100,3 @@ f11_results_display(Vac, Iac, Vdc, Idc, phase_vac, phase_iac, phase_dif, Qcon)
 
 %AC Phasor Plot
 plot_AC(Vac, Iac)
-
-%DC Phasor Plot
-plot_DC(Vdc, Idc, Vhvdc)
