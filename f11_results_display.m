@@ -1,0 +1,13 @@
+function f11_results_display(Vac, Iac, Vdc, Idc, phase_vac, phase_iac, phase_dif, Qcon)
+    fprintf('\nFINAL ITERATION RESULTS: \n')
+    disp(['Vac = ' num2str(Vac)])
+    disp(['Iac = ' num2str(Iac)])
+    disp(['Vdc = ' num2str(Vdc)])
+    disp(['Idc = ' num2str(Idc)])
+    fprintf('\nCALCULATED RESULTS: \n')
+    disp(['Vac Phase = ' num2str(phase_vac) '°'])
+    disp(['Iac Phase = ' num2str(phase_iac) '°'])
+    disp(['Phase Difference = ' num2str(phase_dif) '°'])
+    disp(['Converter Reactive Power = ' num2str(Qcon)])
+    fprintf('\n')
+end
