@@ -1,14 +1,15 @@
 %Simple AC Phasor Plot
-function plot_AC(Vac, Iac)
+function plot_AC(Vac, Iac, msg)
     figure
     hold on
     grid on
     axis equal
-    quiver(0, 0, real(Vac)/1000, imag(Vac)/1000)
-    quiver(0, 0, real(Iac)/1000, imag(Iac)/1000)
-    xlabel('Real [kV and kA]')
-    ylabel('Imaginary [kV and kA]')
-    legend('Vac', 'Iac')
+    quiver(0, 0, real(Vac)/1e3, imag(Vac)/1e3)
+    quiver(0, 0, real(Iac), imag(Iac))
+    annotation('textbox', [.131 .131 .795 .795],'String',msg,'FitBoxToText','on');
+    xlabel('Real [kV and A]')
+    ylabel('Imaginary [kV and A]')
+    legend('Vac (kV)', 'Iac (A)')
     title('Single Arm AC Results')
 end
 

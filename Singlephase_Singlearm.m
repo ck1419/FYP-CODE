@@ -14,17 +14,17 @@ variable_count = 6;
 
 %Operating Points
 Pcon = 0;
-Pgrid = 400 * 1e6;
+Pgrid = 250 * 1e6;
 Qgrid = 100 * 1e6;
-Vgrid_RE = 300 * 1e3;
-Vgrid_IM = 50 * 1e3;
+Vgrid_RE = 400 * 1e3;
+Vgrid_IM = 100 * 1e3;
 Vhvdc = 150 * 1e3;
-Xarm_PU = 0.1;
-R_PU = 0.1;
+Xarm_PU = 0.15;
+R_PU = 0.15;
 
 %Converter Limits
-rated_voltage = 500e3;
-rated_current = 10e3;
+rated_voltage = 600e3;
+rated_current = 50e3;
 rated_power = 1000e6;
 
 
@@ -67,9 +67,9 @@ phase_vac = rad2deg( angle(Vac) );
 phase_iac = rad2deg( angle(Iac) );
 phase_dif = phase_vac - phase_iac;
 
-%Finds the reactive power consumed in the converter
+%Finds the reactive power in the converter
 Scon = (Vac * conj(Iac)) + (Vdc * Idc);
-Qcon = Pcon - Scon;
+Qcon = Scon - Pcon;
 
 
 %% RESULTS
@@ -98,5 +98,14 @@ f11_results_display(Vac, Iac, Vdc, Idc, phase_vac, phase_iac, phase_dif, Qcon)
 
 %% PLOTS
 
+msg_Pcon = ['Pcon = ' num2str(Pcon, '%.2e')];
+msg_Sgrid = ['Sgrid = ' num2str(Sgrid, '%.2e')];
+msg_Vgrid = ['Vgrid = ' num2str(Vgrid, '%.2e')];
+msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc, '%.2e')];
+msg_XarmPU = ['Xarm PU = ' num2str(Xarm_PU, '%.2e')];
+msg_RPU = ['R PU = ' num2str(R_PU, '%.2e')];
+
+msg = {msg_Pcon msg_Sgrid msg_Vgrid msg_Vhvdc msg_XarmPU msg_RPU};
+
 %AC Phasor Plot
-plot_AC(Vac, Iac)
+plot_AC(Vac, Iac, msg)
