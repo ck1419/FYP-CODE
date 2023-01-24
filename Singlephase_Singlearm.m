@@ -102,8 +102,8 @@ msg_Pcon = ['Pcon = ' num2str(Pcon, '%.2e')];
 msg_Sgrid = ['Sgrid = ' num2str(Sgrid, '%.2e')];
 msg_Vgrid = ['Vgrid = ' num2str(Vgrid, '%.2e')];
 msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc, '%.2e')];
-msg_XarmPU = ['Xarm PU = ' num2str(Xarm_PU, '%.2e')];
-msg_RPU = ['R PU = ' num2str(R_PU, '%.2e')];
+msg_XarmPU = ['Xarm PU = ' num2str(Xarm_PU)];
+msg_RPU = ['R PU = ' num2str(R_PU)];
 
 msg = {msg_Pcon msg_Sgrid msg_Vgrid msg_Vhvdc msg_XarmPU msg_RPU};
 
