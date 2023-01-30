@@ -14,18 +14,18 @@ variable_count = 6;
 
 %Operating Points
 Pcon = 0;
-Pgrid = 250 * 1e6;
+Pgrid = 640 * 1e6;
 Qgrid = 100 * 1e6;
-Vgrid_RE = 400 * 1e3;
-Vgrid_IM = 100 * 1e3;
-Vhvdc = 150 * 1e3;
-Xarm_PU = 0.15;
-R_PU = 0.15;
+Vgrid_RE = 525 * 1e3;
+Vgrid_IM = 250 * 1e3;
+Vhvdc = 200 * 1e3;
+Xarm_PU = 0.1;
+R_PU = 0.0015;
 
 %Converter Limits
 rated_voltage = 600e3;
-rated_current = 50e3;
-rated_power = 1000e6;
+rated_current = 100e3;
+rated_power = 2000e6;
 
 
 %% PRE-ITERATION CALCULATIONS
