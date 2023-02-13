@@ -12,7 +12,7 @@ function out = f12_delta(in, R, Xl, Xarm, vhvdc, vgrid, pconu, pconl, pgrid, idc
     eqn(7) = -idcac + idcac_ref;
     eqn(8) = -reiacdc + reiacdc_ref;
     eqn(9) =  -imiacdc + imiacdc_ref;
-    eqn(10) = (real(vgrid) * reiacac) + (imag(vgrid) * imiacdc) + (vdcdif * idcac) - pgrid;
+    eqn(10) = (real(vgrid) * reiacac) + (imag(vgrid) * imiacac) + (vdcdif * idcac) - pgrid;
     eqn(11) = (vdcsum/4 * (2*idcdc + idcac)) - (revacdif * reiacac/2) + (imvacdif * imiacac/2) - (revacsum * reiacdc) + (imvacdif * imiacdc) - pconu;
     eqn(12) = (vdcsum/4 * (2*idcdc - idcac)) - (revacdif * reiacac/2) + (imvacdif * imiacac/2) + (revacsum * reiacdc) - (imvacdif * imiacdc) - pconl;
 

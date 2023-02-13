@@ -8,7 +8,7 @@ close all
 %% INITIAL VARIABLES
 
 %Settings for Newton-Rhapson
-iterations = 25;
+iterations = 100;
 tolerance = 0.01;   %Used to check results
 variable_count = 12;
 
@@ -45,3 +45,4 @@ for n = 2:iterations
     x(:,n) = x(:,n-1) - (f12_delta_value^-1 * f12_value);
 end
 
+Qgrid = imag(Vgrid)*x(7, iterations) - real(Vgrid)*x(8, iterations);

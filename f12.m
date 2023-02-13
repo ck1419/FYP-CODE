@@ -23,7 +23,7 @@ function out = f12(in, R, Xl, Xarm, vhvdc, vgrid, pconu, pconl, pgrid, idcac_ref
     out(7) = -idcac + idcac_ref;
     out(8) = -reiacdc + reiacdc_ref;
     out(9) =  -imiacdc + imiacdc_ref;
-    out(10) = (real(vgrid) * reiacac) + (imag(vgrid) * imiacdc) + (vdcdif * idcac) - pgrid;
+    out(10) = (real(vgrid) * reiacac) + (imag(vgrid) * imiacac) + (vdcdif * idcac) - pgrid;
     out(11) = (vdcsum/4 * (2*idcdc + idcac)) - (revacdif * reiacac/2) + (imvacdif * imiacac/2) - (revacsum * reiacdc) + (imvacdif * imiacdc) - pconu;
     out(12) = (vdcsum/4 * (2*idcdc - idcac)) - (revacdif * reiacac/2) + (imvacdif * imiacac/2) + (revacsum * reiacdc) - (imvacdif * imiacdc) - pconl;
 end
