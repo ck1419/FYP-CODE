@@ -8,7 +8,7 @@ close all
 %% INITIAL VARIABLES
 
 %Settings for Newton-Rhapson
-iterations = 100;
+iterations = 25;
 tolerance = 0.01;   %Used to check results
 variable_count = 12;
 
@@ -23,6 +23,9 @@ Vhvdc = 200 * 1e3;
 Xarm = 2;
 Xl = 2;
 R = 2;
+
+idcac_ref = 1e-3;
+reiacdc_ref = 1e-3;
 
 
 %% PRE-ITERATION CALCULATIONS
@@ -40,8 +43,8 @@ x(:,1) = ones(variable_count,1) * 100;
 
 %Loop to execute Newton-Raphson
 for n = 2:iterations
-    f12_value = f12(x(:,n-1), R, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Pgrid, 1, 1, 1);
-    f12_delta_value = f12_delta(x(:,n-1), R, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Pgrid, 1, 1, 1);
+    f12_value = f12(x(:,n-1), R, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcac_ref, reiacdc_ref);
+    f12_delta_value = f12_delta(x(:,n-1), R, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcac_ref, reiacdc_ref);
     x(:,n) = x(:,n-1) - (f12_delta_value^-1 * f12_value);
 end
 
