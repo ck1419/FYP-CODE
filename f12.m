@@ -1,4 +1,4 @@
-function out = f12(in, R, Xl, vhvdc, vgrid, pconu, pconl)
+function out = f12(in, R, Xl, Xarm, vhvdc, vgrid, pconu, pconl, pgrid)
     vdcsum = in(1);
     vdcdif = in(2);
     revacsum = in(3);
@@ -17,13 +17,13 @@ function out = f12(in, R, Xl, vhvdc, vgrid, pconu, pconl)
     out(1) = vdcsum + (idcdc * R) - vhvdc;  %REAL
     out(2) = (idcac * Xl) - vdcdif;         %IMAG
     out(3) = (2 * Xarm * imiacdc) - revacsum;       %REAL
-    out(4) = (-2 * Xarmm * reiacdc) - imvacsum;     %IMAG
+    out(4) = (-2 * Xarm * reiacdc) - imvacsum;     %IMAG
     out(5) = revacdif + (imiacac * (Xl + Xarm/2)) - real(vgrid);    %REAL
     out(6) = imvacdif - (reiacac * (Xl + Xarm/2)) - imag(vgrid);    %IMAG
     out(7) = -idcac;
     out(8) = -reiacdc;
     out(9) =  -imiacdc;
-    out(10) = (real(vgrid) * reiacac) + (imag(vgrid) * imacdc) + (vdcdif * idcac);
+    out(10) = (real(vgrid) * reiacac) + (imag(vgrid) * imiacdc) + (vdcdif * idcac) - pgrid;
     out(11) = (vdcsum/4 * (2*idcdc + idcac)) - (revacdif * reiacac/2) + (imvacdif * imiacac/2) - (revacsum * reiacdc) + (imvacdif * imiacdc) - pconu;
     out(12) = (vdcsum/4 * (2*idcdc - idcac)) - (revacdif * reiacac/2) + (imvacdif * imiacac/2) + (revacsum * reiacdc) - (imvacdif * imiacdc) - pconl;
 end

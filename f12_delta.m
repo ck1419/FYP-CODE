@@ -3,17 +3,6 @@ function out = f12_delta(in, R, Xl, Xarm, vhvdc, vgrid, pconu, pconl, pgrid)
     syms vdcsum vdcdif revacsum imvacsum revacdif imvacdif reiacac imiacac reiacdc imiacdc idcac idcdc
     state_variables = [vdcsum vdcdif revacsum imvacsum revacdif imvacdif reiacac imiacac reiacdc imiacdc idcac idcdc];
 
-    in = ones(1,12);
-
-    R = 5;
-    Xl = 5;
-    Xarm = 5;
-    vhvdc = 5;
-    vgrid = 5 + 5i;
-    pconu = 5;
-    pconl = 5;
-    pgrid = 5;
-
     eqn(1) = vdcsum + (idcdc * R) - vhvdc;  %REAL
     eqn(2) = (idcac * Xl) - vdcdif;         %IMAG
     eqn(3) = (2 * Xarm * imiacdc) - revacsum;       %REAL
@@ -28,6 +17,7 @@ function out = f12_delta(in, R, Xl, Xarm, vhvdc, vgrid, pconu, pconl, pgrid)
     eqn(12) = (vdcsum/4 * (2*idcdc - idcac)) - (revacdif * reiacac/2) + (imvacdif * imiacac/2) + (revacsum * reiacdc) - (imvacdif * imiacdc) - pconl;
 
     temp = jacobian(eqn, state_variables);
-    out = subs(temp, state_variables, in);
+    out = subs(temp, state_variables, transpose(in));
+    out = double(out);
 
 end
