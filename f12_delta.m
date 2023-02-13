@@ -1,0 +1,33 @@
+function out = f12_delta(in, R, Xl, Xarm, vhvdc, vgrid, pconu, pconl, pgrid)
+
+    syms vdcsum vdcdif revacsum imvacsum revacdif imvacdif reiacac imiacac reiacdc imiacdc idcac idcdc
+    state_variables = [vdcsum vdcdif revacsum imvacsum revacdif imvacdif reiacac imiacac reiacdc imiacdc idcac idcdc];
+
+    in = ones(1,12);
+
+    R = 5;
+    Xl = 5;
+    Xarm = 5;
+    vhvdc = 5;
+    vgrid = 5 + 5i;
+    pconu = 5;
+    pconl = 5;
+    pgrid = 5;
+
+    eqn(1) = vdcsum + (idcdc * R) - vhvdc;  %REAL
+    eqn(2) = (idcac * Xl) - vdcdif;         %IMAG
+    eqn(3) = (2 * Xarm * imiacdc) - revacsum;       %REAL
+    eqn(4) = (-2 * Xarm * reiacdc) - imvacsum;     %IMAG
+    eqn(5) = revacdif + (imiacac * (Xl + Xarm/2)) - real(vgrid);    %REAL
+    eqn(6) = imvacdif - (reiacac * (Xl + Xarm/2)) - imag(vgrid);    %IMAG
+    eqn(7) = -idcac;
+    eqn(8) = -reiacdc;
+    eqn(9) =  -imiacdc;
+    eqn(10) = (real(vgrid) * reiacac) + (imag(vgrid) * imiacdc) + (vdcdif * idcac) - pgrid;
+    eqn(11) = (vdcsum/4 * (2*idcdc + idcac)) - (revacdif * reiacac/2) + (imvacdif * imiacac/2) - (revacsum * reiacdc) + (imvacdif * imiacdc) - pconu;
+    eqn(12) = (vdcsum/4 * (2*idcdc - idcac)) - (revacdif * reiacac/2) + (imvacdif * imiacac/2) + (revacsum * reiacdc) - (imvacdif * imiacdc) - pconl;
+
+    temp = jacobian(eqn, state_variables);
+    out = subs(temp, state_variables, in);
+
+end
