@@ -20,9 +20,9 @@ Qgrid = 100 * 1e6;
 Vgrid_RE = 400 * 1e3;
 Vgrid_IM = 100 * 1e3;
 Vhvdc = 200 * 1e3;
-Xarm = 2;
-Xl = 2;
-R = 2;
+Xarm_PU = 0.2;
+Xl_PU = 0.15;
+R_PU = 0.05;
 
 idcac_ref = 1e-3;
 reiacdc_ref = 1e-3;
@@ -33,6 +33,12 @@ reiacdc_ref = 1e-3;
 %Combines imaginary and real components
 Vgrid = Vgrid_RE + (Vgrid_IM * 1i);
 Sgrid = Pgrid + (Qgrid * 1i);
+
+%PU Conversion
+Z_PU = abs(Vgrid)^2 / abs(Sgrid);
+Xl = Xl_PU * Z_PU;
+Xarm = Xarm_PU * Z_PU;
+R = R_PU * Z_PU;
 
 
 %% NEWTON-RHAPSON CALCULATION
@@ -57,15 +63,13 @@ for n = 2:iterations
     end
 end
 
-Qgrid = imag(Vgrid)*x(7, iterations) - real(Vgrid)*x(8, iterations);
-
 
 %% SEPARATE VARIABLES
 
-%Rounds any magnitude less than 0.01 to the closest integer
-%Helps to clean up values infinitely close to 0
+%Rounds any magnitude less than 0.5 to the closest integer
+%Helps to clean up values that hasnt converged properly yet
 for n = 1:variable_count
-    if abs(final(n)) <= 0.01
+    if abs(final(n)) <= 0.5
         final(n) = round(final(n));
     end
 end
@@ -89,15 +93,28 @@ iacac = reiacac + (imiacac * 1i);
 iacdc = reiacdc + (imiacdc * 1i);
 
 
+%% CALCULATE VARIABLES
+
+Qconu = imag( (vdcsum/2) * (idcdc + idcac/2) - (vacdif*conj(iacac)/2) - (vacsum*conj(iacdc)/2) );
+Qconl = imag( (vdcsum/2) * (idcdc - idcac/2) - (vacdif*conj(iacac)/2) + (vacsum*conj(iacdc)/2) );
+
+
 %% DISPLAY OUTPUTS
 
 fprintf(['ITERATIONS = ' num2str(iterated) '\n\n'])
 
 disp(['VDC SUM = ' num2str(vdcsum, '%3.3e')])
-disp(['VDC DIF = ' num2str(vdcdif, '%3.3e')])
-disp(['VAC SUM = ' num2str(real(vacsum), '%3.3e') disp_sign(vacsum) num2str(abs(imag(vacsum)), '%3.3e') 'i'])
 disp(['VAC DIF = ' num2str(real(vacdif), '%3.3e') disp_sign(vacdif) num2str(abs(imag(vacdif)), '%3.3e') 'i'])
 disp(['IAC AC = ' num2str(real(iacac), '%3.3e') disp_sign(iacac) num2str(abs(imag(iacac)), '%3.3e') 'i'])
+disp(['IDC DC = ' num2str(idcdc, '%3.3e')])
+
+disp(['VAC SUM = ' num2str(real(vacsum), '%3.3e') disp_sign(vacsum) num2str(abs(imag(vacsum)), '%3.3e') 'i'])
+disp(['VDC DIF = ' num2str(vdcdif, '%3.3e')])
 disp(['IAC DC = ' num2str(real(iacdc), '%3.3e') disp_sign(iacdc) num2str(abs(imag(iacdc)), '%3.3e') 'i'])
 disp(['IDC AC = ' num2str(idcac, '%3.3e')])
-disp(['IDC DC = ' num2str(idcdc, '%3.3e')])
+
+fprintf('\nCALCULATED VALUES: \n')
+disp(['QCON U = ' num2str(Qconu, '%3.3e') 'i'])
+disp(['QCON L = ' num2str(Qconl, '%3.3e') 'i'])
+
+plot_AC(vacdif, iacac, 'AC Grid Values', 'temp')

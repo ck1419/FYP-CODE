@@ -1,5 +1,5 @@
 %Simple AC Phasor Plot
-function plot_AC(Vac, Iac, msg)
+function plot_AC(Vac, Iac, heading, msg)
     figure
     hold on
     grid on
@@ -10,7 +10,7 @@ function plot_AC(Vac, Iac, msg)
     xlabel('Real')
     ylabel('Imaginary')
     legend('Vac/100 (V)', 'Iac (A)')
-    title('Single Arm AC Results')
+    title(heading)
 end
 
 
