@@ -22,8 +22,8 @@ Xarm_PU = 0.2;
 Xl_PU = 0.15;
 R_PU = 0.05;
 
-voltage_lim = 8*1e5;
-current_lim = 10*1e3;
+voltage_lim = 800*1e3;
+current_lim = 5*1e3;
 
 idcac_ref = 1*1e-3;
 reiacdc_ref = 1*1e-3;
@@ -47,7 +47,7 @@ for angle_loop = 0:71
     angle = angle_loop * 5;
     magnitude = 500 * 1e6;
 
-    for change_loop = 10:20
+    for change_loop = linspace(1,30,20)
         change = change_loop / 10;
         Pgrid = magnitude * cosd(angle) * change;
         Qgrid = magnitude * sind(angle) * change;
@@ -105,14 +105,14 @@ for angle_loop = 0:71
         if check_voltage_limit(vacdif, vdcsum, voltage_lim) == 0 %FAILED CHECK
             failed_voltage_angle = [failed_voltage_angle, angle];
             failed_voltage_magnitude = [failed_voltage_magnitude, magnitude*change];
-            disp([num2str(angle) ': VOLTAGE LIMIT'])
+            disp([num2str(angle) ', ' num2str(change) ': VOLTAGE LIMIT'])
             break
         elseif check_current_limit(iacac, idcdc, current_lim) == 0 %FAILED CHECK
             failed_current_angle = [failed_current_angle, angle];
             failed_current_magnitude = [failed_current_magnitude, magnitude*change];
-            disp([num2str(angle) ': CURRENT LIMIT'])
+            disp([num2str(angle) ', ' num2str(change) ': CURRENT LIMIT'])
             break
-        elseif change_loop == 20
+        elseif change_loop == 30
             failed_max = [failed_max, angle];
             disp([num2str(angle) ': MAXED'])
         end
@@ -131,15 +131,15 @@ failed_voltage_q = failed_voltage_magnitude .* sind(failed_voltage_angle);
 failed_max_p = 500*1e6*2 * cosd(failed_max);
 failed_max_q = 500*1e6*2 * sind(failed_max);
 
-max_magnitude = 500 * 1e6 * 2;
+max_magnitude = 500 * 1e6 * 3;
 
 figure
 hold on
 grid on
 axis equal
-plot(failed_current_p, failed_current_q)
-plot(failed_voltage_p, failed_voltage_q)
-plot(failed_max_p, failed_max_q)
+plot(failed_current_p, failed_current_q, 'x')
+plot(failed_voltage_p, failed_voltage_q, 'x')
+plot(failed_max_p, failed_max_q, 'x')
 xlim([-max_magnitude, max_magnitude])
 ylim([-max_magnitude, max_magnitude])
 legend('Current Limit', 'Voltage Limit', 'Max Iterations')
