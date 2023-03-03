@@ -95,8 +95,8 @@ iacdc = reiacdc + (imiacdc * 1i);
 
 %% CALCULATE VARIABLES
 
-Qconu = imag( ((vdcsum/2) * (idcdc + idcac/2)) - (vacdif*conj(iacac)/2) - (vacsum*conj(iacdc)/2) );
-Qconl = imag( ((vdcsum/2) * (idcdc + idcac/2)) - (vacdif*conj(iacac)/2) + (vacsum*conj(iacdc)/2) );
+Qconu = imag( ((vdcsum/2) * (idcdc + idcac/2)) - (vacdif*conj(iacac)/2) - (vacsum*conj(iacdc)) );
+Qconl = imag( ((vdcsum/2) * (idcdc + idcac/2)) - (vacdif*conj(iacac)/2) + (vacsum*conj(iacdc)) );
 
 
 %% DISPLAY OUTPUTS
