@@ -29,6 +29,13 @@ idcac_ref = 1*1e-3;
 reiacdc_ref = 1*1e-3;
 
 
+%% SWEEP SETTINGS
+
+angle_size = 20;
+
+exponent_mat = linspace(0,2.5,10);
+magnitude_coefficient = 10 .^ exponent_mat - 0.9;
+
 
 %% NEWTON-RHAPSON SWEEP
 
@@ -42,12 +49,13 @@ failed_current_angle = [];
 failed_current_magnitude = [];
 failed_max = [];
 
+
 %Loop to change operating conditions
-for angle_loop = 0:71
-    angle = angle_loop * 5;
+for angle_loop = 0:(360/angle_size)-1
+    angle = angle_loop * angle_size;
     magnitude = 500 * 1e6;
 
-    for change_loop = linspace(1,30,20)
+    for change_loop = magnitude_coefficient
         change = change_loop / 10;
         Pgrid = magnitude * cosd(angle) * change;
         Qgrid = magnitude * sind(angle) * change;
@@ -112,7 +120,7 @@ for angle_loop = 0:71
             failed_current_magnitude = [failed_current_magnitude, magnitude*change];
             disp([num2str(angle) ', ' num2str(change) ': CURRENT LIMIT'])
             break
-        elseif change_loop == 30
+        elseif change_loop == magnitude_coefficient(end)
             failed_max = [failed_max, angle];
             disp([num2str(angle) ': MAXED'])
         end
