@@ -1,14 +1,14 @@
-function out = f12_delta(in, R, Xl, Xarm, vhvdc, vgrid, pconu, pconl, sgrid, idcac_ref, reiacdc_ref)
+function out = f12_delta(in, R, Rl, Xl, Xarm, vhvdc, vgrid, pconu, pconl, sgrid, idcac_ref, reiacdc_ref)
 
     syms vdcsum vdcdif revacsum imvacsum revacdif imvacdif reiacac imiacac reiacdc imiacdc idcac idcdc
     state_variables = [vdcsum vdcdif revacsum imvacsum revacdif imvacdif reiacac imiacac reiacdc imiacdc idcac idcdc];
 
     eqn(1) = vdcsum + (idcdc * R) - vhvdc;  %REAL
-    eqn(2) = (idcac * Xl) - vdcdif;         %IMAG
+    eqn(2) = (idcac * Rl) - vdcdif;         %IMAG
     eqn(3) = (2 * Xarm * imiacdc) - revacsum;       %REAL
     eqn(4) = (-2 * Xarm * reiacdc) - imvacsum;      %IMAG
-    eqn(5) = revacdif + (imiacac * (Xl + Xarm/2)) - real(vgrid);    %REAL
-    eqn(6) = imvacdif - (reiacac * (Xl + Xarm/2)) - imag(vgrid);    %IMAG
+    eqn(5) = revacdif + (imiacac * (Xl + Xarm/2)) - (reiacac*Rl) - real(vgrid);    %REAL
+    eqn(6) = imvacdif - (reiacac * (Xl + Xarm/2)) - (imiacac*Rl) - imag(vgrid);    %IMAG
     eqn(7) = -idcac + idcac_ref;
     eqn(8) = -reiacdc + reiacdc_ref;
     eqn(9) = (real(vgrid) * reiacac) + (imag(vgrid) * imiacac) + (vdcdif * idcac) - real(sgrid);

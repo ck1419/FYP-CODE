@@ -15,14 +15,15 @@ variable_count = 12;
 %Operating Points
 Pconu = 0;
 Pconl = 0;
-Pgrid = 500 * 1e6;
-Qgrid = 100 * 1e6;
+Pgrid = 400 * 1e6;
+Qgrid = 200 * 1e6;
 Vgrid_RE = 400 * 1e3;
 Vgrid_IM = 100 * 1e3;
 Vhvdc = 200 * 1e3;
 Xarm_PU = 0.2;
-Xl_PU = 0.15;
+Xl_PU = 0.4;
 R_PU = 0.05;
+Rl_PU = 0.1;
 
 idcac_ref = 1e-3;
 reiacdc_ref = 1e-3;
@@ -39,6 +40,7 @@ Z_PU = abs(Vgrid)^2 / abs(Sgrid);
 Xl = Xl_PU * Z_PU;
 Xarm = Xarm_PU * Z_PU;
 R = R_PU * Z_PU;
+Rl = Rl_PU * Z_PU;
 
 
 %% NEWTON-RHAPSON CALCULATION
@@ -49,8 +51,8 @@ x(:,1) = ones(variable_count,1) * 100;
 
 %Loop to execute Newton-Raphson
 for n = 2:iterations
-    f12_value = f12(x(:,n-1), R, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcac_ref, reiacdc_ref);
-    f12_delta_value = f12_delta(x(:,n-1), R, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcac_ref, reiacdc_ref);
+    f12_value = f12(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcac_ref, reiacdc_ref);
+    f12_delta_value = f12_delta(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcac_ref, reiacdc_ref);
     x(:,n) = x(:,n-1) - (f12_delta_value^-1 * f12_value);
     if (abs(f12_value)) <= tolerance
         final = x(:,n);
@@ -98,6 +100,10 @@ iacdc = reiacdc + (imiacdc * 1i);
 Qconu = imag( ((vdcsum/2) * (idcdc + idcac/2)) - (vacdif*conj(iacac)/2) - (vacsum*conj(iacdc)) );
 Qconl = imag( ((vdcsum/2) * (idcdc + idcac/2)) - (vacdif*conj(iacac)/2) + (vacsum*conj(iacdc)) );
 
+Qarmu = imag(((iacac/2)^2 + idcdc^2) * Xarm * 1i);
+Qarml = imag(((iacac/2)^2 - idcdc^2) * Xarm * 1i);
+Ql = imag(iacac^2 * Xl * 1i);
+
 
 %% DISPLAY OUTPUTS
 
@@ -116,5 +122,8 @@ disp(['IDC AC = ' num2str(idcac, '%3.3e')])
 fprintf('\nCALCULATED VALUES: \n')
 disp(['QCON U = ' num2str(Qconu, '%3.3e') 'i'])
 disp(['QCON L = ' num2str(Qconl, '%3.3e') 'i'])
+disp(['QARM U = ' num2str(Qarmu, '%3.3e') 'i'])
+disp(['QARM L = ' num2str(Qarml, '%3.3e') 'i'])
+disp(['QL = ' num2str(Ql, '%3.3e') 'i'])
 
 plot_AC(vacdif, iacac, 'AC Grid Values', 'temp')
