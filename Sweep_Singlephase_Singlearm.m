@@ -21,14 +21,15 @@ Vgrid_IM = 100 * 1e3;
 Vhvdc = 200 * 1e3;
 Xarm_PU = 0.15;
 R_PU = 0.01;
+Rarm_PU = 0.05;
 
 %Converter Limits
-voltage_lim = 800e3;
+voltage_lim = 1200e3;
 current_lim = 2000;
 
 %% SWEEP SETTINGS
 
-angle_size = 15;
+angle_size = 10;
 
 exponent_mat = linspace(0.6,1.35,30);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
@@ -65,12 +66,13 @@ for angle_loop = 0:(360/angle_size)-1
         Z_PUBase = abs(Vgrid)^2 / abs(Sgrid);
         Xarm = Xarm_PU * Z_PUBase;
         R = R_PU * Z_PUBase;
+        Rarm = Rarm_PU * Z_PUBase;
 
 
         %Loop to execute Newton-Raphson
         for n = 2:iterations
-            f11_value = f11(x(:,n-1), Pcon, Xarm, R, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
-            f11_delta_value = f11_delta(x(:,n-1), Pcon, Xarm, R, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
+            f11_value = f11(x(:,n-1), Pcon, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
+            f11_delta_value = f11_delta(x(:,n-1), Pcon, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
             x(:,n) = x(:,n-1) - (f11_delta_value^-1 * f11_value);
             if (abs(f11_value)) <= tolerance
                 final = x(:,n);

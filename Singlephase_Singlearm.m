@@ -21,6 +21,7 @@ Vgrid_IM = 100 * 1e3;
 Vhvdc = 200 * 1e3;
 Xarm_PU = 0.15;
 R_PU = 0.01;
+Rarm_PU = 0.05;
 
 %Converter Limits
 rated_voltage = 600e3;
@@ -38,6 +39,7 @@ Sgrid = Pgrid + (Qgrid * 1i);
 Z_PUBase = abs(Vgrid)^2 / abs(Sgrid);
 Xarm = Xarm_PU * Z_PUBase;
 R = R_PU * Z_PUBase;
+Rarm = Rarm_PU * Z_PUBase;
 
 
 %% NEWTON-RHAPSON CALCULATION
@@ -48,8 +50,8 @@ x(:,1) = ones(variable_count,1) * 100;
 
 %Loop to execute Newton-Raphson
 for n = 2:iterations
-    f11_value = f11(x(:,n-1), Pcon, Xarm, R, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
-    f11_delta_value = f11_delta(x(:,n-1), Pcon, Xarm, R, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
+    f11_value = f11(x(:,n-1), Pcon, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
+    f11_delta_value = f11_delta(x(:,n-1), Pcon, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
     x(:,n) = x(:,n-1) - (f11_delta_value^-1 * f11_value);
 end
 
@@ -74,24 +76,6 @@ Qcon = Scon - Pcon;
 
 %% RESULTS
 
-fprintf('CALCULATION CHECK: \n')
-
-%Check for f(x) = 0
-pass_eqn = f11_eqn_check(x(:,iterations), Pcon, Xarm, R, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid, tolerance);
-%Check for no imaginary components of each variable
-pass_im = check_im(x(:,iterations));
-%Check for power flow direction
-pass_flow = check_powerflow(Vdc, Idc);
-
-fprintf('\nCONVERTER PHYSICAL LIMITS CHECK: \n')
-
-%Voltage limit check
-pass_voltage_lim = check_voltage_limit(Vac,Vdc,rated_voltage);
-%Current limit check
-pass_current_lim = check_current_limit(Iac,Idc,rated_current);
-%Power limit check
-pass_power_lim = check_power_limit(Vgrid,Iac,rated_power);
-
 %Displays results
 f11_results_display(Vac, Iac, Vdc, Idc, phase_vac, phase_iac, phase_dif, Qcon)
 
@@ -108,4 +92,4 @@ msg_RPU = ['R PU = ' num2str(R_PU)];
 msg = {msg_Pcon msg_Sgrid msg_Vgrid msg_Vhvdc msg_XarmPU msg_RPU};
 
 %AC Phasor Plot
-% plot_AC(Vac, Iac, msg)
+plot_AC(Vac, Iac, 'Single Phase Single Arm', msg)
