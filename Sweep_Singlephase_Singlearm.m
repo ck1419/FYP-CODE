@@ -18,22 +18,26 @@ Pgrid = 500 * 1e6;
 Qgrid = 100 * 1e6;
 Vgrid_RE = 400 * 1e3;
 Vgrid_IM = 100 * 1e3;
-Vhvdc = 200 * 1e3;
-Xarm_PU = 0.15;
-R_PU = 0.01;
-Rarm_PU = 0.05;
+Vhvdc = 600 * 1e3;
+Xarm_PU = 0.2;
+R_PU = 0.05;
+Rarm_PU = 0.1;
 
 %Converter Limits
-voltage_lim = 1200e3;
-current_lim = 2000;
+voltage_lim = 1300e3;
+current_lim = 1500;
 
 %% SWEEP SETTINGS
 
-angle_size = 10;
+angle_size = 5;
 
-exponent_mat = linspace(0.6,1.35,30);
+exponent_mat = linspace(0.75,1.5,30);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
 
+%For runs where Rarm and Xarm needs to remain the same
+Xarm = 100;
+Rarm = 50;
+R = 25;
 
 %% NEWTON-RHAPSON SWEEP
 
@@ -62,11 +66,11 @@ for angle_loop = 0:(360/angle_size)-1
         Vgrid = Vgrid_RE + (Vgrid_IM * 1i);
         Sgrid = Pgrid + (Qgrid * 1i);
         
-        %PU Conversion
-        Z_PUBase = abs(Vgrid)^2 / abs(Sgrid);
-        Xarm = Xarm_PU * Z_PUBase;
-        R = R_PU * Z_PUBase;
-        Rarm = Rarm_PU * Z_PUBase;
+%         %PU Conversion
+%         Z_PUBase = abs(Vgrid)^2 / abs(Sgrid);
+%         Xarm = Xarm_PU * Z_PUBase;
+%         R = R_PU * Z_PUBase;
+%         Rarm = Rarm_PU * Z_PUBase;
 
 
         %Loop to execute Newton-Raphson
@@ -137,13 +141,14 @@ figure
 hold on
 grid on
 axis equal
-plot(failed_current_p, failed_current_q)
-plot(failed_voltage_p, failed_voltage_q)
+plot(failed_current_p, failed_current_q, 'x')
+plot(failed_voltage_p, failed_voltage_q, 'x')
 plot(failed_max_p, failed_max_q, 'x')
 xlabel('Pgrid')
 ylabel('Qgrid')
 % xlim([-max_magnitude, max_magnitude])
 % ylim([-max_magnitude, max_magnitude])
+title('Single-Phase Single-Arm')
 legend('Current Limit', 'Voltage Limit', 'Max Iterations')
 
 
