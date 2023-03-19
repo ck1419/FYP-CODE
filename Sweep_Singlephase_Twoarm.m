@@ -17,24 +17,24 @@ Pconu = 0;
 Pconl = 0;
 Vgrid_RE = 400 * 1e3;
 Vgrid_IM = 150 * 1e3;
-Vhvdc = 200 * 1e3;
+Vhvdc = 600 * 1e3;
 Xarm_PU = 0.2;
 Xl_PU = 0.4;
 R_PU = 0.05;
 Rl_PU = 0.1;
 
-voltage_lim = 1000*1e3;
+voltage_lim = 15000*1e3;
 current_lim = 1.5*1e3;
 
-idcac_ref = 1*1e-3;
-reiacdc_ref = 1*1e-3;
+idcdif_ref = 1*1e-3;
+reiacsum_ref = 1*1e-3;
 
 
 %% SWEEP SETTINGS
 
 angle_size = 10;
 
-exponent_mat = linspace(0.3,1.35,30);
+exponent_mat = linspace(0.5,1.6,30);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
 
 
@@ -74,8 +74,8 @@ for angle_loop = 0:(360/angle_size)-1
 
         %Loop to execute Newton-Raphson
         for n = 2:iterations
-            f12_value = f12(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcac_ref, reiacdc_ref);
-            f12_delta_value = f12_delta(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcac_ref, reiacdc_ref);
+            f12_value = f12(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref, reiacsum_ref);
+            f12_delta_value = f12_delta(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref, reiacsum_ref);
             x(:,n) = x(:,n-1) - (f12_delta_value^-1 * f12_value);
             if (abs(f12_value)) <= tolerance
                 final = x(:,n);
@@ -100,16 +100,16 @@ for angle_loop = 0:(360/angle_size)-1
         imvacsum = final(4);       % 0
         revacdif = final(5);       
         imvacdif = final(6);
-        reiacac = final(7);        %Iac of AC grid
-        imiacac = final(8);       
-        reiacdc = final(9);        %Iac of DC grid - 0
-        imiacdc = final(10);       % 0
-        idcac = final(11);         %Idc of AC grid - 0
-        idcdc = final(12);         %Idc of DC grid
+        reiacdif = final(7);        %Iac of AC grid
+        imiacdif = final(8);       
+        reiacsum = final(9);        %Iac of DC grid - 0
+        imiacsum = final(10);       % 0
+        idcdif = final(11);         %Idc of AC grid - 0
+        idcsum = final(12);         %Idc of DC grid
         vacsum = revacsum + (imvacsum * 1i);
         vacdif = revacdif + (imvacdif * 1i);
-        iacac = reiacac + (imiacac * 1i);
-        iacdc = reiacdc + (imiacdc * 1i);
+        iacdif = reiacdif + (imiacdif * 1i);
+        iacsum = reiacsum + (imiacsum * 1i);
 
         %Check for limits
         if check_voltage_limit(vacdif, vdcsum, voltage_lim) == 0 %FAILED CHECK
@@ -118,7 +118,7 @@ for angle_loop = 0:(360/angle_size)-1
             disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(change) ': VOLTAGE LIMIT'])
             data_collection(:,angle_loop+1) = final;
             break
-        elseif check_current_limit(iacac/2, idcdc, current_lim) == 0 %FAILED CHECK
+        elseif check_current_limit(iacdif/2, idcsum, current_lim) == 0 %FAILED CHECK
             failed_current_angle = [failed_current_angle, angle];
             failed_current_magnitude = [failed_current_magnitude, magnitude*change];
             disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(change) ': CURRENT LIMIT'])
@@ -157,6 +157,7 @@ xlabel('Pgrid')
 ylabel('Qgrid')
 % xlim([-max_magnitude, max_magnitude])
 % ylim([-max_magnitude, max_magnitude])
+title('Single-Phase Two-Arm')
 legend('Current Limit', 'Voltage Limit', 'Max Iterations')
 
 
@@ -168,16 +169,16 @@ revacsum = data_collection(3,:);       % 0
 imvacsum = data_collection(4,:);       % 0
 revacdif = data_collection(5,:);       
 imvacdif = data_collection(6,:);
-reiacac = data_collection(7,:);        %Iac of AC grid
-imiacac = data_collection(8,:);       
-reiacdc = data_collection(9,:);        %Iac of DC grid - 0
-imiacdc = data_collection(10,:);       % 0
-idcac = data_collection(11,:);         %Idc of AC grid - 0
-idcdc = data_collection(12,:);         %Idc of DC grid
+reiacdif = data_collection(7,:);        %Iac of AC grid
+imiacdif = data_collection(8,:);       
+reiacsum = data_collection(9,:);        %Iac of DC grid - 0
+imiacsum = data_collection(10,:);       % 0
+idcdif = data_collection(11,:);         %Idc of AC grid - 0
+idcsum = data_collection(12,:);         %Idc of DC grid
 vacsum = revacsum + (imvacsum * 1i);
 vacdif = revacdif + (imvacdif * 1i);
-iacac = reiacac + (imiacac * 1i);
-iacdc = reiacdc + (imiacdc * 1i);
+iacdif = reiacdif + (imiacdif * 1i);
+iacsum = reiacsum + (imiacsum * 1i);
 
 debug_voltage = abs(vacdif)*sqrt(2) + abs(vdcsum);
-debug_current = abs(iacac/2)*sqrt(2) + abs(idcdc);
+debug_current = abs(iacdif/2)*sqrt(2) + abs(idcsum);
