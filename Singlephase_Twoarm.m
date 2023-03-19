@@ -111,13 +111,13 @@ fprintf(['ITERATIONS = ' num2str(iterated) '\n\n'])
 
 disp(['VDC SUM = ' num2str(vdcsum, '%3.3e')])
 disp(['VAC DIF = ' num2str(real(vacdif), '%3.3e') disp_sign(vacdif) num2str(abs(imag(vacdif)), '%3.3e') 'i'])
-disp(['IAC AC = ' num2str(real(iacdif), '%3.3e') disp_sign(iacdif) num2str(abs(imag(iacdif)), '%3.3e') 'i'])
-disp(['IDC DC = ' num2str(idcsum, '%3.3e')])
+disp(['IDC SUM = ' num2str(idcsum, '%3.3e')])
+disp(['IAC DIF = ' num2str(real(iacdif), '%3.3e') disp_sign(iacdif) num2str(abs(imag(iacdif)), '%3.3e') 'i'])
 
 disp(['VAC SUM = ' num2str(real(vacsum), '%3.3e') disp_sign(vacsum) num2str(abs(imag(vacsum)), '%3.3e') 'i'])
 disp(['VDC DIF = ' num2str(vdcdif, '%3.3e')])
-disp(['IAC DC = ' num2str(real(iacsum), '%3.3e') disp_sign(iacsum) num2str(abs(imag(iacsum)), '%3.3e') 'i'])
-disp(['IDC AC = ' num2str(idcdif, '%3.3e')])
+disp(['IAC SUM = ' num2str(real(iacsum), '%3.3e') disp_sign(iacsum) num2str(abs(imag(iacsum)), '%3.3e') 'i'])
+disp(['IDC DIF = ' num2str(idcdif, '%3.3e')])
 
 fprintf('\nCALCULATED VALUES: \n')
 disp(['QCON U = ' num2str(Qconu, '%3.3e') 'i'])
