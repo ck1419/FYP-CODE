@@ -14,19 +14,20 @@ variable_count = 6;
 
 %Operating Points
 Pcon = 0;
-Pgrid = 500 * 1e6;
+Pgrid = -300 * 1e6;
 Qgrid = 100 * 1e6;
 Vgrid_RE = 400 * 1e3;
 Vgrid_IM = 100 * 1e3;
-Vhvdc = 200 * 1e3;
-Xarm_PU = 0.15;
-R_PU = 0.01;
-Rarm_PU = 0.05;
+Vhvdc = 600 * 1e3;
+Xarm_PU = 0.2;
+R_PU = 0.05;
+Rarm_PU = 0.1;
 
 %Converter Limits
 rated_voltage = 600e3;
 rated_current = 100e3;
 rated_power = 2000e6;
+
 
 
 %% PRE-ITERATION CALCULATIONS
@@ -41,6 +42,10 @@ Xarm = Xarm_PU * Z_PUBase;
 R = R_PU * Z_PUBase;
 Rarm = Rarm_PU * Z_PUBase;
 
+%For runs where Rarm and Xarm needs to remain the same
+Xarm = 100;
+Rarm = 50;
+R = 25;
 
 %% NEWTON-RHAPSON CALCULATION
 

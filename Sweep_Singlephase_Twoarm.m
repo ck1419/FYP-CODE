@@ -23,7 +23,7 @@ Xl_PU = 0.4;
 R_PU = 0.05;
 Rl_PU = 0.1;
 
-voltage_lim = 15000*1e3;
+voltage_lim = 1500*1e3;
 current_lim = 1.5*1e3;
 
 idcdif_ref = 1*1e-3;
@@ -32,10 +32,15 @@ reiacsum_ref = 1*1e-3;
 
 %% SWEEP SETTINGS
 
-angle_size = 10;
+angle_size = 3;
 
-exponent_mat = linspace(0.5,1.6,30);
+exponent_mat = linspace(0.9,1.25,30);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
+
+Xarm = 75;
+Xl = 150;
+R = 20;
+Rl = 35;
 
 
 %% NEWTON-RHAPSON SWEEP
@@ -65,12 +70,12 @@ for angle_loop = 0:(360/angle_size)-1
         Vgrid = Vgrid_RE + (Vgrid_IM * 1i);
         Sgrid = Pgrid + (Qgrid * 1i);
         
-        %PU Conversion
-        Z_PU = abs(Vgrid)^2 / abs(Sgrid);
-        Xl = Xl_PU * Z_PU;
-        Xarm = Xarm_PU * Z_PU;
-        R = R_PU * Z_PU;
-        Rl = Rl_PU * Z_PU;
+%         %PU Conversion
+%         Z_PU = abs(Vgrid)^2 / abs(Sgrid);
+%         Xl = Xl_PU * Z_PU;
+%         Xarm = Xarm_PU * Z_PU;
+%         R = R_PU * Z_PU;
+%         Rl = Rl_PU * Z_PU;
 
         %Loop to execute Newton-Raphson
         for n = 2:iterations
@@ -150,8 +155,8 @@ figure
 hold on
 grid on
 axis equal
-plot(failed_current_p, failed_current_q)
-plot(failed_voltage_p, failed_voltage_q)
+plot(failed_current_p, failed_current_q, 'x')
+plot(failed_voltage_p, failed_voltage_q, 'x')
 plot(failed_max_p, failed_max_q, 'x')
 xlabel('Pgrid')
 ylabel('Qgrid')

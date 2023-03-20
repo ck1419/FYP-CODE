@@ -29,9 +29,9 @@ current_lim = 1500;
 
 %% SWEEP SETTINGS
 
-angle_size = 5;
+angle_size = 2;
 
-exponent_mat = linspace(0.75,1.5,30);
+exponent_mat = linspace(0.75,1.25,40);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
 
 %For runs where Rarm and Xarm needs to remain the same
