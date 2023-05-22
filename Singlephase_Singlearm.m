@@ -14,8 +14,8 @@ variable_count = 6;
 
 %Operating Points
 Pcon = 0;
-Pgrid = -300 * 1e6;
-Qgrid = 100 * 1e6;
+Pgrid = 100 * 1e6;
+Qgrid = 300 * 1e6;
 Vgrid_RE = 400 * 1e3;
 Vgrid_IM = 100 * 1e3;
 Vhvdc = 600 * 1e3;

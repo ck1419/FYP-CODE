@@ -8,15 +8,15 @@ close all
 %% INITIAL VARIABLES
 
 %Settings for Newton-Rhapson
-iterations = 25;
-tolerance = 1;   %Used to check results
+iterations = 50;
+tolerance = 0.5;   %Used to check results
 variable_count = 12;
 
 %Operating Points
 Pconu = 0;
 Pconl = 0;
-Pgrid = -400 * 1e6;
-Qgrid = -200 * 1e6;
+Pgrid = 500 * 1e6;
+Qgrid = 500 * 1e6;
 Vgrid_RE = 400 * 1e3;
 Vgrid_IM = 100 * 1e3;
 Vhvdc = 600 * 1e3;
@@ -55,8 +55,8 @@ for n = 2:iterations
     f12_delta_value = f12_delta(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref, reiacsum_ref);
     x(:,n) = x(:,n-1) - (f12_delta_value^-1 * f12_value);
     if (abs(f12_value)) <= tolerance
-        final = x(:,n);
         iterated = n;
+        final = x(:,n);
         break
     end
     if n == iterations
@@ -97,8 +97,8 @@ iacsum = reiacsum + (imiacsum * 1i);
 
 %% CALCULATE VARIABLES
 
-Qconu = imag( ((vdcsum/2) * (idcsum + idcdif/2)) - (vacdif*conj(iacdif)/2) - (vacsum*conj(iacsum)) );
-Qconl = imag( ((vdcsum/2) * (idcsum + idcdif/2)) - (vacdif*conj(iacdif)/2) + (vacsum*conj(iacsum)) );
+Qconu = imag( ((vdcsum/2) * (idcsum - idcdif/2)) - (vacdif*conj(iacdif)/2) - (vacsum*conj(iacsum)) );
+Qconl = imag( ((vdcsum/2) * (idcsum - idcdif/2)) - (vacdif*conj(iacdif)/2) + (vacsum*conj(iacsum)) );
 
 Qarmu = imag(((iacdif/2)^2 + idcsum^2) * Xarm * 1i);
 Qarml = imag(((iacdif/2)^2 - idcsum^2) * Xarm * 1i);
@@ -127,3 +127,5 @@ disp(['QARM L = ' num2str(Qarml, '%3.3e') 'i'])
 disp(['QL = ' num2str(Ql, '%3.3e') 'i'])
 
 plot_AC(vacdif, iacdif, 'AC Grid Values', 'temp')
+
+abs(iacdif/2)*sqrt(2) + abs(idcsum)

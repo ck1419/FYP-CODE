@@ -29,7 +29,7 @@ current_lim = 1500;
 
 %% SWEEP SETTINGS
 
-angle_size = 2;
+angle_size = 3;
 
 exponent_mat = linspace(0.75,1.25,40);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
