@@ -9,7 +9,7 @@ close all
 
 %Settings for Newton-Rhapson
 iterations = 25;
-tolerance = 1;   %Used to check results
+tolerance = 0.05;   %Used to check results
 variable_count = 12;
 
 %Operating Points
@@ -23,7 +23,7 @@ Xl_PU = 0.4;
 R_PU = 0.05;
 Rl_PU = 0.1;
 
-voltage_lim = 1500*1e3;
+voltage_lim = 1450*1e3;
 current_lim = 1.5*1e3;
 
 idcdif_ref = 1*1e-3;
@@ -32,7 +32,7 @@ reiacsum_ref = 1*1e-3;
 
 %% SWEEP SETTINGS
 
-angle_size = 10;
+angle_size = 6;
 
 exponent_mat = linspace(0.9,1.25,30);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
@@ -82,7 +82,7 @@ for angle_loop = 0:(360/angle_size)-1
             f12_value = f12(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref, reiacsum_ref);
             f12_delta_value = f12_delta(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref, reiacsum_ref);
             x(:,n) = x(:,n-1) - (f12_delta_value^-1 * f12_value);
-            if (abs(f12_value)) <= tolerance
+            if all((x(:,n)./x(:,n-1)) <= 1+tolerance) && all((x(:,n)./x(:,n-1)) >= 1-tolerance)
                 final = x(:,n);
                 iterated = n;
                 break
@@ -93,12 +93,15 @@ for angle_loop = 0:(360/angle_size)-1
             end
         end
 
-        %Cleans and assign variables
+        %This allows us to relax the tolerances before the values properly converges to 0
         for n = 1:variable_count
-            if abs(final(n)) <= 0.5
-                final(n) = round(final(n));
+            if n <= 6 && final(n) <= Vgrid*tolerance
+                final(n) = 0;
+            elseif final(n) <= Igrid*tolerance
+                final(n) = 0;
             end
         end
+        
         vdcsum = final(1);
         vdcdif = final(2);         % 0
         revacsum = final(3);       % 0

@@ -9,14 +9,14 @@ close all
 
 %Settings for Newton-Rhapson
 iterations = 50;
-tolerance = 0.5;   %Used to check results
+tolerance = 0.05;   %Tolerance percentage in difference between iterations for final answer
 variable_count = 12;
 
 %Operating Points
 Pconu = 0;
 Pconl = 0;
 Pgrid = 500 * 1e6;
-Qgrid = 500 * 1e6;
+Qgrid = -500 * 1e6;
 Vgrid_RE = 400 * 1e3;
 Vgrid_IM = 100 * 1e3;
 Vhvdc = 600 * 1e3;
@@ -34,6 +34,7 @@ reiacsum_ref = 1e-3;
 %Combines imaginary and real components
 Vgrid = Vgrid_RE + (Vgrid_IM * 1i);
 Sgrid = Pgrid + (Qgrid * 1i);
+Igrid = abs(Sgrid)/abs(Vgrid);
 
 %PU Conversion
 Z_PU = abs(Vgrid)^2 / abs(Sgrid);
@@ -54,7 +55,7 @@ for n = 2:iterations
     f12_value = f12(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref, reiacsum_ref);
     f12_delta_value = f12_delta(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref, reiacsum_ref);
     x(:,n) = x(:,n-1) - (f12_delta_value^-1 * f12_value);
-    if (abs(f12_value)) <= tolerance
+    if all((x(:,n)./x(:,n-1)) <= 1+tolerance) && all((x(:,n)./x(:,n-1)) >= 1-tolerance)
         iterated = n;
         final = x(:,n);
         break
@@ -66,15 +67,19 @@ for n = 2:iterations
 end
 
 
-%% SEPARATE VARIABLES
+%% CLEAN UP VARIABLES
 
-%Rounds any magnitude less than 0.5 to the closest integer
-%Helps to clean up values that hasnt converged properly yet
+%This allows us to relax the tolerances before the values properly converges to 0
 for n = 1:variable_count
-    if abs(final(n)) <= 0.5
-        final(n) = round(final(n));
+    if n <= 6 && final(n) <= Vgrid*tolerance
+        final(n) = 0;
+    elseif final(n) <= Igrid*tolerance
+        final(n) = 0;
     end
 end
+
+
+%% SEPARATE VARIABLES
 
 vdcsum = final(1);
 vdcdif = final(2);         % 0
@@ -89,20 +94,16 @@ imiacsum = final(10);       % 0
 idcdif = final(11);         %Idc of AC grid - 0
 idcsum = final(12);         %Idc of DC grid
 
+
+%% CALCULATE VARIABLES
+
 vacsum = revacsum + (imvacsum * 1i);
 vacdif = revacdif + (imvacdif * 1i);
 iacdif = reiacdif + (imiacdif * 1i);
 iacsum = reiacsum + (imiacsum * 1i);
 
-
-%% CALCULATE VARIABLES
-
 Qconu = imag( ((vdcsum/2) * (idcsum - idcdif/2)) - (vacdif*conj(iacdif)/2) - (vacsum*conj(iacsum)) );
 Qconl = imag( ((vdcsum/2) * (idcsum - idcdif/2)) - (vacdif*conj(iacdif)/2) + (vacsum*conj(iacsum)) );
-
-Qarmu = imag(((iacdif/2)^2 + idcsum^2) * Xarm * 1i);
-Qarml = imag(((iacdif/2)^2 - idcsum^2) * Xarm * 1i);
-Ql = imag(iacdif^2 * Xl * 1i);
 
 
 %% DISPLAY OUTPUTS
@@ -122,9 +123,6 @@ disp(['IDC DIF = ' num2str(idcdif, '%3.3e')])
 fprintf('\nCALCULATED VALUES: \n')
 disp(['QCON U = ' num2str(Qconu, '%3.3e') 'i'])
 disp(['QCON L = ' num2str(Qconl, '%3.3e') 'i'])
-disp(['QARM U = ' num2str(Qarmu, '%3.3e') 'i'])
-disp(['QARM L = ' num2str(Qarml, '%3.3e') 'i'])
-disp(['QL = ' num2str(Ql, '%3.3e') 'i'])
 
 plot_AC(vacdif, iacdif, 'AC Grid Values', 'temp')
 
