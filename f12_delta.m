@@ -1,31 +1,30 @@
 
-function out = f12_delta(in, R, Rl, Xl, Xarm, vhvdc, vgrid, pconu, pconl, sgrid, idcdif_ref, reiacsum_ref)
+function out = f12_delta(in, R, Rl, Xl, Xarm, vgrid)
+    vdcsum = in(1);
+    vdcdif = in(2);         % 0
+    revacsum = in(3);       % 0
+    imvacsum = in(4);       % 0
+    revacdif = in(5);       
+    imvacdif = in(6);
+    reiacdif = in(7);        %Iac of AC grid
+    imiacdif = in(8);       
+    reiacsum = in(9);        %Iac of DC grid - 0
+    imiacsum = in(10);       % 0
+    idcdif = in(11);         %Idc of AC grid - 0
+    idcsum = in(12);         %Idc of DC grid
 
-    syms vdcsum vdcdif revacsum imvacsum revacdif imvacdif reiacdif imiacdif reiacsum imiacsum idcdif idcsum
-    state_variables = [vdcsum vdcdif revacsum imvacsum revacdif imvacdif reiacdif imiacdif reiacsum imiacsum idcdif idcsum];
-
-    eqn(1) = vdcsum + (idcsum * R) - vhvdc;  
-    eqn(2) = vdcdif - (idcdif * Rl);   
-    eqn(3) = (2 * Xarm * imiacsum) - revacsum;   
-    eqn(4) = (-2 * Xarm * reiacsum) - imvacsum;  
-    eqn(5) = revacdif + (imiacdif * (Xl + Xarm/2)) - (reiacdif*Rl) - real(vgrid);
-    eqn(6) = imvacdif - (reiacdif * (Xl + Xarm/2)) - (imiacdif*Rl) - imag(vgrid);
-    eqn(7) = (real(vgrid) * reiacdif) + (imag(vgrid) * imiacdif) + (vdcdif * idcdif) - real(sgrid);
-    eqn(8) = (imag(vgrid) * reiacdif) - (real(vgrid) * imiacdif) - imag(sgrid);
-
-    eqn(9) = (-vdcdif + vdcsum/2)*(idcdif/2 + idcsum) - revacdif*(reiacdif/2+reiacsum) - imvacdif*(imiacdif/2+imiacsum) + 0.5*revacsum*(reiacdif/2+reiacsum) + 0.5*imvacsum*(imiacdif/2+imiacsum) - pconu;
-    eqn(10) = (vdcdif + vdcsum/2)*(-idcdif/2 + idcsum) + revacdif*(-reiacdif/2+reiacsum) + imiacdif*(-imiacdif/2+imiacsum) + 0.5*revacsum*(-revacdif/2+reiacsum) + 0.5*imvacsum*(-imiacdif/2+imiacsum) - pconl;
-    
-    eqn(11) = idcdif - idcdif_ref;
-    eqn(12) = reiacsum - reiacsum_ref;
-
-%     eqn(9) = ((vdcsum/2) * (idcsum - idcdif/2)) - (revacdif * reiacdif/2) - (imvacdif * imiacdif/2) - (revacsum * reiacsum) - (imvacdif * imiacsum) - pconu;
-%     eqn(10) = ((vdcsum/2) * (idcsum - idcdif/2)) - (revacdif * reiacdif/2) - (imvacdif * imiacdif/2) + (revacsum * reiacsum) + (imvacdif * imiacsum) - pconl;
-%     eqn(12) = (imvacsum*reiacsum) - (revacsum*imiacsum);
-
-    temp = jacobian(eqn, state_variables);
-    out = subs(temp, state_variables, transpose(in));
-    out = double(out);
+    out(1,:) = [                  1,                   0,                       0,                       0,                                  0,                       0,                       0,                                0,                     0,                     0,                     0,                 R];
+    out(2,:) = [                  0,                   1,                       0,                       0,                                  0,                       0,                       0,                                0,                     0,                     0,                   -Rl,                 0];
+    out(3,:) = [                  0,                   0,                      -1,                       0,                                  0,                       0,                       0,                                0,                     0,                2*Xarm,                     0,                 0];
+    out(4,:) = [                  0,                   0,                       0,                      -1,                                  0,                       0,                       0,                                0,               -2*Xarm,                     0,                     0,                 0];
+    out(5,:) = [                  0,                   0,                       0,                       0,                                  1,                       0,                     -Rl,                      Xarm/2 + Xl,                     0,                     0,                     0,                 0];
+    out(6,:) = [                  0,                   0,                       0,                       0,                                  0,                       1,           - Xarm/2 - Xl,                              -Rl,                     0,                     0,                     0,                 0];
+    out(7,:) = [                  0,              idcdif,                       0,                       0,                                  0,                       0,             real(vgrid),                      imag(vgrid),                     0,                     0,                vdcdif,                 0];
+    out(8,:) = [                  0,                   0,                       0,                       0,                                  0,                       0,             imag(vgrid),                     -real(vgrid),                     0,                     0,                     0,                 0];
+    out(9,:) = [idcdif/4 + idcsum/2, - idcdif/2 - idcsum, reiacdif/4 + reiacsum/2, imiacdif/4 + imiacsum/2,            - reiacdif/2 - reiacsum, - imiacdif/2 - imiacsum, revacsum/4 - revacdif/2,          imvacsum/4 - imvacdif/2, revacsum/2 - revacdif, imvacsum/2 - imvacdif,   vdcsum/4 - vdcdif/2, vdcsum/2 - vdcdif];
+    out(10,:) = [idcsum/2 - idcdif/4,   idcsum - idcdif/2, reiacsum/2 - revacdif/4, imiacsum/2 - imiacdif/4, reiacsum - reiacdif/2 - revacsum/4,                       0,             -revacdif/2, imiacsum - imiacdif - imvacsum/4, revacdif + revacsum/2, imiacdif + imvacsum/2, - vdcdif/2 - vdcsum/4, vdcdif + vdcsum/2];
+    out(11,:) = [                  0,                   0,                       0,                       0,                                  0,                       0,                       0,                                0,                     0,                     0,                     1,                 0];
+    out(12,:) = [                  0,                   0,                       0,                       0,                                  0,                       0,                       0,                                0,                     1,                     0,                     0,                 0];
 
 end
 

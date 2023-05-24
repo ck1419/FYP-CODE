@@ -53,7 +53,7 @@ x(:,1) = ones(variable_count,1) * 100;
 %Loop to execute Newton-Raphson
 for n = 2:iterations
     f12_value = f12(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref, reiacsum_ref);
-    f12_delta_value = f12_delta(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref, reiacsum_ref);
+    f12_delta_value = f12_delta(x(:,n-1), R, Rl, Xl, Xarm, Vgrid);
     x(:,n) = x(:,n-1) - (f12_delta_value^-1 * f12_value);
     if all((x(:,n)./x(:,n-1)) <= 1+tolerance) && all((x(:,n)./x(:,n-1)) >= 1-tolerance)
         iterated = n;
@@ -71,9 +71,9 @@ end
 
 %This allows us to relax the tolerances before the values properly converges to 0
 for n = 1:variable_count
-    if n <= 6 && final(n) <= Vgrid*tolerance
+    if n <= 6 && abs(final(n)) <= Vgrid*tolerance/2
         final(n) = 0;
-    elseif final(n) <= Igrid*tolerance
+    elseif abs(final(n)) <= Igrid*tolerance/2
         final(n) = 0;
     end
 end

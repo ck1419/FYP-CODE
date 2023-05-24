@@ -34,7 +34,7 @@ reiacsum_ref = 1*1e-3;
 
 angle_size = 6;
 
-exponent_mat = linspace(0.9,1.25,30);
+exponent_mat = linspace(0.9,1.35,30);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
 
 Xarm = 75;
@@ -80,7 +80,7 @@ for angle_loop = 0:(360/angle_size)-1
         %Loop to execute Newton-Raphson
         for n = 2:iterations
             f12_value = f12(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref, reiacsum_ref);
-            f12_delta_value = f12_delta(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref, reiacsum_ref);
+            f12_delta_value = f12_delta(x(:,n-1), R, Rl, Xl, Xarm, Vgrid);
             x(:,n) = x(:,n-1) - (f12_delta_value^-1 * f12_value);
             if all((x(:,n)./x(:,n-1)) <= 1+tolerance) && all((x(:,n)./x(:,n-1)) >= 1-tolerance)
                 final = x(:,n);
@@ -93,15 +93,12 @@ for angle_loop = 0:(360/angle_size)-1
             end
         end
 
-        %This allows us to relax the tolerances before the values properly converges to 0
+        %Cleans and assign variables
         for n = 1:variable_count
-            if n <= 6 && final(n) <= Vgrid*tolerance
-                final(n) = 0;
-            elseif final(n) <= Igrid*tolerance
-                final(n) = 0;
+            if abs(final(n)) <= 0.5
+                final(n) = round(final(n));
             end
         end
-        
         vdcsum = final(1);
         vdcdif = final(2);         % 0
         revacsum = final(3);       % 0
