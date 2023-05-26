@@ -56,7 +56,7 @@ x(:,1) = ones(variable_count,1) * 100;
 %Loop to execute Newton-Raphson
 for n = 2:iterations
     f11_value = f11(x(:,n-1), Pcon, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
-    f11_delta_value = f11_delta(x(:,n-1), Pcon, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
+    f11_delta_value = f11_delta(x(:,n-1), Xarm, R, Rarm, Vgrid_RE, Vgrid_IM);
     x(:,n) = x(:,n-1) - (f11_delta_value^-1 * f11_value);
 end
 

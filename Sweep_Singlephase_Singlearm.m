@@ -29,9 +29,9 @@ current_lim = 1500;
 
 %% SWEEP SETTINGS
 
-angle_size = 3;
+angle_size = 1;
 
-exponent_mat = linspace(0.75,1.25,40);
+exponent_mat = linspace(0.75,1.25,250);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
 
 %For runs where Rarm and Xarm needs to remain the same
@@ -76,7 +76,7 @@ for angle_loop = 0:(360/angle_size)-1
         %Loop to execute Newton-Raphson
         for n = 2:iterations
             f11_value = f11(x(:,n-1), Pcon, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
-            f11_delta_value = f11_delta(x(:,n-1), Pcon, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
+            f11_delta_value = f11_delta(x(:,n-1), Xarm, R, Rarm, Vgrid_RE, Vgrid_IM);
             x(:,n) = x(:,n-1) - (f11_delta_value^-1 * f11_value);
             if (abs(f11_value)) <= tolerance
                 final = x(:,n);
@@ -141,15 +141,25 @@ figure
 hold on
 grid on
 axis equal
-plot(failed_current_p, failed_current_q, 'x')
-plot(failed_voltage_p, failed_voltage_q, 'x')
-plot(failed_max_p, failed_max_q, 'x')
+plot(failed_current_p, failed_current_q, '.')
+plot(failed_voltage_p, failed_voltage_q, '.')
+plot(failed_max_p, failed_max_q, '.')
 xlabel('Pgrid')
 ylabel('Qgrid')
-% xlim([-max_magnitude, max_magnitude])
-% ylim([-max_magnitude, max_magnitude])
 title('Single-Phase Single-Arm')
 legend('Current Limit', 'Voltage Limit', 'Max Iterations')
+
+msg_Vgrid = ['Vgrid = ' num2str(Vgrid, '%.2e')];
+msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc, '%.2e')];
+msg_RPU = ['R = ' num2str(R)];
+msg_RarmPU = ['Rarm = ' num2str(Rarm)];
+msg_XarmPU = ['Xarm = ' num2str(Xarm)];
+msg_Vlim = ['Voltage Limit = ' num2str(voltage_lim, '%.2e')];
+msg_Ilim = ['Current Limit = ' num2str(current_lim, '%.2e')];
+
+
+msg = {msg_Vgrid msg_Vhvdc msg_RPU msg_RarmPU msg_XarmPU msg_Vlim msg_Ilim};
+annotation('textbox', [.131 .131 .795 .795],'String',msg,'FitBoxToText','on');
 
 
 %% DATA FOR DEBUG

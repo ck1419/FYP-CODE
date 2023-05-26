@@ -32,9 +32,9 @@ reiacsum_ref = 1*1e-3;
 
 %% SWEEP SETTINGS
 
-angle_size = 6;
+angle_size = 1;
 
-exponent_mat = linspace(0.9,1.35,30);
+exponent_mat = linspace(0.9,1.35,250);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
 
 Xarm = 75;
