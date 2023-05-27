@@ -1,17 +1,17 @@
 function out = f12(in, R, Rl, Xl, Xarm, vhvdc, vgrid, pconu, pconl, sgrid, idcdif_ref, reiacsum_ref)
 
     vdcsum = in(1);
-    vdcdif = in(2);         % 0
-    revacsum = in(3);       % 0
-    imvacsum = in(4);       % 0
-    revacdif = in(5);       
-    imvacdif = in(6);
-    reiacdif = in(7);        %Iac of AC grid
-    imiacdif = in(8);       
-    reiacsum = in(9);        %Iac of DC grid - 0
-    imiacsum = in(10);       % 0
-    idcdif = in(11);         %Idc of AC grid - 0
-    idcsum = in(12);         %Idc of DC grid
+    vdcdif = in(2); 
+    idcdif = in(3);  
+    idcsum = in(4);  
+    revacsum = in(5);   
+    imvacsum = in(6); 
+    revacdif = in(7);       
+    imvacdif = in(8);
+    reiacsum = in(9);      
+    imiacsum = in(10);    
+    reiacdif = in(11);  
+    imiacdif = in(12);       
 
     out = zeros(12,1);
 
@@ -23,10 +23,8 @@ function out = f12(in, R, Rl, Xl, Xarm, vhvdc, vgrid, pconu, pconl, sgrid, idcdi
     out(6) = imvacdif - (reiacdif * (Xl + Xarm/2)) - (imiacdif*Rl) - imag(vgrid);    %IMAG
     out(7) = (real(vgrid) * reiacdif) + (imag(vgrid) * imiacdif) + (vdcdif * idcdif) - real(sgrid);
     out(8) = (imag(vgrid) * reiacdif) - (real(vgrid) * imiacdif) - imag(sgrid);
-
     out(9) = (-vdcdif + vdcsum/2)*(idcdif/2 + idcsum) - revacdif*(reiacdif/2+reiacsum) - imvacdif*(imiacdif/2+imiacsum) + 0.5*revacsum*(reiacdif/2+reiacsum) + 0.5*imvacsum*(imiacdif/2+imiacsum) - pconu;
     out(10) = (vdcdif + vdcsum/2)*(-idcdif/2 + idcsum) + revacdif*(-reiacdif/2+reiacsum) + imiacdif*(-imiacdif/2+imiacsum) + 0.5*revacsum*(-revacdif/2+reiacsum) + 0.5*imvacsum*(-imiacdif/2+imiacsum) - pconl;
-
     out(11) = idcdif - idcdif_ref;
     out(12) = reiacsum - reiacsum_ref;
 

@@ -14,14 +14,14 @@ variable_count = 6;
 
 %Operating Points
 Pcon = 0;
-Pgrid = 100 * 1e6;
-Qgrid = 300 * 1e6;
+Pgrid = 500 * 1e6;
+Qgrid = 100 * 1e6;
 Vgrid_RE = 400 * 1e3;
 Vgrid_IM = 100 * 1e3;
-Vhvdc = 600 * 1e3;
-Xarm_PU = 0.2;
-R_PU = 0.05;
-Rarm_PU = 0.1;
+Vhvdc = 200 * 1e3;
+Xarm_PU = 0.1;
+R_PU = 0.02;
+Rarm_PU = 0.02;
 
 %Converter Limits
 rated_voltage = 600e3;
@@ -93,8 +93,9 @@ msg_Vgrid = ['Vgrid = ' num2str(Vgrid, '%.2e')];
 msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc, '%.2e')];
 msg_XarmPU = ['Xarm PU = ' num2str(Xarm_PU)];
 msg_RPU = ['R PU = ' num2str(R_PU)];
+msg_RarmPU = ['Rarm PU = ' num2str(Rarm_PU)];
 
-msg = {msg_Pcon msg_Sgrid msg_Vgrid msg_Vhvdc msg_XarmPU msg_RPU};
+msg = {msg_Pcon msg_Sgrid msg_Vgrid msg_Vhvdc msg_XarmPU msg_RarmPU msg_RPU};
 
 %AC Phasor Plot
 plot_AC(Vac, Iac, 'Single Phase Single Arm', msg)

@@ -71,9 +71,13 @@ end
 
 %This allows us to relax the tolerances before the values properly converges to 0
 for n = 1:variable_count
-    if n <= 6 && abs(final(n)) <= Vgrid*tolerance/2
+    if n <= 2 && abs(final(n)) <= Vgrid*tolerance/2
         final(n) = 0;
-    elseif abs(final(n)) <= Igrid*tolerance/2
+    elseif n > 2 && n <= 4 && abs(final(n)) <= Igrid*tolerance/2
+        final(n) = 0;
+    elseif n > 4 && n <= 8 && abs(final(n)) <= Vgrid*tolerance/2
+        final(n) = 0;
+    elseif n > 8 && abs(final(n)) <= Igrid*tolerance/2
         final(n) = 0;
     end
 end
@@ -82,17 +86,17 @@ end
 %% SEPARATE VARIABLES
 
 vdcsum = final(1);
-vdcdif = final(2);         % 0
-revacsum = final(3);       % 0
-imvacsum = final(4);       % 0
-revacdif = final(5);       
-imvacdif = final(6);
-reiacdif = final(7);        %Iac of AC grid
-imiacdif = final(8);       
-reiacsum = final(9);        %Iac of DC grid - 0
-imiacsum = final(10);       % 0
-idcdif = final(11);         %Idc of AC grid - 0
-idcsum = final(12);         %Idc of DC grid
+vdcdif = final(2); 
+idcdif = final(3);  
+idcsum = final(4);  
+revacsum = final(5);   
+imvacsum = final(6); 
+revacdif = final(7);       
+imvacdif = final(8);
+reiacsum = final(9);      
+imiacsum = final(10);    
+reiacdif = final(11);  
+imiacdif = final(12);    
 
 
 %% CALCULATE VARIABLES

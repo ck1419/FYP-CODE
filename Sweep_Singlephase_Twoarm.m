@@ -100,17 +100,17 @@ for angle_loop = 0:(360/angle_size)-1
             end
         end
         vdcsum = final(1);
-        vdcdif = final(2);         % 0
-        revacsum = final(3);       % 0
-        imvacsum = final(4);       % 0
-        revacdif = final(5);       
-        imvacdif = final(6);
-        reiacdif = final(7);        %Iac of AC grid
-        imiacdif = final(8);       
-        reiacsum = final(9);        %Iac of DC grid - 0
-        imiacsum = final(10);       % 0
-        idcdif = final(11);         %Idc of AC grid - 0
-        idcsum = final(12);         %Idc of DC grid
+        vdcdif = final(2); 
+        idcdif = final(3);  
+        idcsum = final(4);  
+        revacsum = final(5);   
+        imvacsum = final(6); 
+        revacdif = final(7);       
+        imvacdif = final(8);
+        reiacsum = final(9);      
+        imiacsum = final(10);    
+        reiacdif = final(11);  
+        imiacdif = final(12);   
         vacsum = revacsum + (imvacsum * 1i);
         vacdif = revacdif + (imvacdif * 1i);
         iacdif = reiacdif + (imiacdif * 1i);
@@ -155,9 +155,9 @@ figure
 hold on
 grid on
 axis equal
-plot(failed_current_p, failed_current_q, 'x')
-plot(failed_voltage_p, failed_voltage_q, 'x')
-plot(failed_max_p, failed_max_q, 'x')
+plot(failed_current_p, failed_current_q, '.')
+plot(failed_voltage_p, failed_voltage_q, '.')
+plot(failed_max_p, failed_max_q, '.')
 xlabel('Pgrid')
 ylabel('Qgrid')
 % xlim([-max_magnitude, max_magnitude])
