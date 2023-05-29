@@ -69,15 +69,8 @@ end
 
 %% CLEAN UP VARIABLES
 
-%This allows us to relax the tolerances before the values properly converges to 0
 for n = 1:variable_count
-    if n <= 2 && abs(final(n)) <= Vgrid*tolerance/2
-        final(n) = 0;
-    elseif n > 2 && n <= 4 && abs(final(n)) <= Igrid*tolerance/2
-        final(n) = 0;
-    elseif n > 4 && n <= 8 && abs(final(n)) <= Vgrid*tolerance/2
-        final(n) = 0;
-    elseif n > 8 && abs(final(n)) <= Igrid*tolerance/2
+    if abs(final(n)) <= 1
         final(n) = 0;
     end
 end

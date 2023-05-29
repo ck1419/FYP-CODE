@@ -93,12 +93,13 @@ for angle_loop = 0:(360/angle_size)-1
             end
         end
 
-        %Cleans and assign variables
+        %Cleans up variables converging to 0
         for n = 1:variable_count
-            if abs(final(n)) <= 0.5
-                final(n) = round(final(n));
+            if abs(final(n)) <= 1
+                final(n) = 0;
             end
         end
+
         vdcsum = final(1);
         vdcdif = final(2); 
         idcdif = final(3);  
