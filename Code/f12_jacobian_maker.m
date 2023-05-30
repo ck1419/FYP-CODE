@@ -16,7 +16,7 @@ eqn(9) = (-vdcdif + vdcsum/2)*(idcdif/2 + idcsum) - revacdif*(reiacdif/2+reiacsu
 eqn(10) = (vdcdif + vdcsum/2)*(-idcdif/2 + idcsum) + revacdif*(-reiacdif/2+reiacsum) - imvacdif*(-imiacdif/2+imiacsum) + 0.5*revacsum*(-reiacdif/2+reiacsum) - 0.5*imvacsum*(-imiacdif/2+imiacsum) - pconl;
 
 eqn(11) = idcdif - idcdif_ref;
-eqn(12) = reiacsum - reiacsum_ref;
+eqn(12) = imiacsum - reiacsum_ref;
 
 
 

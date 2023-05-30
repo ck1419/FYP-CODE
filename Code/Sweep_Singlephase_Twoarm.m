@@ -27,7 +27,7 @@ voltage_lim = 1450*1e3;
 current_lim = 1.5*1e3;
 
 idcdif_ref = 1*1e-3;
-reiacsum_ref = 1*1e-3;
+imiacsum_ref = 1*1e-3;
 
 
 %% SWEEP SETTINGS
@@ -79,7 +79,7 @@ for angle_loop = 0:(360/angle_size)-1
 
         %Loop to execute Newton-Raphson
         for n = 2:iterations
-            f12_value = f12(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref, reiacsum_ref);
+            f12_value = f12(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref, imiacsum_ref);
             f12_delta_value = f12_delta(x(:,n-1), R, Rl, Xl, Xarm, Vgrid);
             x(:,n) = x(:,n-1) - (f12_delta_value^-1 * f12_value);
             if all((x(:,n)./x(:,n-1)) <= 1+tolerance) && all((x(:,n)./x(:,n-1)) >= 1-tolerance)

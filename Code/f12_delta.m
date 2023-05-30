@@ -24,30 +24,5 @@ function out = f12_delta(in, R, Rl, Xl, Xarm, vgrid)
     out(9,:) = [idcdif/4 + idcsum/2, - idcdif/2 - idcsum,   vdcsum/4 - vdcdif/2, vdcsum/2 - vdcdif, reiacdif/4 + reiacsum/2, - imiacdif/4 - imiacsum/2,            - reiacdif/2 - reiacsum, imiacdif/2 + imiacsum, revacsum/2 - revacdif,   imvacdif - imvacsum/2, revacsum/4 - revacdif/2,          imvacdif/2 - imvacsum/4];
     out(10,:) = [idcsum/2 - idcdif/4,   idcsum - idcdif/2, - vdcdif/2 - vdcsum/4, vdcdif + vdcsum/2, reiacsum/2 - reiacdif/4,   imiacdif/4 - imiacsum/2,   reiacsum - reiacdif/2, imiacdif/2 - imiacsum, revacdif + revacsum/2, - imvacdif - imvacsum/2, - revacdif/2 - revacsum/4, imvacdif/2 + imvacsum/4];
     out(11,:) = [                  0,                   0,                     1,                 0,                       0,                       0,                                  0,                       0,                     0,                     0,                       0,                                0];
-    out(12,:) = [                  0,                   0,                     0,                 0,                       0,                       0,                                  0,                       0,                     1,                     0,                       0,                                0];
+    out(12,:) = [                  0,                   0,                     0,                 0,                       0,                         0,                       0,                     0,                     0,                       1,                         0,                       0];
 end
-
-
-
-
-% function out = f12_delta(in, R, Rl, Xl, Xarm, Vhvdc, Vgrid, Sgrid)
-%     syms vdcu vdcl idcu idcl revacu imvacu revacl imvacl reiacu imiacu reiacl imiacl
-%     state_variables = [vdcu vdcl idcu idcl revacu imvacu revacl imvacl reiacu imiacu reiacl imiacl];
-%     
-%     eqn(1) = vdcu + (idcu*R/2) - (Vhvdc/2);
-%     eqn(2) = vdcl + (idcl*R/2) - (Vhvdc/2);
-%     eqn(3) = - revacu + (Xarm*imiacu) + (Xl*imiacu) - (Xl*imiacl) - real(Vgrid);
-%     eqn(4) = - imvacu - (Xarm*reiacu) - (Xl*reiacu) + (Xl*reiacu) - imag(Vgrid);
-%     eqn(5) = revacl - (Xarm*imiacl) + (Xl*imiacu) - (Xl*imiacl) - real(Vgrid);
-%     eqn(6) = imvacl + (Xarm*reiacl) - (Xl*reiacu) + (Xl*reiacl) - imag(Vgrid);
-%     eqn(7) = (real(Vgrid)*(reiacu-reiacl)) + (imag(Vgrid)*(imiacu-imiacl)) - real(Sgrid);
-%     eqn(8) = (imag(Vgrid)*(reiacu-reiacl)) - (real(Vgrid)*(imiacu-imiacl)) - imag(Sgrid);
-%     eqn(9) = (vdcu*idcu) - (revacu*reiacu) - (imvacu*imiacu);
-%     eqn(10) = (vdcl*idcl) - (revacl*reiacl) - (imvacl*imiacl);
-%     eqn(11) = Rl*(idcu-idcl);
-%     eqn(12) = revacu - revacl;
-% 
-%     temp = jacobian(eqn, state_variables);
-%     out = subs(temp, state_variables, transpose(in));
-%     out = double(out);
-% end
