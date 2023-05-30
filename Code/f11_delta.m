@@ -1,5 +1,6 @@
+%function for single-phase single-arm jacobian
 function out = f11_delta(x, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM)
-
+    %extract variables from x for easy usage
     revac = x(1);
     imvac = x(2);
     reiac = x(3);
@@ -7,6 +8,7 @@ function out = f11_delta(x, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM)
     vdc = x(5);
     idc = x(6);
 
+    %creates the jacobian
     out(1,:) = [reiac, imiac,    revac,     imvac, idc, vdc];
     out(2,:) = [    0,     0,        0,         0,  -1,   R];
     out(3,:) = [    1,     0,    -Rarm,      Xarm,   0,   0];
