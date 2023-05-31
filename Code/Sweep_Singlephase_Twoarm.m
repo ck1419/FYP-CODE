@@ -16,18 +16,14 @@ variable_count = 12;
 Pconu = 0;
 Pconl = 0;
 Vgrid_RE = 400 * 1e3;
-Vgrid_IM = 100 * 1e3;
+Vgrid_IM = 0 * 1e3;
 Vhvdc = 600 * 1e3;
-Xarm_PU = 0.2;
-Xl_PU = 0.4;
-R_PU = 0.05;
-Rl_PU = 0.1;
 
-voltage_lim = 1450*1e3;
-current_lim = 1.5*1e3;
+voltage_lim = 1180*1e3;
+current_lim = 1500;
 
-idcdif_ref = 1*1e-3;
-imiacsum_ref = 1*1e-3;
+idcdif_ref = 0;
+imiacsum_ref = 0;
 
 
 %% SWEEP SETTINGS
@@ -37,10 +33,10 @@ angle_size = 0.5;
 exponent_mat = linspace(0.9,1.35,250);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
 
-Xarm = 75;
-Xl = 150;
-R = 20;
-Rl = 35;
+Xarm = 5;
+Xl = 8;
+R = 2;
+Rl = 4;
 
 
 %% PRE-ITERATION CALCULATIONS
@@ -186,16 +182,16 @@ legend('Current Limit', 'Voltage Limit', 'Max Iterations')
 
 vdcsum = data_collection(1,:);
 vdcdif = data_collection(2,:);         % 0
-revacsum = data_collection(3,:);       % 0
-imvacsum = data_collection(4,:);       % 0
-revacdif = data_collection(5,:);       
-imvacdif = data_collection(6,:);
-reiacdif = data_collection(7,:);        %Iac of AC grid
-imiacdif = data_collection(8,:);       
-reiacsum = data_collection(9,:);        %Iac of DC grid - 0
-imiacsum = data_collection(10,:);       % 0
-idcdif = data_collection(11,:);         %Idc of AC grid - 0
-idcsum = data_collection(12,:);         %Idc of DC grid
+idcdif = data_collection(3,:);       % 0
+idcsum = data_collection(4,:);       % 0
+revacsum = data_collection(5,:);       
+imvacsum = data_collection(6,:);
+revacdif = data_collection(7,:);        %Iac of AC grid
+imvacdif = data_collection(8,:);       
+imiacsum = data_collection(9,:);        %Iac of DC grid - 0
+reiacsum = data_collection(10,:);       % 0
+reiacdif = data_collection(11,:);         %Idc of AC grid - 0
+imiacdif = data_collection(12,:);         %Idc of DC grid
 vacsum = revacsum + (imvacsum * 1i);
 vacdif = revacdif + (imvacdif * 1i);
 iacdif = reiacdif + (imiacdif * 1i);
