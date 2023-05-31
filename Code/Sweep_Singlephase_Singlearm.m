@@ -38,11 +38,6 @@ R = 4;
 
 %% NEWTON-RHAPSON SWEEP
 
-figure
-hold on
-grid on
-axis equal
-
 for nominal_change = 1:3
 
     if nominal_change == 2
@@ -158,6 +153,11 @@ Vgrid_RE = 400 * 1e3;
 Vgrid_IM = 0 * 1e3;
 Vhvdc = 600 * 1e3;
 Vgrid = Vgrid_RE + (Vgrid_IM * 1i);
+
+figure
+hold on
+grid on
+axis equal
 
 plot(failed_current_p_decrease, failed_current_q_decrease, '.', 'color', "#008000", 'markersize', 5)
 plot(failed_current_p, failed_current_q, '.', 'color', "#FF0000", 'markersize', 5)
