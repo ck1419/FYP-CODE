@@ -32,7 +32,7 @@ imiacsum_ref = 1*1e-3;
 
 %% SWEEP SETTINGS
 
-angle_size = 1;
+angle_size = 0.5;
 
 exponent_mat = linspace(0.9,1.35,250);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
@@ -41,6 +41,20 @@ Xarm = 75;
 Xl = 150;
 R = 20;
 Rl = 35;
+
+
+%% PRE-ITERATION CALCULATIONS
+
+%Allows system to converge faster without affecting results
+idcdif_ref_temp = idcdif_ref;
+if idcdif_ref == 0
+    idcdif_ref_temp = 1e-9;
+end
+
+imiacsum_ref_temp = imiacsum_ref;
+if imiacsum_ref == 0
+    imiacsum_ref_temp = 1e-9;
+end
 
 
 %% NEWTON-RHAPSON SWEEP
@@ -66,20 +80,23 @@ for angle_loop = 0:(360/angle_size)-1
         Pgrid = magnitude * cosd(angle) * change;
         Qgrid = magnitude * sind(angle) * change;
 
-        %Combines imaginary and real components
-        Vgrid = Vgrid_RE + (Vgrid_IM * 1i);
-        Sgrid = Pgrid + (Qgrid * 1i);
-        
-%         %PU Conversion
-%         Z_PU = abs(Vgrid)^2 / abs(Sgrid);
-%         Xl = Xl_PU * Z_PU;
-%         Xarm = Xarm_PU * Z_PU;
-%         R = R_PU * Z_PU;
-%         Rl = Rl_PU * Z_PU;
+        Vgrid_IM_temp = Vgrid_IM;
+        if Vgrid_IM == 0
+            Vgrid_IM_temp = 1e-9;
+        end
+            
+        Qgrid_temp = Qgrid;
+        if Qgrid == 0
+            Qgrid_temp = 1e-9;
+        end
 
+        %Combines imaginary and real components
+        Vgrid = Vgrid_RE + (Vgrid_IM_temp * 1i);
+        Sgrid = Pgrid + (Qgrid_temp * 1i);
+        
         %Loop to execute Newton-Raphson
         for n = 2:iterations
-            f12_value = f12(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref, imiacsum_ref);
+            f12_value = f12(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref_temp, imiacsum_ref_temp);
             f12_delta_value = f12_delta(x(:,n-1), R, Rl, Xl, Xarm, Vgrid);
             x(:,n) = x(:,n-1) - (f12_delta_value^-1 * f12_value);
             if all((x(:,n)./x(:,n-1)) <= 1+tolerance) && all((x(:,n)./x(:,n-1)) >= 1-tolerance)

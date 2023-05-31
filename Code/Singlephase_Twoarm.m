@@ -16,9 +16,9 @@ variable_count = 12;
 Pconu = 0;
 Pconl = 0;
 Pgrid = 500 * 1e6;
-Qgrid = 1e-9;
+Qgrid = 100 * 1e6;
 Vgrid_RE = 400 * 1e3;
-Vgrid_IM = 1e-9;
+Vgrid_IM = 100 * 1e3;
 Vhvdc = 600 * 1e3;
 Xarm_PU = 0.015;
 Xl_PU = 0.02;
@@ -90,11 +90,11 @@ end
 
 %% CLEAN UP VARIABLES
 
-% for n = 1:variable_count
-%     if abs(final(n)) <= 1
-%         final(n) = 0;
-%     end
-% end
+for n = 1:variable_count
+    if abs(final(n)) <= 1
+        final(n) = 0;
+    end
+end
 
 
 %% SEPARATE VARIABLES
