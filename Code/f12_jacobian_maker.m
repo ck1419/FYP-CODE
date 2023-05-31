@@ -3,21 +3,19 @@ syms vdcsum vdcdif idcdif idcsum revacsum imvacsum revacdif imvacdif reiacsum im
 
 state_variables = [vdcsum vdcdif idcdif idcsum revacsum imvacsum revacdif imvacdif reiacsum imiacsum reiacdif imiacdif];
 
-eqn(1) = vdcsum + (idcsum * R) - vhvdc;  
-eqn(2) = vdcdif - (idcdif * Rl);   
-eqn(3) = (2 * Xarm * imiacsum) - revacsum;   
-eqn(4) = (-2 * Xarm * reiacsum) - imvacsum;  
-eqn(5) = revacdif + (imiacdif * (Xl + Xarm/2)) - (reiacdif*Rl) - real(vgrid);
-eqn(6) = imvacdif - (reiacdif * (Xl + Xarm/2)) - (imiacdif*Rl) - imag(vgrid);
-eqn(7) = (real(vgrid) * reiacdif) + (imag(vgrid) * imiacdif) + (vdcdif * idcdif) - real(sgrid);
-eqn(8) = (imag(vgrid) * reiacdif) - (real(vgrid) * imiacdif) - imag(sgrid);
-
-eqn(9) = (-vdcdif + vdcsum/2)*(idcdif/2 + idcsum) - revacdif*(reiacdif/2+reiacsum) + imvacdif*(imiacdif/2+imiacsum) + 0.5*revacsum*(reiacdif/2+reiacsum) - 0.5*imvacsum*(imiacdif/2+imiacsum) - pconu;
-eqn(10) = (vdcdif + vdcsum/2)*(-idcdif/2 + idcsum) + revacdif*(-reiacdif/2+reiacsum) - imvacdif*(-imiacdif/2+imiacsum) + 0.5*revacsum*(-reiacdif/2+reiacsum) - 0.5*imvacsum*(-imiacdif/2+imiacsum) - pconl;
-
-eqn(11) = idcdif - idcdif_ref;
-eqn(12) = imiacsum - reiacsum_ref;
+    out(1) = vdcsum + (idcsum * R) - vhvdc;  %REAL
+    out(2) = vdcdif - (idcdif * Rl);       %IMAG
+    out(3) = revacdif + (imiacdif * (Xl + Xarm/2)) - (reiacdif*Rl) - real(vgrid);    %REAL
+    out(4) = imvacdif - (reiacdif * (Xl + Xarm/2)) - (imiacdif*Rl) - imag(vgrid);    %IMAG
+    out(5) = (2 * Xarm * imiacsum) - revacsum;       %REAL
+    out(6) = (-2 * Xarm * reiacsum) - imvacsum;      %IMAG
+    out(7) = (real(vgrid) * reiacdif) + (imag(vgrid) * imiacdif) + (vdcdif * idcdif) - real(sgrid);
+    out(8) = (imag(vgrid) * reiacdif) - (real(vgrid) * imiacdif) - imag(sgrid);
+    out(9) = (-vdcdif + vdcsum/2)*(idcdif/2 + idcsum) - revacdif*(reiacdif/2+reiacsum) - imvacdif*(imiacdif/2+imiacsum) + 0.5*revacsum*(reiacdif/2+reiacsum) + 0.5*imvacsum*(imiacdif/2+imiacsum) - pconu;
+    out(10) = (vdcdif + vdcsum/2)*(-idcdif/2 + idcsum) + revacdif*(-reiacdif/2+reiacsum) + imvacdif*(-imiacdif/2+imiacsum) + 0.5*revacsum*(-reiacdif/2+reiacsum) + 0.5*imvacsum*(-imiacdif/2+imiacsum) - pconl;    
+    out(11) = idcdif - idcdif_ref;
+    out(12) = imiacsum - imiacsum_ref;
 
 
 
-temp = jacobian(eqn, state_variables);
+temp = jacobian(out, state_variables);
