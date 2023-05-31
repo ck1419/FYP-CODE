@@ -178,8 +178,6 @@ plot(failed_voltage_p, failed_voltage_q, '.')
 plot(failed_max_p, failed_max_q, '.')
 xlabel('Pgrid')
 ylabel('Qgrid')
-% xlim([-max_magnitude, max_magnitude])
-% ylim([-max_magnitude, max_magnitude])
 title('Single-Phase Two-Arm')
 legend('Current Limit', 'Voltage Limit', 'Max Iterations')
 

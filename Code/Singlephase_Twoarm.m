@@ -16,9 +16,9 @@ variable_count = 12;
 Pconu = 0;
 Pconl = 0;
 Pgrid = 500 * 1e6;
-Qgrid = 100 * 1e6;
+Qgrid = 0 * 1e6;
 Vgrid_RE = 400 * 1e3;
-Vgrid_IM = 100 * 1e3;
+Vgrid_IM = 0 * 1e3;
 Vhvdc = 600 * 1e3;
 Xarm_PU = 0.015;
 Xl_PU = 0.02;
@@ -55,7 +55,6 @@ end
 %Combines imaginary and real components
 Vgrid = Vgrid_RE + (Vgrid_IM_temp * 1i);
 Sgrid = Pgrid + (Qgrid_temp * 1i);
-Igrid = abs(Sgrid)/abs(Vgrid);
 
 %PU Conversion
 Z_PU = abs(Vgrid)^2 / abs(Sgrid);
@@ -126,6 +125,10 @@ Qconl = imag( ((vdcsum/2) * (idcsum - idcdif/2)) - (vacdif*conj(iacdif)/2) + (va
 
 %% DISPLAY OUTPUTS
 
+Vgrid = Vgrid_RE + (Vgrid_IM * 1i);
+Sgrid = Pgrid + (Qgrid * 1i);
+Igrid = abs(Sgrid)/abs(Vgrid);
+
 fprintf(['ITERATIONS = ' num2str(iterated) '\n\n'])
 
 fprintf('\nFINAL ITERATION RESULTS: \n')
@@ -153,10 +156,9 @@ msg_RPU = ['R PU = ' num2str(R_PU)];
 msg_RlPU = ['Rl PU = ' num2str(Rl_PU)];
 msg_XlPU = ['Xl PU = ' num2str(Xl_PU)];
 msg_Idc = ['Idcdif ref = ' num2str(idcdif_ref)];
-msg_Iac = ['Iacsum ref = ' num2str(imiacsum_ref)];
+msg_Iac = ['Im(Iacsum) ref = ' num2str(imiacsum_ref)];
 
 msg = {msg_Pconu msg_Pconl msg_Sgrid msg_Vgrid msg_Vhvdc msg_XarmPU msg_XlPU msg_RlPU msg_RPU msg_Idc msg_Iac};
 
-plot_AC(vacdif, iacdif, 'Single Phase Two Arm Differential Values', [.565 .2895 .565 .286], msg)
-
-abs(iacdif/2)*sqrt(2) + abs(idcsum)
+% [.631 .2895 .565 .286]
+plot_AC(vacdif, iacdif, 'Single Phase Two Arm Differential Values', [.67 .2895 .565 .286], msg)
