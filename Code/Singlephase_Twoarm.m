@@ -16,9 +16,9 @@ variable_count = 12;
 Pconu = 0;
 Pconl = 0;
 Pgrid = 500 * 1e6;
-Qgrid = 500 * 1e6;
+Qgrid = 1e-9;
 Vgrid_RE = 400 * 1e3;
-Vgrid_IM = 100 * 1e3;
+Vgrid_IM = 1e-9;
 Vhvdc = 600 * 1e3;
 Xarm_PU = 0.015;
 Xl_PU = 0.02;
@@ -26,14 +26,35 @@ R_PU = 0.01;
 Rl_PU = 0.01;
 
 idcdif_ref = 0;
-imiacsum_ref = 1000;
+imiacsum_ref = 0;
 
 
 %% PRE-ITERATION CALCULATIONS
 
+%Allows system to converge faster without affecting results
+idcdif_ref_temp = idcdif_ref;
+if idcdif_ref == 0
+    idcdif_ref_temp = 1e-9;
+end
+
+imiacsum_ref_temp = imiacsum_ref;
+if imiacsum_ref == 0
+    imiacsum_ref_temp = 1e-9;
+end
+
+Vgrid_IM_temp = Vgrid_IM;
+if Vgrid_IM == 0
+    Vgrid_IM_temp = 1e-9;
+end
+    
+Qgrid_temp = Qgrid;
+if Qgrid == 0
+    Qgrid_temp = 1e-9;
+end
+
 %Combines imaginary and real components
-Vgrid = Vgrid_RE + (Vgrid_IM * 1i);
-Sgrid = Pgrid + (Qgrid * 1i);
+Vgrid = Vgrid_RE + (Vgrid_IM_temp * 1i);
+Sgrid = Pgrid + (Qgrid_temp * 1i);
 Igrid = abs(Sgrid)/abs(Vgrid);
 
 %PU Conversion
@@ -49,18 +70,6 @@ Rl = Rl_PU * Z_PU;
 %Initial matrix to Solve newton-Raphson with
 x = zeros(variable_count, iterations);
 x(:,1) = ones(variable_count,1) * 100;
-
-%Allows system to converge faster without affecting results
-if abs(idcdif_ref) == 0
-    idcdif_ref_temp = 1e-9;
-else
-    idcdif_ref_temp = idcdif_ref;
-end
-if abs(imiacsum_ref) == 0
-    imiacsum_ref_temp = 1e-9;
-else
-    imiacsum_ref_temp = imiacsum_ref;
-end
 
 %Loop to execute Newton-Raphson
 for n = 2:iterations
@@ -81,11 +90,11 @@ end
 
 %% CLEAN UP VARIABLES
 
-for n = 1:variable_count
-    if abs(final(n)) <= 1
-        final(n) = 0;
-    end
-end
+% for n = 1:variable_count
+%     if abs(final(n)) <= 1
+%         final(n) = 0;
+%     end
+% end
 
 
 %% SEPARATE VARIABLES
