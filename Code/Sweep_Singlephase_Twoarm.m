@@ -58,9 +58,9 @@ end
 for nominal_change = 1:3
 
     if nominal_change == 2
-        Vgrid_RE = Vgrid_RE * 1.05;
+        Vhvdc = Vhvdc * 1.05;
     elseif nominal_change == 3
-        Vgrid_RE = (Vgrid_RE / 1.05) * 0.95;
+        Vhvdc = (Vhvdc / 1.05) * 0.95;
     end
 
 
@@ -202,8 +202,23 @@ plot(failed_voltage_p_increase, failed_voltage_q_increase, '.', 'color', "#0096F
 
 xlabel('Pgrid')
 ylabel('Qgrid')
-title('Single-Phase Single-Arm (V_{GRID} Changed)')
+title('Single-Phase Single-Arm (V_{HVDC} Changed)')
 legend('5% Decrease', 'Nominal Value', '5% Increase')
+
+msg_Pconu = ['Pconu = ' num2str(Pconu, '%.2e')];
+msg_Pconl = ['Pconu = ' num2str(Pconl, '%.2e')];
+msg_Sgrid = ['Sgrid = ' num2str(Sgrid, '%.2e')];
+msg_Vgrid = ['Vgrid = ' num2str(Vgrid, '%.2e')];
+msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc, '%.2e')];
+msg_XarmPU = ['Xarm = ' num2str(Xarm)];
+msg_RPU = ['R = ' num2str(R)];
+msg_RlPU = ['Rl = ' num2str(Rl)];
+msg_XlPU = ['Xl = ' num2str(Xl)];
+msg_Idc = ['Idcdif ref = ' num2str(idcdif_ref)];
+msg_Iac = ['Im(Iacsum) ref = ' num2str(imiacsum_ref)];
+
+msg = {msg_Pconu msg_Pconl msg_Sgrid msg_Vgrid msg_Vhvdc msg_XarmPU msg_XlPU msg_RlPU msg_RPU msg_Idc msg_Iac};
+annotation('textbox', [.57 .2895 .565 .286],'String',msg,'FitBoxToText','on');
 
 
 %% DATA FOR DEBUG
