@@ -20,13 +20,13 @@ Qgrid = 500 * 1e6;
 Vgrid_RE = 400 * 1e3;
 Vgrid_IM = 100 * 1e3;
 Vhvdc = 600 * 1e3;
-Xarm_PU = 0.2;
-Xl_PU = 0.4;
-R_PU = 0.05;
-Rl_PU = 0.1;
+Xarm_PU = 0.015;
+Xl_PU = 0.02;
+R_PU = 0.01;
+Rl_PU = 0.01;
 
-idcdif_ref = 1e-3;
-imiacsum_ref = 1e-3;
+idcdif_ref = 0;
+imiacsum_ref = 1000;
 
 
 %% PRE-ITERATION CALCULATIONS
@@ -50,9 +50,21 @@ Rl = Rl_PU * Z_PU;
 x = zeros(variable_count, iterations);
 x(:,1) = ones(variable_count,1) * 100;
 
+%Allows system to converge faster without affecting results
+if abs(idcdif_ref) == 0
+    idcdif_ref_temp = 1e-9;
+else
+    idcdif_ref_temp = idcdif_ref;
+end
+if abs(imiacsum_ref) == 0
+    imiacsum_ref_temp = 1e-9;
+else
+    imiacsum_ref_temp = imiacsum_ref;
+end
+
 %Loop to execute Newton-Raphson
 for n = 2:iterations
-    f12_value = f12(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref, imiacsum_ref);
+    f12_value = f12(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref_temp, imiacsum_ref_temp);
     f12_delta_value = f12_delta(x(:,n-1), R, Rl, Xl, Xarm, Vgrid);
     x(:,n) = x(:,n-1) - (f12_delta_value^-1 * f12_value);
     if all((x(:,n)./x(:,n-1)) <= 1+tolerance) && all((x(:,n)./x(:,n-1)) >= 1-tolerance)
@@ -107,6 +119,7 @@ Qconl = imag( ((vdcsum/2) * (idcsum - idcdif/2)) - (vacdif*conj(iacdif)/2) + (va
 
 fprintf(['ITERATIONS = ' num2str(iterated) '\n\n'])
 
+fprintf('\nFINAL ITERATION RESULTS: \n')
 disp(['VDC SUM = ' num2str(vdcsum, '%3.3e')])
 disp(['VAC DIF = ' num2str(real(vacdif), '%3.3e') disp_sign(vacdif) num2str(abs(imag(vacdif)), '%3.3e') 'i'])
 disp(['IDC SUM = ' num2str(idcsum, '%3.3e')])
@@ -121,6 +134,20 @@ fprintf('\nCALCULATED VALUES: \n')
 disp(['QCON U = ' num2str(Qconu, '%3.3e') 'i'])
 disp(['QCON L = ' num2str(Qconl, '%3.3e') 'i'])
 
-plot_AC(vacdif, iacdif, 'AC Grid Values', 'temp')
+msg_Pconu = ['Pconu = ' num2str(Pconu, '%.2e')];
+msg_Pconl = ['Pconu = ' num2str(Pconl, '%.2e')];
+msg_Sgrid = ['Sgrid = ' num2str(Sgrid, '%.2e')];
+msg_Vgrid = ['Vgrid = ' num2str(Vgrid, '%.2e')];
+msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc, '%.2e')];
+msg_XarmPU = ['Xarm PU = ' num2str(Xarm_PU)];
+msg_RPU = ['R PU = ' num2str(R_PU)];
+msg_RlPU = ['Rl PU = ' num2str(Rl_PU)];
+msg_XlPU = ['Xl PU = ' num2str(Xl_PU)];
+msg_Idc = ['Idcdif ref = ' num2str(idcdif_ref)];
+msg_Iac = ['Iacsum ref = ' num2str(imiacsum_ref)];
+
+msg = {msg_Pconu msg_Pconl msg_Sgrid msg_Vgrid msg_Vhvdc msg_XarmPU msg_XlPU msg_RlPU msg_RPU msg_Idc msg_Iac};
+
+plot_AC(vacdif, iacdif, 'Single Phase Two Arm Differential Values', [.565 .2895 .565 .286], msg)
 
 abs(iacdif/2)*sqrt(2) + abs(idcsum)

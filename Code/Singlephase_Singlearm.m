@@ -16,10 +16,10 @@ variable_count = 6;
 Pcon = 0;
 Pgrid = 640 * 1e6;
 Qgrid = 100 * 1e6;
-Vgrid_RE = 400 * 1e3;
-Vgrid_IM = 100 * 1e3;
-Vhvdc = 200 * 1e3;
-Xarm_PU = 0.05;
+Vgrid_RE = 525 * 1e3;
+Vgrid_IM = 250 * 1e3;
+Vhvdc = 800 * 1e3;
+Xarm_PU = 0.04;
 R_PU = 0.02;
 Rarm_PU = 0.01;
 
@@ -41,7 +41,6 @@ Z_PUBase = abs(Vgrid)^2 / abs(Sgrid);
 Xarm = Xarm_PU * Z_PUBase;
 R = R_PU * Z_PUBase;
 Rarm = Rarm_PU * Z_PUBase;
-
 
 %% NEWTON-RHAPSON CALCULATION
 
@@ -94,4 +93,4 @@ msg_RarmPU = ['Rarm PU = ' num2str(Rarm_PU)];
 msg = {msg_Pcon msg_Sgrid msg_Vgrid msg_Vhvdc msg_XarmPU msg_RarmPU msg_RPU};
 
 %AC Phasor Plot
-plot_AC(Vac, Iac, 'Single Phase Single Arm', msg)
+plot_AC(Vac, Iac, 'Single Phase Single Arm', [.131 .131 .795 .795], msg)
