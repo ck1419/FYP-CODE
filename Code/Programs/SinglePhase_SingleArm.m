@@ -3,6 +3,7 @@
 clc
 clear
 close all
+addpath("**/Functions")
 
 
 %% INITIAL VARIABLES
@@ -23,12 +24,6 @@ Xarm_PU = 0.04;
 R_PU = 0.02;
 Rarm_PU = 0.01;
 
-%Converter Limits
-rated_voltage = 600e3;
-rated_current = 100e3;
-rated_power = 2000e6;
-
-
 
 %% PRE-ITERATION CALCULATIONS
 
@@ -41,6 +36,7 @@ Z_PUBase = abs(Vgrid)^2 / abs(Sgrid);
 Xarm = Xarm_PU * Z_PUBase;
 R = R_PU * Z_PUBase;
 Rarm = Rarm_PU * Z_PUBase;
+
 
 %% NEWTON-RHAPSON CALCULATION
 

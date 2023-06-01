@@ -3,6 +3,7 @@
 clc
 clear
 close all
+addpath("**/Functions")
 
 
 %% INITIAL VARIABLES
