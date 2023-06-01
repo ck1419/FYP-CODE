@@ -32,6 +32,7 @@ current_lim = 1500;
 %Sweep Settings
 angle_size = 1;
 magnitude_steps = 500;
+change_percentage = 0.05;
 
 
 %% NEWTON-RHAPSON SWEEP
