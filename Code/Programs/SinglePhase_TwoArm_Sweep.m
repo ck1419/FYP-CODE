@@ -38,11 +38,14 @@ varying = 0; %Vgrid = 0; Vhvdc = 1;
 
 %% NEWTON-RHAPSON SWEEP
 
+%Creates the multipliers for the sweep
 exponent_mat = linspace(0.1,1.5,magnitude_steps);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
     
+%First loop for change in operating condition
 for nominal_change = 1:3
 
+    %Changes operating condition each loop
     Vgrid_RE_temp = Vgrid_RE;
     Vgrid_IM_temp = Vgrid_IM;
     Vhvdc_temp = Vhvdc;
@@ -71,18 +74,21 @@ for nominal_change = 1:3
     failed_max = [];
     data_collection = zeros(12, (360/angle_size)-1);
     
+    %Loop to change Sgrid angle
     disp('ITERATION / ANGLE / MAGNITUDE MULTIPLIER')
-    %Loop to change operating conditions
     for angle_loop = 0:(360/angle_size)-1
         angle = angle_loop * angle_size;
         magnitude = 500 * 1e6;
-    
+        
+        %Loop to change Sgrid magnitude
         for change = magnitude_coefficient
             Pgrid = magnitude * cosd(angle) * change;
             Qgrid = magnitude * sind(angle) * change;
             
+            %Newton-Raphson calculation
             final = SinglePhase_TwoArm_Calc(in, max_iteration, tolerance, R, Rl, Xl, Xarm, Vhvdc_temp, Vgrid_RE_temp, Vgrid_IM_temp, Pconu, Pconl, Pgrid, Qgrid, idcdif_ref, imiacsum_ref);
     
+            %Extracts variables from Newton-Raphson output
             vdcsum = final(1);
             vdcdif = final(2); 
             idcdif = final(3);  
@@ -100,6 +106,7 @@ for nominal_change = 1:3
             iacdif = reiacdif + (imiacdif * 1i);
             iacsum = reiacsum + (imiacsum * 1i);
     
+            %Transforms variables
             Vacu = -vacdif + vacsum/2;
             Vdcu = -vdcdif + vdcsum/2;
             Iacu = iacdif/2 + iacsum;
@@ -130,6 +137,7 @@ for nominal_change = 1:3
         end
     end
 
+    %Stores variable for each operating condition
     if nominal_change == 1
         failed_current_p = failed_current_magnitude .* cosd(failed_current_angle);
         failed_current_q = failed_current_magnitude .* sind(failed_current_angle);
@@ -157,32 +165,32 @@ end
 
 %% PLOT SWEEP RESULTS
 
-Pconu = 0;
-Pconl = 0;
-Vgrid_RE = 400 * 1e3;
-Vgrid_IM = 0 * 1e3;
-Vhvdc = 600 * 1e3;
-
+%Calculates variables for output plot
 Vgrid = Vgrid_RE + (Vgrid_IM * 1i);
-Sgrid = Pgrid + (Qgrid * 1i);
 
+%Plots operating region
 figure
 hold on
 grid on
 axis equal
-
 plot(failed_current_p_decrease, failed_current_q_decrease, '.', 'color', "#008000", 'markersize', 5)
 plot(failed_current_p, failed_current_q, '.', 'color', "#FF0000", 'markersize', 5)
 plot(failed_current_p_increase, failed_current_q_increase, '.', 'color', "#0000FF", 'markersize', 5)
-
 plot(failed_voltage_p_decrease, failed_voltage_q_decrease, '.', 'color', "#7CFC00", 'markersize', 5)
 plot(failed_voltage_p, failed_voltage_q, '.', 'color', "#FF00FF", 'markersize', 5)
 plot(failed_voltage_p_increase, failed_voltage_q_increase, '.', 'color', "#0096FF", 'markersize', 5)
 
+%Apply axis labels and legend
 xlabel('Pgrid')
 ylabel('Qgrid')
 legend([num2str(change_percentage*100) '% Decrease'], 'Nominal Value', [num2str(change_percentage*100) '% Increase'])
+if varying == 0
+    title('Single-Phase Two-Arm (V_{GRID} Changed)')
+else
+    title('Single-Phase Two-Arm (V_{HVDC} Changed)')
+end
 
+%Adds textbox with nominal operating conditions
 msg_Pconu = ['Pconu = ' num2str(Pconu, '%.2e')];
 msg_Pconl = ['Pconu = ' num2str(Pconl, '%.2e')];
 msg_Vgrid = ['Vgrid = ' num2str(Vgrid, '%.2e')];
@@ -198,27 +206,23 @@ msg_Ilim = ['Current Limit = ' num2str(current_lim, '%.2e')];
 msg = {msg_Pconu msg_Pconl msg_Vgrid msg_Vhvdc msg_XarmPU msg_XlPU msg_RlPU msg_RPU msg_Idc msg_Iac msg_Vlim msg_Ilim};
 annotation('textbox', [.131 .131 .795 .795],'String',msg,'FitBoxToText','on');
 
-if varying == 0
-    title('Single-Phase Two-Arm (V_{GRID} Changed)')
-else
-    title('Single-Phase Two-Arm (V_{HVDC} Changed)')
-end
+
 
 
 %% DATA FOR DEBUG
 
 vdcsum = data_collection(1,:);
-vdcdif = data_collection(2,:);         % 0
-idcdif = data_collection(3,:);       % 0
-idcsum = data_collection(4,:);       % 0
+vdcdif = data_collection(2,:);   
+idcdif = data_collection(3,:);  
+idcsum = data_collection(4,:);  
 revacsum = data_collection(5,:);       
 imvacsum = data_collection(6,:);
-revacdif = data_collection(7,:);        %Iac of AC grid
+revacdif = data_collection(7,:);  
 imvacdif = data_collection(8,:);       
-imiacsum = data_collection(9,:);        %Iac of DC grid - 0
-reiacsum = data_collection(10,:);       % 0
-reiacdif = data_collection(11,:);         %Idc of AC grid - 0
-imiacdif = data_collection(12,:);         %Idc of DC grid
+imiacsum = data_collection(9,:);  
+reiacsum = data_collection(10,:); 
+reiacdif = data_collection(11,:); 
+imiacdif = data_collection(12,:); 
 vacsum = revacsum + (imvacsum * 1i);
 vacdif = revacdif + (imvacdif * 1i);
 iacdif = reiacdif + (imiacdif * 1i);

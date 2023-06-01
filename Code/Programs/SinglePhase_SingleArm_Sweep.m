@@ -34,11 +34,14 @@ varying = 0; %Vgrid = 0; Vhvdc = 1;
 
 %% NEWTON-RHAPSON SWEEP
 
+%Creates the multipliers for the sweep
 exponent_mat = linspace(0.1,1.5,magnitude_steps);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
 
+%First loop for change in operating condition
 for nominal_change = 1:3
-
+    
+    %Changes operating condition each loop
     Vgrid_RE_temp = Vgrid_RE;
     Vgrid_IM_temp = Vgrid_IM;
     Vhvdc_temp = Vhvdc;
@@ -61,7 +64,6 @@ for nominal_change = 1:3
 
     %Initial matrix to Solve newton-Raphson with
     in = ones(6,1) * 1000;
-    
     failed_voltage_angle = 0;
     failed_voltage_magnitude = 0;
     failed_current_angle = 0;
@@ -69,19 +71,21 @@ for nominal_change = 1:3
     failed_max = [];
     data_collection = zeros(6, (360/angle_size)-1);
     
+    %Loop to change Sgrid angle
     disp('ITERATION / ANGLE / MAGNITUDE MULTIPLIER')
-    %Loop to change operating conditions
     for angle_loop = 0:(360/angle_size)-1
         angle = angle_loop * angle_size;
         magnitude = 500 * 1e6;
     
+        %Loop to change Sgrid magnitude
         for change = magnitude_coefficient
             Pgrid = magnitude * cosd(angle) * change;
             Qgrid = magnitude * sind(angle) * change;
-    
+            
+            %Newton-Raphson calculation
             final = SinglePhase_SingleArm_Calc(in, iterations, tolerance, Pcon, Xarm, R, Rarm, Vgrid_RE_temp, Vgrid_IM_temp, Vhvdc_temp, Pgrid, Qgrid);
     
-            %Finds combined Vac/Iac values
+            %Extracts variables from Newton-Raphson output
             Vac = final(1) + (final(2)*1i);
             Iac = final(3) + (final(4)*1i);
             Vdc = final(5);
@@ -108,6 +112,7 @@ for nominal_change = 1:3
         end
     end
     
+    %Stores variable for each operating condition
     if nominal_change == 1
         failed_current_p = failed_current_magnitude .* cosd(failed_current_angle);
         failed_current_q = failed_current_magnitude .* sind(failed_current_angle);
@@ -135,25 +140,32 @@ end
     
 %% PLOT SWEEP RESULTS
 
+%Calculates variables for output plot
 Vgrid = Vgrid_RE + (Vgrid_IM * 1i);
 
+%Plots operating region
 figure
 hold on
 grid on
 axis equal
-
 plot(failed_current_p_decrease, failed_current_q_decrease, '.', 'color', "#008000", 'markersize', 5)
 plot(failed_current_p, failed_current_q, '.', 'color', "#FF0000", 'markersize', 5)
 plot(failed_current_p_increase, failed_current_q_increase, '.', 'color', "#0000FF", 'markersize', 5)
-
 plot(failed_voltage_p_decrease, failed_voltage_q_decrease, '.', 'color', "#7CFC00", 'markersize', 5)
 plot(failed_voltage_p, failed_voltage_q, '.', 'color', "#FF00FF", 'markersize', 5)
 plot(failed_voltage_p_increase, failed_voltage_q_increase, '.', 'color', "#0096FF", 'markersize', 5)
 
+%Apply axis labels and legend
 xlabel('Pgrid')
 ylabel('Qgrid')
 legend([num2str(change_percentage*100) '% Decrease'], 'Nominal Value', [num2str(change_percentage*100) '% Increase'])
+if varying == 0
+    title('Single-Phase Single-Arm (V_{GRID} Changed)')
+else
+    title('Single-Phase Single-Arm (V_{HVDC} Changed)')
+end
 
+%Adds textbox with nominal operating conditions
 msg_Vgrid = ['Vgrid = ' num2str(Vgrid, '%.2e')];
 msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc, '%.2e')];
 msg_RPU = ['R = ' num2str(R)];
@@ -164,11 +176,6 @@ msg_Ilim = ['Current Limit = ' num2str(current_lim, '%.2e')];
 msg = {msg_Vgrid msg_Vhvdc msg_RPU msg_RarmPU msg_XarmPU msg_Vlim msg_Ilim};
 annotation('textbox', [.131 .131 .795 .795],'String',msg,'FitBoxToText','on');
 
-if varying == 0
-    title('Single-Phase Single-Arm (V_{GRID} Changed)')
-else
-    title('Single-Phase Single-Arm (V_{HVDC} Changed)')
-end
 
 
 %% DATA FOR DEBUG
