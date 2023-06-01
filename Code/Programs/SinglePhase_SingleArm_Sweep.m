@@ -29,6 +29,7 @@ current_lim = 2500;
 angle_size = 0.5;
 magnitude_steps = 500;
 change_percentage = 0.005;
+varying = 0; %Vgrid = 0; Vhvdc = 1;
 
 
 %% NEWTON-RHAPSON SWEEP
@@ -38,11 +39,25 @@ magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
 
 for nominal_change = 1:3
 
-    if nominal_change == 2
-        Vgrid_RE = Vgrid_RE * (1+change_percentage);
-    elseif nominal_change == 3
-        Vgrid_RE = (Vgrid_RE / (1+change_percentage)) * (1-change_percentage);
+    Vgrid_RE_temp = Vgrid_RE;
+    Vgrid_IM_temp = Vgrid_IM;
+    Vhvdc_temp = Vhvdc;
+    if varying == 1
+        if nominal_change == 2
+            Vhvdc_temp = Vhvdc * (1+change_percentage);
+        elseif nominal_change == 3
+            Vhvdc_temp = Vhvdc * (1-change_percentage);
+        end
+    else
+        if nominal_change == 2
+            Vgrid_RE_temp = Vgrid_RE * (1+change_percentage);
+            Vgrid_IM_temp = Vgrid_IM * (1+change_percentage);
+        elseif nominal_change == 3
+            Vgrid_RE_temp = Vgrid_RE * (1-change_percentage);
+            Vgrid_IM_temp = Vgrid_IM * (1-change_percentage);
+        end
     end
+
 
     %Initial matrix to Solve newton-Raphson with
     in = ones(6,1) * 1000;
@@ -64,7 +79,7 @@ for nominal_change = 1:3
             Pgrid = magnitude * cosd(angle) * change;
             Qgrid = magnitude * sind(angle) * change;
     
-            final = SinglePhase_SingleArm_Calc(in, iterations, tolerance, Pcon, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
+            final = SinglePhase_SingleArm_Calc(in, iterations, tolerance, Pcon, Xarm, R, Rarm, Vgrid_RE_temp, Vgrid_IM_temp, Vhvdc_temp, Pgrid, Qgrid);
     
             %Finds combined Vac/Iac values
             Vac = final(1) + (final(2)*1i);
@@ -120,10 +135,6 @@ end
     
 %% PLOT SWEEP RESULTS
 
-Pcon = 0;
-Vgrid_RE = 400 * 1e3;
-Vgrid_IM = 0 * 1e3;
-Vhvdc = 600 * 1e3;
 Vgrid = Vgrid_RE + (Vgrid_IM * 1i);
 
 figure
@@ -141,8 +152,7 @@ plot(failed_voltage_p_increase, failed_voltage_q_increase, '.', 'color', "#0096F
 
 xlabel('Pgrid')
 ylabel('Qgrid')
-title('Single-Phase Single-Arm (V_{GRID} Changed)')
-legend('0.5% Decrease', 'Nominal Value', '0.5% Increase')
+legend([num2str(change_percentage*100) '% Decrease'], 'Nominal Value', [num2str(change_percentage*100) '% Increase'])
 
 msg_Vgrid = ['Vgrid = ' num2str(Vgrid, '%.2e')];
 msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc, '%.2e')];
@@ -151,9 +161,14 @@ msg_RarmPU = ['Rarm = ' num2str(Rarm)];
 msg_XarmPU = ['Xarm = ' num2str(Xarm)];
 msg_Vlim = ['Voltage Limit = ' num2str(voltage_lim, '%.2e')];
 msg_Ilim = ['Current Limit = ' num2str(current_lim, '%.2e')];
-
 msg = {msg_Vgrid msg_Vhvdc msg_RPU msg_RarmPU msg_XarmPU msg_Vlim msg_Ilim};
 annotation('textbox', [.131 .131 .795 .795],'String',msg,'FitBoxToText','on');
+
+if varying == 0
+    title('Single-Phase Single-Arm (V_{GRID} Changed)')
+else
+    title('Single-Phase Single-Arm (V_{HVDC} Changed)')
+end
 
 
 %% DATA FOR DEBUG

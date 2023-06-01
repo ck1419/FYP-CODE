@@ -33,6 +33,7 @@ current_lim = 2500;
 angle_size = 0.5;
 magnitude_steps = 1000;
 change_percentage = 0.05;
+varying = 0; %Vgrid = 0; Vhvdc = 1;
 
 
 %% NEWTON-RHAPSON SWEEP
@@ -42,10 +43,23 @@ magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
     
 for nominal_change = 1:3
 
-    if nominal_change == 2
-        Vgrid_RE = Vgrid_RE * (1+change_percentage);
-    elseif nominal_change == 3
-        Vgrid_RE = (Vgrid_RE / (1+change_percentage)) * (1-change_percentage);
+    Vgrid_RE_temp = Vgrid_RE;
+    Vgrid_IM_temp = Vgrid_IM;
+    Vhvdc_temp = Vhvdc;
+    if varying == 1
+        if nominal_change == 2
+            Vhvdc_temp = Vhvdc * (1+change_percentage);
+        elseif nominal_change == 3
+            Vhvdc_temp = Vhvdc * (1-change_percentage);
+        end
+    else
+        if nominal_change == 2
+            Vgrid_RE_temp = Vgrid_RE * (1+change_percentage);
+            Vgrid_IM_temp = Vgrid_IM * (1+change_percentage);
+        elseif nominal_change == 3
+            Vgrid_RE_temp = Vgrid_RE * (1-change_percentage);
+            Vgrid_IM_temp = Vgrid_IM * (1-change_percentage);
+        end
     end
 
     %Initial matrix to Solve newton-Raphson with
@@ -67,7 +81,7 @@ for nominal_change = 1:3
             Pgrid = magnitude * cosd(angle) * change;
             Qgrid = magnitude * sind(angle) * change;
             
-            final = SinglePhase_TwoArm_Calc(in, max_iteration, tolerance, R, Rl, Xl, Xarm, Vhvdc, Vgrid_RE, Vgrid_IM, Pconu, Pconl, Pgrid, Qgrid, idcdif_ref, imiacsum_ref);
+            final = SinglePhase_TwoArm_Calc(in, max_iteration, tolerance, R, Rl, Xl, Xarm, Vhvdc_temp, Vgrid_RE_temp, Vgrid_IM_temp, Pconu, Pconl, Pgrid, Qgrid, idcdif_ref, imiacsum_ref);
     
             vdcsum = final(1);
             vdcdif = final(2); 
@@ -167,8 +181,7 @@ plot(failed_voltage_p_increase, failed_voltage_q_increase, '.', 'color', "#0096F
 
 xlabel('Pgrid')
 ylabel('Qgrid')
-title('Single-Phase Single-Arm (V_{GRID} Changed)')
-legend('5% Decrease', 'Nominal Value', '5% Increase')
+legend([num2str(change_percentage*100) '% Decrease'], 'Nominal Value', [num2str(change_percentage*100) '% Increase'])
 
 msg_Pconu = ['Pconu = ' num2str(Pconu, '%.2e')];
 msg_Pconl = ['Pconu = ' num2str(Pconl, '%.2e')];
@@ -182,9 +195,14 @@ msg_Idc = ['Idcdif ref = ' num2str(idcdif_ref)];
 msg_Iac = ['Im(Iacsum) ref = ' num2str(imiacsum_ref)];
 msg_Vlim = ['Voltage Limit = ' num2str(voltage_lim, '%.2e')];
 msg_Ilim = ['Current Limit = ' num2str(current_lim, '%.2e')];
-
 msg = {msg_Pconu msg_Pconl msg_Vgrid msg_Vhvdc msg_XarmPU msg_XlPU msg_RlPU msg_RPU msg_Idc msg_Iac msg_Vlim msg_Ilim};
 annotation('textbox', [.131 .131 .795 .795],'String',msg,'FitBoxToText','on');
+
+if varying == 0
+    title('Single-Phase Two-Arm (V_{GRID} Changed)')
+else
+    title('Single-Phase Two-Arm (V_{HVDC} Changed)')
+end
 
 
 %% DATA FOR DEBUG
