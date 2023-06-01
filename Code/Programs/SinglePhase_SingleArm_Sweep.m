@@ -29,7 +29,7 @@ current_lim = 2500;
 angle_size = 0.5;
 change_percentage = 0.005;
 
-exponent_mat = linspace(0.1,1.5,1000);
+exponent_mat = linspace(0.1,1.5,500);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
 
 %For runs where Rarm and Xarm needs to remain the same
@@ -49,8 +49,7 @@ for nominal_change = 1:3
     end
 
     %Initial matrix to Solve newton-Raphson with
-    x = zeros(variable_count, iterations);
-    x(:,1) = ones(variable_count,1) * 100;
+    in = ones(6,1) * 1000;
     
     failed_voltage_angle = 0;
     failed_voltage_magnitude = 0;
@@ -69,7 +68,7 @@ for nominal_change = 1:3
             Pgrid = magnitude * cosd(angle) * change;
             Qgrid = magnitude * sind(angle) * change;
     
-            final = SinglePhase_SingleArm_Calc(x(:,1), iterations, tolerance, Pcon, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
+            final = SinglePhase_SingleArm_Calc(in, iterations, tolerance, Pcon, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
     
             %Finds combined Vac/Iac values
             Vac = final(1) + (final(2)*1i);

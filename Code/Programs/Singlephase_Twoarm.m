@@ -9,7 +9,7 @@ addpath("../Functions/")
 %% INITIAL VARIABLES
 
 %Settings for Newton-Rhapson
-iterations = 50;
+max_iteration = 50;
 tolerance = 0.05;   %Tolerance percentage in difference between iterations for final answer
 variable_count = 12;
 
@@ -32,30 +32,9 @@ imiacsum_ref = 0;
 
 %% PRE-ITERATION CALCULATIONS
 
-%Allows system to converge faster without affecting results
-idcdif_ref_temp = idcdif_ref;
-if idcdif_ref == 0
-    idcdif_ref_temp = 1e-9;
-end
-
-imiacsum_ref_temp = imiacsum_ref;
-if imiacsum_ref == 0
-    imiacsum_ref_temp = 1e-9;
-end
-
-Vgrid_IM_temp = Vgrid_IM;
-if Vgrid_IM == 0
-    Vgrid_IM_temp = 1e-9;
-end
-    
-Qgrid_temp = Qgrid;
-if Qgrid == 0
-    Qgrid_temp = 1e-9;
-end
-
 %Combines imaginary and real components
-Vgrid = Vgrid_RE + (Vgrid_IM_temp * 1i);
-Sgrid = Pgrid + (Qgrid_temp * 1i);
+Vgrid = Vgrid_RE + (Vgrid_IM * 1i);
+Sgrid = Pgrid + (Qgrid * 1i);
 
 %PU Conversion
 Z_PU = abs(Vgrid)^2 / abs(Sgrid);
@@ -67,34 +46,8 @@ Rl = Rl_PU * Z_PU;
 
 %% NEWTON-RHAPSON CALCULATION
 
-%Initial matrix to Solve newton-Raphson with
-x = zeros(variable_count, iterations);
-x(:,1) = ones(variable_count,1) * 100;
-
-%Loop to execute Newton-Raphson
-for n = 2:iterations
-    f12_value = f12(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref_temp, imiacsum_ref_temp);
-    f12_delta_value = f12_delta(x(:,n-1), R, Rl, Xl, Xarm, Vgrid);
-    x(:,n) = x(:,n-1) - (f12_delta_value^-1 * f12_value);
-    if all((x(:,n)./x(:,n-1)) <= 1+tolerance) && all((x(:,n)./x(:,n-1)) >= 1-tolerance)
-        iterated = n;
-        final = x(:,n);
-        break
-    end
-    if n == iterations
-        final = x(:,n);
-        fprintf('WARNING: MAX ITERATIONS REACHED \n')
-    end
-end
-
-
-%% CLEAN UP VARIABLES
-
-for n = 1:variable_count
-    if abs(final(n)) <= 1
-        final(n) = 0;
-    end
-end
+in = ones(12,1) * 1000;
+final = SinglePhase_TwoArm_Calc(in, max_iteration, tolerance, R, Rl, Xl, Xarm, Vhvdc, Vgrid_RE, Vgrid_IM, Pconu, Pconl, Pgrid, Qgrid, idcdif_ref, imiacsum_ref);
 
 
 %% SEPARATE VARIABLES
@@ -125,12 +78,6 @@ Qconl = imag( ((vdcsum/2) * (idcsum - idcdif/2)) - (vacdif*conj(iacdif)/2) + (va
 
 
 %% DISPLAY OUTPUTS
-
-Vgrid = Vgrid_RE + (Vgrid_IM * 1i);
-Sgrid = Pgrid + (Qgrid * 1i);
-Igrid = abs(Sgrid)/abs(Vgrid);
-
-fprintf(['ITERATIONS = ' num2str(iterated) '\n\n'])
 
 fprintf('\nFINAL ITERATION RESULTS: \n')
 disp(['VDC SUM = ' num2str(vdcsum, '%3.3e')])

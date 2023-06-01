@@ -15,7 +15,7 @@ function final = SinglePhase_SingleArm_Calc(in, max_iteration, tolerance, Pcon, 
     %Starts the iterations
     for n = 2:max_iteration
 
-        %parses variables from x matrix for easier analysis
+        %separates variables from x matrix for easier analysis
         revac = x(1,n-1);
         imvac = x(2,n-1);
         reiac = x(3,n-1);

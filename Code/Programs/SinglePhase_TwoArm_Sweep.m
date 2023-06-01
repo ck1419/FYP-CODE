@@ -9,7 +9,7 @@ addpath("../Functions/")
 %% INITIAL VARIABLES
 
 %Settings for Newton-Rhapson
-iterations = 25;
+max_iteration = 25;
 tolerance = 0.05;   %Used to check results
 variable_count = 12;
 
@@ -29,9 +29,9 @@ imiacsum_ref = 0;
 
 %% SWEEP SETTINGS
 
-angle_size = 0.5;
+angle_size = 1;
 
-exponent_mat = linspace(0.1,1.5,1000);
+exponent_mat = linspace(0.1,1.5,500);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
 
 Xarm = 5;
@@ -59,20 +59,17 @@ end
 for nominal_change = 1:3
 
     if nominal_change == 2
-        Vgrid_RE = Vgrid_RE * 1.05;
+        Vgrid_RE = Vgrid_RE * (1+change_percentage);
     elseif nominal_change == 3
-        Vgrid_RE = (Vgrid_RE / 1.05) * 0.95;
+        Vgrid_RE = (Vgrid_RE / (1+change_percentage)) * (1-change_percentage);
     end
 
-
     %Initial matrix to Solve newton-Raphson with
-    x = zeros(variable_count, iterations);
-    x(:,1) = ones(variable_count,1) * 100;
-    
-    failed_voltage_angle = [];
-    failed_voltage_magnitude = [];
-    failed_current_angle = [];
-    failed_current_magnitude = [];
+    in = ones(12,1) * 1000;
+    failed_voltage_angle = 0;
+    failed_voltage_magnitude = 0;
+    failed_current_angle = 0;
+    failed_current_magnitude = 0;
     failed_max = [];
     data_collection = zeros(variable_count, (360/angle_size)-1);
     
@@ -85,43 +82,8 @@ for nominal_change = 1:3
         for change = magnitude_coefficient
             Pgrid = magnitude * cosd(angle) * change;
             Qgrid = magnitude * sind(angle) * change;
-    
-            Vgrid_IM_temp = Vgrid_IM;
-            if Vgrid_IM == 0
-                Vgrid_IM_temp = 1e-9;
-            end
-                
-            Qgrid_temp = Qgrid;
-            if Qgrid == 0
-                Qgrid_temp = 1e-9;
-            end
-    
-            %Combines imaginary and real components
-            Vgrid = Vgrid_RE + (Vgrid_IM_temp * 1i);
-            Sgrid = Pgrid + (Qgrid_temp * 1i);
             
-            %Loop to execute Newton-Raphson
-            for n = 2:iterations
-                f12_value = f12(x(:,n-1), R, Rl, Xl, Xarm, Vhvdc, Vgrid, Pconu, Pconl, Sgrid, idcdif_ref_temp, imiacsum_ref_temp);
-                f12_delta_value = f12_delta(x(:,n-1), R, Rl, Xl, Xarm, Vgrid);
-                x(:,n) = x(:,n-1) - (f12_delta_value^-1 * f12_value);
-                if all((x(:,n)./x(:,n-1)) <= 1+tolerance) && all((x(:,n)./x(:,n-1)) >= 1-tolerance)
-                    final = x(:,n);
-                    iterated = n;
-                    break
-                end
-                if n == iterations
-                    final = x(:,n);
-                    fprintf('WARNING: MAX ITERATIONS REACHED \n')
-                end
-            end
-    
-            %Cleans up variables converging to 0
-            for n = 1:variable_count
-                if abs(final(n)) <= 1
-                    final(n) = 0;
-                end
-            end
+            final = SinglePhase_TwoArm_Calc(in, max_iteration, tolerance, R, Rl, Xl, Xarm, Vhvdc, Vgrid_RE, Vgrid_IM, Pconu, Pconl, Pgrid, Qgrid, idcdif_ref, imiacsum_ref);
     
             vdcsum = final(1);
             vdcdif = final(2); 

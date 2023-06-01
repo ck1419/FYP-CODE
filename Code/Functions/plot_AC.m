@@ -4,9 +4,10 @@ function plot_AC(Vac, Iac, heading, pos, msg)
     hold on
     grid on
     axis equal
+
     quiver(0, 0, real(Vac)/1e2, imag(Vac)/1e2)
     quiver(0, 0, real(Iac), imag(Iac))
-%     annotation('textbox', [.131 .131 .795 .795],'String',msg,'FitBoxToText','on');
+
     annotation('textbox', pos,'String',msg,'FitBoxToText','on');
     xlabel('Real')
     ylabel('Imaginary')
