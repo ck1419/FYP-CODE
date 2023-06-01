@@ -3,7 +3,7 @@
 clc
 clear
 close all
-addpath("**/Functions")
+addpath("../Functions/")
 
 
 %% INITIAL VARIABLES

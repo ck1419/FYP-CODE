@@ -3,7 +3,7 @@
 clc
 clear
 close all
-addpath("**/Functions")
+addpath("../Functions/")
 
 
 %% INITIAL VARIABLES
@@ -141,13 +141,13 @@ for nominal_change = 1:3
             iacsum = reiacsum + (imiacsum * 1i);
     
             %Check for limits
-            if check_voltage_limit(vacdif, vdcsum, voltage_lim) == 0 %FAILED CHECK
+            if check_limit(vacdif, vdcsum, voltage_lim) == 0 %FAILED CHECK
                 failed_voltage_angle = [failed_voltage_angle, angle];
                 failed_voltage_magnitude = [failed_voltage_magnitude, magnitude*change];
                 disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(change) ': VOLTAGE LIMIT'])
                 data_collection(:,angle_loop+1) = final;
                 break
-            elseif check_current_limit(iacdif/2, idcsum, current_lim) == 0 %FAILED CHECK
+            elseif check_limit(iacdif/2, idcsum, current_lim) == 0 %FAILED CHECK
                 failed_current_angle = [failed_current_angle, angle];
                 failed_current_magnitude = [failed_current_magnitude, magnitude*change];
                 disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(change) ': CURRENT LIMIT'])

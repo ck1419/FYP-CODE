@@ -3,14 +3,14 @@
 clc
 clear
 close all
-addpath("**/Functions")
+addpath("../Functions/")
 
 
 %% INITIAL VARIABLES
 
 %Settings for Newton-Rhapson
-iterations = 25;
-tolerance = 0.01;   %Used to check results
+max_iterations = 25;
+tolerance = 0.01;
 variable_count = 6;
 
 %Operating Points
@@ -41,24 +41,17 @@ Rarm = Rarm_PU * Z_PUBase;
 %% NEWTON-RHAPSON CALCULATION
 
 %Initial matrix to Solve newton-Raphson with
-x = zeros(variable_count, iterations);
-x(:,1) = ones(variable_count,1) * 100;
-
-%Loop to execute Newton-Raphson
-for n = 2:iterations
-    f11_value = f11(x(:,n-1), Pcon, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
-    f11_delta_value = f11_delta(x(:,n-1), Xarm, R, Rarm, Vgrid_RE, Vgrid_IM);
-    x(:,n) = x(:,n-1) - (f11_delta_value^-1 * f11_value);
-end
+in = ones(6,1) * 1000;
+final = SinglePhase_SingleArm_Calc(in, max_iterations, tolerance, Pcon, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
 
 
 %% OTHER CALCULATIONS FOR FINAL ITERATION
 
 %Finds combined Vac/Iac values
-Vac = x(1, iterations) + (x(2, iterations)*1i);
-Iac = x(3, iterations) + (x(4, iterations)*1i);
-Vdc = x(5, iterations);
-Idc = x(6, iterations);
+Vac = final(1) + (final(2)*1i);
+Iac = final(3) + (final(4)*1i);
+Vdc = final(5);
+Idc = final(6);
 
 %Finds the phase of Vac/Iac
 phase_vac = rad2deg( angle(Vac) );
@@ -72,8 +65,18 @@ Qcon = Scon - Pcon;
 
 %% RESULTS
 
-%Displays results
-f11_results_display(Vac, Iac, Vdc, Idc, phase_vac, phase_iac, phase_dif, Qcon)
+fprintf('\nFINAL ITERATION RESULTS: \n')
+disp(['Vac = ' num2str(real(Vac), '%3.3e') disp_sign(Vac) num2str(abs(imag(Vac)), '%3.3e') 'i'])
+disp(['Iac = ' num2str(real(Iac), '%3.3e') disp_sign(Iac) num2str(abs(imag(Iac)), '%3.3e') 'i'])
+disp(['Vdc = ' num2str(Vdc, '%3.3e')])
+disp(['Idc = ' num2str(Idc, '%3.3e')])
+
+fprintf('\nCALCULATED RESULTS: \n')
+disp(['Vac Phase = ' num2str(phase_vac) '°'])
+disp(['Iac Phase = ' num2str(phase_iac) '°'])
+disp(['Phase Difference = ' num2str(phase_dif) '°'])
+disp(['Converter Reactive Power = ' num2str(imag(Qcon), '%3.3e')])
+fprintf('\n')
 
 
 %% PLOTS

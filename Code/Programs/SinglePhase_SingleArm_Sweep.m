@@ -3,14 +3,14 @@
 clc
 clear
 close all
-addpath("**/Functions")
+addpath("../Functions/")
 
 
 %% INITIAL VARIABLES
 
 %Settings for Newton-Rhapson
 iterations = 25;
-tolerance = 1;   %Used to check results
+tolerance = 0.05;   %Used to check results
 variable_count = 6;
 
 %Operating Points
@@ -69,32 +69,7 @@ for nominal_change = 1:3
             Pgrid = magnitude * cosd(angle) * change;
             Qgrid = magnitude * sind(angle) * change;
     
-            %Combines imaginary and real components
-            Vgrid = Vgrid_RE + (Vgrid_IM * 1i);
-            Sgrid = Pgrid + (Qgrid * 1i);
-    
-            %Loop to execute Newton-Raphson
-            for n = 2:iterations
-                f11_value = f11(x(:,n-1), Pcon, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
-                f11_delta_value = f11_delta(x(:,n-1), Xarm, R, Rarm, Vgrid_RE, Vgrid_IM);
-                x(:,n) = x(:,n-1) - (f11_delta_value^-1 * f11_value);
-                if (abs(f11_value)) <= tolerance
-                    final = x(:,n);
-                    iterated = n;
-                    break
-                end
-                if n == iterations
-                    final = x(:,n);
-                    fprintf('WARNING: MAX ITERATIONS REACHED \n')
-                end
-            end
-    
-            %Cleans and assign variables
-            for n = 1:variable_count
-                if abs(final(n)) <= 0.5
-                    final(n) = round(final(n));
-                end
-            end
+            final = SinglePhase_SingleArm_Calc(x(:,1), iterations, tolerance, Pcon, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
     
             %Finds combined Vac/Iac values
             Vac = final(1) + (final(2)*1i);
@@ -103,13 +78,13 @@ for nominal_change = 1:3
             Idc = final(6);
     
             %Check for limits
-            if check_voltage_limit(Vac, Vdc, voltage_lim) == 0 %FAILED CHECK
+            if check_limit(Vac, Vdc, voltage_lim) == 0 %FAILED CHECK
                 failed_voltage_angle = [failed_voltage_angle, angle];
                 failed_voltage_magnitude = [failed_voltage_magnitude, magnitude*change];
                 disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(change) ': VOLTAGE LIMIT'])
                 data_collection(:,angle_loop+1) = final;
                 break
-            elseif check_current_limit(Iac, Idc, current_lim) == 0 %FAILED CHECK
+            elseif check_limit(Iac, Idc, current_lim) == 0 %FAILED CHECK
                 failed_current_angle = [failed_current_angle, angle];
                 failed_current_magnitude = [failed_current_magnitude, magnitude*change];
                 disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(change) ': CURRENT LIMIT'])
