@@ -70,28 +70,27 @@ vacsum = revacsum + (imvacsum * 1i);
 vacdif = revacdif + (imvacdif * 1i);
 iacdif = reiacdif + (imiacdif * 1i);
 iacsum = reiacsum + (imiacsum * 1i);
-
 Qconu = imag( ((vdcsum/2) * (idcsum - idcdif/2)) - (vacdif*conj(iacdif)/2) - (vacsum*conj(iacsum)) );
 Qconl = imag( ((vdcsum/2) * (idcsum - idcdif/2)) - (vacdif*conj(iacdif)/2) + (vacsum*conj(iacsum)) );
 
 
 %% DISPLAY OUTPUTS
 
+%Displays results
 fprintf('\nFINAL ITERATION RESULTS: \n')
 disp(['VDC SUM = ' num2str(vdcsum, '%3.3e')])
 disp(['VAC DIF = ' num2str(real(vacdif), '%3.3e') disp_sign(vacdif) num2str(abs(imag(vacdif)), '%3.3e') 'i'])
 disp(['IDC SUM = ' num2str(idcsum, '%3.3e')])
 disp(['IAC DIF = ' num2str(real(iacdif), '%3.3e') disp_sign(iacdif) num2str(abs(imag(iacdif)), '%3.3e') 'i'])
-
 disp(['VAC SUM = ' num2str(real(vacsum), '%3.3e') disp_sign(vacsum) num2str(abs(imag(vacsum)), '%3.3e') 'i'])
 disp(['VDC DIF = ' num2str(vdcdif, '%3.3e')])
 disp(['IAC SUM = ' num2str(real(iacsum), '%3.3e') disp_sign(iacsum) num2str(abs(imag(iacsum)), '%3.3e') 'i'])
 disp(['IDC DIF = ' num2str(idcdif, '%3.3e')])
-
 fprintf('\nCALCULATED VALUES: \n')
 disp(['QCON U = ' num2str(Qconu, '%3.3e') 'i'])
 disp(['QCON L = ' num2str(Qconl, '%3.3e') 'i'])
 
+%Creates the textbox message
 msg_Pconu = ['Pconu = ' num2str(Pconu, '%.2e')];
 msg_Pconl = ['Pconu = ' num2str(Pconl, '%.2e')];
 msg_Sgrid = ['Sgrid = ' num2str(Sgrid, '%.2e')];
@@ -103,8 +102,8 @@ msg_RlPU = ['Rl PU = ' num2str(Rl_PU)];
 msg_XlPU = ['Xl PU = ' num2str(Xl_PU)];
 msg_Idc = ['Idcdif ref = ' num2str(idcdif_ref)];
 msg_Iac = ['Im(Iacsum) ref = ' num2str(imiacsum_ref)];
-
 msg = {msg_Pconu msg_Pconl msg_Sgrid msg_Vgrid msg_Vhvdc msg_XarmPU msg_XlPU msg_RlPU msg_RPU msg_Idc msg_Iac};
 
+%AC Phasor Plot
 % [.631 .2895 .565 .286]
 plot_AC(vacdif, iacdif, 'Single Phase Two Arm Differential Values', [.67 .2895 .565 .286], msg)
