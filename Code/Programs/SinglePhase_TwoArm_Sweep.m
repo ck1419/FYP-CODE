@@ -26,12 +26,12 @@ R = 2;
 Rl = 4;
 
 %Converter Limits
-voltage_lim = 1180*1e3;
-current_lim = 1500;
+voltage_lim = 900*1e3;
+current_lim = 2500;
 
 %Sweep Settings
-angle_size = 1;
-magnitude_steps = 500;
+angle_size = 0.5;
+magnitude_steps = 1000;
 change_percentage = 0.05;
 
 
@@ -86,14 +86,23 @@ for nominal_change = 1:3
             iacdif = reiacdif + (imiacdif * 1i);
             iacsum = reiacsum + (imiacsum * 1i);
     
+            Vacu = -vacdif + vacsum/2;
+            Vdcu = -vdcdif + vdcsum/2;
+            Iacu = iacdif/2 + iacsum;
+            Idcu = idcdif/2 + idcsum;
+            Vacl = vacdif + vacsum/2;
+            Vdcl = vdcdif + vdcsum/2;
+            Iacl = -iacdif/2 + iacsum;
+            Idcl = -idcdif/2 + idcsum;
+
             %Check for limits
-            if check_limit(vacdif, vdcsum, voltage_lim) == 0 %FAILED CHECK
+            if check_limit(Vacu, Vdcu, voltage_lim) == 0 || check_limit(Vacl, Vdcl, voltage_lim) == 0 %FAILED CHECK
                 failed_voltage_angle = [failed_voltage_angle, angle];
                 failed_voltage_magnitude = [failed_voltage_magnitude, magnitude*change];
                 disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(change) ': VOLTAGE LIMIT'])
                 data_collection(:,angle_loop+1) = final;
                 break
-            elseif check_limit(iacdif/2, idcsum, current_lim) == 0 %FAILED CHECK
+            elseif check_limit(Iacu, Idcu, current_lim) == 0 || check_limit(Iacl, Idcl, current_lim) == 0 %FAILED CHECK
                 failed_current_angle = [failed_current_angle, angle];
                 failed_current_magnitude = [failed_current_magnitude, magnitude*change];
                 disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(change) ': CURRENT LIMIT'])
@@ -140,6 +149,9 @@ Vgrid_RE = 400 * 1e3;
 Vgrid_IM = 0 * 1e3;
 Vhvdc = 600 * 1e3;
 
+Vgrid = Vgrid_RE + (Vgrid_IM * 1i);
+Sgrid = Pgrid + (Qgrid * 1i);
+
 figure
 hold on
 grid on
@@ -168,9 +180,11 @@ msg_RlPU = ['Rl = ' num2str(Rl)];
 msg_XlPU = ['Xl = ' num2str(Xl)];
 msg_Idc = ['Idcdif ref = ' num2str(idcdif_ref)];
 msg_Iac = ['Im(Iacsum) ref = ' num2str(imiacsum_ref)];
+msg_Vlim = ['Voltage Limit = ' num2str(voltage_lim, '%.2e')];
+msg_Ilim = ['Current Limit = ' num2str(current_lim, '%.2e')];
 
-msg = {msg_Pconu msg_Pconl msg_Vgrid msg_Vhvdc msg_XarmPU msg_XlPU msg_RlPU msg_RPU msg_Idc msg_Iac};
-annotation('textbox', [.57 .25 .565 .286],'String',msg,'FitBoxToText','on');
+msg = {msg_Pconu msg_Pconl msg_Vgrid msg_Vhvdc msg_XarmPU msg_XlPU msg_RlPU msg_RPU msg_Idc msg_Iac msg_Vlim msg_Ilim};
+annotation('textbox', [.131 .131 .795 .795],'String',msg,'FitBoxToText','on');
 
 
 %% DATA FOR DEBUG
@@ -192,5 +206,14 @@ vacdif = revacdif + (imvacdif * 1i);
 iacdif = reiacdif + (imiacdif * 1i);
 iacsum = reiacsum + (imiacsum * 1i);
 
-debug_voltage = abs(vacdif)*sqrt(2) + abs(vdcsum);
+Vacu = -vacdif + vacsum/2;
+Vdcu = -vdcdif + vdcsum/2;
+Iacu = iacdif/2 + iacsum;
+Idcu = idcdif/2 + idcsum;
+Vacl = vacdif + vacsum/2;
+Vdcl = vdcdif + vdcsum/2;
+Iacl = -iacdif/2 + iacsum;
+Idcl = -idcdif/2 + idcsum;
+
+debug_voltage = abs(Vacu)*sqrt(2) + abs(Vdcu);
 debug_current = abs(iacdif/2)*sqrt(2) + abs(idcsum);
