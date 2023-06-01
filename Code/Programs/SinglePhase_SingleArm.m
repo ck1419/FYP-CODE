@@ -6,12 +6,11 @@ close all
 addpath("../Functions/")
 
 
-%% INITIAL VARIABLES
+%% CHANGEABLE VARIABLES
 
 %Settings for Newton-Rhapson
 max_iterations = 25;
 tolerance = 0.01;
-variable_count = 6;
 
 %Operating Points
 Pcon = 0;

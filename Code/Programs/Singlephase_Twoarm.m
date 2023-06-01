@@ -6,12 +6,11 @@ close all
 addpath("../Functions/")
 
 
-%% INITIAL VARIABLES
+%% CHANGEABLE VARIABLES
 
 %Settings for Newton-Rhapson
 max_iteration = 50;
 tolerance = 0.05;   %Tolerance percentage in difference between iterations for final answer
-variable_count = 12;
 
 %Operating Points
 Pconu = 0;
@@ -25,7 +24,6 @@ Xarm_PU = 0.015;
 Xl_PU = 0.02;
 R_PU = 0.01;
 Rl_PU = 0.01;
-
 idcdif_ref = 0;
 imiacsum_ref = 0;
 

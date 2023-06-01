@@ -6,12 +6,11 @@ close all
 addpath("../Functions/")
 
 
-%% INITIAL VARIABLES
+%% CHANGEABLE VARIABLES
 
 %Settings for Newton-Rhapson
 max_iteration = 25;
 tolerance = 0.05;   %Used to check results
-variable_count = 12;
 
 %Operating Points
 Pconu = 0;
@@ -19,42 +18,26 @@ Pconl = 0;
 Vgrid_RE = 400 * 1e3;
 Vgrid_IM = 0 * 1e3;
 Vhvdc = 600 * 1e3;
-
-voltage_lim = 1180*1e3;
-current_lim = 1500;
-
 idcdif_ref = 0;
 imiacsum_ref = 0;
-
-
-%% SWEEP SETTINGS
-
-angle_size = 1;
-
-exponent_mat = linspace(0.1,1.5,500);
-magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
-
 Xarm = 5;
 Xl = 8;
 R = 2;
 Rl = 4;
 
+%Converter Limits
+voltage_lim = 1180*1e3;
+current_lim = 1500;
 
-%% PRE-ITERATION CALCULATIONS
-
-%Allows system to converge faster without affecting results
-idcdif_ref_temp = idcdif_ref;
-if idcdif_ref == 0
-    idcdif_ref_temp = 1e-9;
-end
-
-imiacsum_ref_temp = imiacsum_ref;
-if imiacsum_ref == 0
-    imiacsum_ref_temp = 1e-9;
-end
+%Sweep Settings
+angle_size = 1;
+magnitude_steps = 500;
 
 
 %% NEWTON-RHAPSON SWEEP
+
+exponent_mat = linspace(0.1,1.5,magnitude_steps);
+magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
     
 for nominal_change = 1:3
 
@@ -71,7 +54,7 @@ for nominal_change = 1:3
     failed_current_angle = 0;
     failed_current_magnitude = 0;
     failed_max = [];
-    data_collection = zeros(variable_count, (360/angle_size)-1);
+    data_collection = zeros(12, (360/angle_size)-1);
     
     disp('ITERATION / ANGLE / MAGNITUDE MULTIPLIER')
     %Loop to change operating conditions
