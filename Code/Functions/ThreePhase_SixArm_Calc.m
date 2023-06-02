@@ -32,20 +32,17 @@ function final = ThreePhase_SixArm_Calc(in, max_iteration, tolerance, R, Rl, Xl,
     vgrid_RE_c = real(vgrid_c);
     vgrid_IM_c = imag(vgrid_c);
 
-    %applies phase difference to the Sgrids 
+    %extracts p/q grid for each phase. usually the same valyes, but 
+    %this allows for testing with different scenarios
     pgrid_a = pgrid/3;
     qgrid_a = qgrid/3;
     sgrid_a = pgrid_a + (qgrid_a*1i);
-    sgrid_b = sgrid_a * exp(1i*deg2rad(b_phase));
-    sgrid_c = sgrid_a * exp(1i*deg2rad(c_phase));
+    sgrid_b = sgrid_a;
+    sgrid_c = sgrid_a;
     pgrid_b = real(sgrid_b);
     qgrid_b = imag(sgrid_b);
     pgrid_c = real(sgrid_c);
     qgrid_c = imag(sgrid_c);
-
-%     disp(sgrid_a)
-%     disp(sgrid_b)
-%     disp(sgrid_c)
 
     %converts 0s for faster calculations for phase A
     pconu_a = pseudo_zero(pconu_a);

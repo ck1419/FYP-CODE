@@ -167,3 +167,4 @@ disp(['VDC DIF = ' num2str(vdcdif_c, '%3.3e')])
 disp(['IAC SUM = ' num2str(real(iacsum_c), '%3.3e') disp_sign(iacsum_c) num2str(abs(imag(iacsum_c)), '%3.3e') 'i'])
 disp(['IDC DIF = ' num2str(idcdif_c, '%3.3e')])
 
+plot_3AC(vacdif_a, iacdif_a, vacdif_b, iacdif_b, vacdif_c, iacdif_c, 'Three Phase Six Arm Differential Values')

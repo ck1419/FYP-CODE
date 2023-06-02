@@ -104,6 +104,4 @@ msg_Idc = ['Idcdif ref = ' num2str(idcdif_ref)];
 msg_Iac = ['Im(Iacsum) ref = ' num2str(imiacsum_ref)];
 msg = {msg_Pconu msg_Pconl msg_Sgrid msg_Vgrid msg_Vhvdc msg_XarmPU msg_XlPU msg_RlPU msg_RPU msg_Idc msg_Iac};
 
-%AC Phasor Plot
-% [.631 .2895 .565 .286]
 plot_AC(vacdif, iacdif, 'Single Phase Two Arm Differential Values', [.67 .2895 .565 .286], msg)
