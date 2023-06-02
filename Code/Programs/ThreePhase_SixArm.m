@@ -117,12 +117,14 @@ iacdif_a = reiacdif_a + (imiacdif_a * 1i);
 iacsum_a = reiacsum_a + (imiacsum_a * 1i);
 
 %Phase B
+vgrid_b = Vgrid * exp(1i*deg2rad(b_phase));
 vacsum_b = revacsum_b + (imvacsum_b * 1i);
 vacdif_b = revacdif_b + (imvacdif_b * 1i);
 iacdif_b = reiacdif_b + (imiacdif_b * 1i);
 iacsum_b = reiacsum_b + (imiacsum_b * 1i);
 
 %Phase C
+vgrid_c = Vgrid * exp(1i*deg2rad(c_phase));
 vacsum_c = revacsum_c + (imvacsum_c * 1i);
 vacdif_c = revacdif_c + (imvacdif_c * 1i);
 iacdif_c = reiacdif_c + (imiacdif_c * 1i);
@@ -133,6 +135,7 @@ iacsum_c = reiacsum_c + (imiacsum_c * 1i);
 
 %Displays results
 fprintf('\nPHASE A: \n')
+disp(['VGRID = ' num2str(real(Vgrid), '%3.3e') disp_sign(Vgrid) num2str(abs(imag(Vgrid)), '%3.3e') 'i'])
 disp(['VDC SUM = ' num2str(vdcsum_a, '%3.3e')])
 disp(['VAC DIF = ' num2str(real(vacdif_a), '%3.3e') disp_sign(vacdif_a) num2str(abs(imag(vacdif_a)), '%3.3e') 'i'])
 disp(['IDC SUM = ' num2str(idcsum_a, '%3.3e')])
@@ -143,6 +146,7 @@ disp(['IAC SUM = ' num2str(real(iacsum_a), '%3.3e') disp_sign(iacsum_a) num2str(
 disp(['IDC DIF = ' num2str(idcdif_a, '%3.3e')])
 
 fprintf('\nPHASE B: \n')
+disp(['VGRID = ' num2str(real(vgrid_b), '%3.3e') disp_sign(vgrid_b) num2str(abs(imag(vgrid_b)), '%3.3e') 'i'])
 disp(['VDC SUM = ' num2str(vdcsum_b, '%3.3e')])
 disp(['VAC DIF = ' num2str(real(vacdif_b), '%3.3e') disp_sign(vacdif_b) num2str(abs(imag(vacdif_b)), '%3.3e') 'i'])
 disp(['IDC SUM = ' num2str(idcsum_b, '%3.3e')])
@@ -153,6 +157,7 @@ disp(['IAC SUM = ' num2str(real(iacsum_b), '%3.3e') disp_sign(iacsum_b) num2str(
 disp(['IDC DIF = ' num2str(idcdif_b, '%3.3e')])
 
 fprintf('\nPHASE C: \n')
+disp(['VGRID = ' num2str(real(vgrid_c), '%3.3e') disp_sign(vgrid_c) num2str(abs(imag(vgrid_c)), '%3.3e') 'i'])
 disp(['VDC SUM = ' num2str(vdcsum_c, '%3.3e')])
 disp(['VAC DIF = ' num2str(real(vacdif_c), '%3.3e') disp_sign(vacdif_c) num2str(abs(imag(vacdif_c)), '%3.3e') 'i'])
 disp(['IDC SUM = ' num2str(idcsum_c, '%3.3e')])

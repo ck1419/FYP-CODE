@@ -32,19 +32,20 @@ function final = ThreePhase_SixArm_Calc(in, max_iteration, tolerance, R, Rl, Xl,
     vgrid_RE_c = real(vgrid_c);
     vgrid_IM_c = imag(vgrid_c);
 
-    disp(vgrid_RE_a)
-    disp(vgrid_IM_a)
-
     %applies phase difference to the Sgrids 
-    pgrid_a = pgrid;
-    qgrid_a = qgrid;
-    sgrid_a = pgrid_a + (qgrid_a);
+    pgrid_a = pgrid/3;
+    qgrid_a = qgrid/3;
+    sgrid_a = pgrid_a + (qgrid_a*1i);
     sgrid_b = sgrid_a * exp(1i*deg2rad(b_phase));
     sgrid_c = sgrid_a * exp(1i*deg2rad(c_phase));
     pgrid_b = real(sgrid_b);
     qgrid_b = imag(sgrid_b);
     pgrid_c = real(sgrid_c);
     qgrid_c = imag(sgrid_c);
+
+%     disp(sgrid_a)
+%     disp(sgrid_b)
+%     disp(sgrid_c)
 
     %converts 0s for faster calculations for phase A
     pconu_a = pseudo_zero(pconu_a);
@@ -129,8 +130,8 @@ function final = ThreePhase_SixArm_Calc(in, max_iteration, tolerance, R, Rl, Xl,
         fx(4) = imvacdif_a - (reiacdif_a * (Xl + Xarm/2)) - (imiacdif_a*Rl) - vgrid_IM_a;
         fx(5) = (2 * Xarm * imiacsum_a) - revacsum_a;
         fx(6) = (-2 * Xarm * reiacsum_a) - imvacsum_a;
-        fx(7) = (vgrid_RE * reiacdif_a) + (vgrid_IM * imiacdif_a) + (vdcdif_a * idcdif_a) - pgrid_a;
-        fx(8) = (vgrid_IM * reiacdif_a) - (vgrid_RE * imiacdif_a) - qgrid_a;
+        fx(7) = (vgrid_RE_a * reiacdif_a) + (vgrid_IM_a * imiacdif_a) + (vdcdif_a * idcdif_a) - pgrid_a;
+        fx(8) = (vgrid_IM_a * reiacdif_a) - (vgrid_RE_a * imiacdif_a) - qgrid_a;
         fx(9) = (-vdcdif_a + vdcsum_a/2)*(idcdif_a/2 + idcsum_a) - revacdif_a*(reiacdif_a/2+reiacsum_a) - imvacdif_a*(imiacdif_a/2+imiacsum_a) + 0.5*revacsum_a*(reiacdif_a/2+reiacsum_a) + 0.5*imvacsum_a*(imiacdif_a/2+imiacsum_a) - pconu_a;
         fx(10) = (vdcdif_a + vdcsum_a/2)*(-idcdif_a/2 + idcsum_a) + revacdif_a*(-reiacdif_a/2+reiacsum_a) + imvacdif_a*(-imiacdif_a/2+imiacsum_a) + 0.5*revacsum_a*(-reiacdif_a/2+reiacsum_a) + 0.5*imvacsum_a*(-imiacdif_a/2+imiacsum_a) - pconl_a;    
         fx(11) = idcdif_a - idcdif_ref_a;
@@ -143,8 +144,8 @@ function final = ThreePhase_SixArm_Calc(in, max_iteration, tolerance, R, Rl, Xl,
         fx(16) = imvacdif_b - (reiacdif_b * (Xl + Xarm/2)) - (imiacdif_b*Rl) - vgrid_IM_b;
         fx(17) = (2 * Xarm * imiacsum_b) - revacsum_b;
         fx(18) = (-2 * Xarm * reiacsum_b) - imvacsum_b;
-        fx(19) = (vgrid_RE * reiacdif_b) + (vgrid_IM * imiacdif_b) + (vdcdif_b * idcdif_b) - pgrid_b;
-        fx(20) = (vgrid_IM * reiacdif_b) - (vgrid_RE * imiacdif_b) - qgrid_b;
+        fx(19) = (vgrid_RE_b * reiacdif_b) + (vgrid_IM_b * imiacdif_b) + (vdcdif_b * idcdif_b) - pgrid_b;
+        fx(20) = (vgrid_IM_b * reiacdif_b) - (vgrid_RE_b * imiacdif_b) - qgrid_b;
         fx(21) = (-vdcdif_b + vdcsum_b/2)*(idcdif_b/2 + idcsum_b) - revacdif_b*(reiacdif_b/2+reiacsum_b) - imvacdif_b*(imiacdif_b/2+imiacsum_b) + 0.5*revacsum_b*(reiacdif_b/2+reiacsum_b) + 0.5*imvacsum_b*(imiacdif_b/2+imiacsum_b) - pconu_b;
         fx(22) = (vdcdif_b + vdcsum_b/2)*(-idcdif_b/2 + idcsum_b) + revacdif_b*(-reiacdif_b/2+reiacsum_b) + imvacdif_b*(-imiacdif_b/2+imiacsum_b) + 0.5*revacsum_b*(-reiacdif_b/2+reiacsum_b) + 0.5*imvacsum_b*(-imiacdif_b/2+imiacsum_b) - pconl_b;    
         fx(23) = idcdif_b - idcdif_ref_b;
@@ -157,8 +158,8 @@ function final = ThreePhase_SixArm_Calc(in, max_iteration, tolerance, R, Rl, Xl,
         fx(28) = imvacdif_c - (reiacdif_c * (Xl + Xarm/2)) - (imiacdif_c*Rl) - vgrid_IM_c;
         fx(29) = (2 * Xarm * imiacsum_c) - revacsum_c;
         fx(30) = (-2 * Xarm * reiacsum_c) - imvacsum_c;
-        fx(31) = (vgrid_RE * reiacdif_c) + (vgrid_IM * imiacdif_c) + (vdcdif_c * idcdif_c) - pgrid_c;
-        fx(32) = (vgrid_IM * reiacdif_c) - (vgrid_RE * imiacdif_c) - qgrid_c;
+        fx(31) = (vgrid_RE_c * reiacdif_c) + (vgrid_IM_c * imiacdif_c) + (vdcdif_c * idcdif_c) - pgrid_c;
+        fx(32) = (vgrid_IM_c * reiacdif_c) - (vgrid_RE_c * imiacdif_c) - qgrid_c;
         fx(33) = (-vdcdif_c + vdcsum_c/2)*(idcdif_c/2 + idcsum_c) - revacdif_c*(reiacdif_c/2+reiacsum_c) - imvacdif_c*(imiacdif_c/2+imiacsum_c) + 0.5*revacsum_c*(reiacdif_c/2+reiacsum_c) + 0.5*imvacsum_c*(imiacdif_c/2+imiacsum_c) - pconu_c;
         fx(34) = (vdcdif_c + vdcsum_c/2)*(-idcdif_c/2 + idcsum_c) + revacdif_c*(-reiacdif_c/2+reiacsum_c) + imvacdif_c*(-imiacdif_c/2+imiacsum_c) + 0.5*revacsum_c*(-reiacdif_c/2+reiacsum_c) + 0.5*imvacsum_c*(-imiacdif_c/2+imiacsum_c) - pconl_c;    
         fx(35) = idcdif_c - idcdif_ref_c;
@@ -205,8 +206,6 @@ function final = ThreePhase_SixArm_Calc(in, max_iteration, tolerance, R, Rl, Xl,
          
         %computes the current iteration results
         x(:,n) = x(:,n-1) - (jx^-1 * fx);
-
-%         disp(x(:,n))
 
         %test for whether answer met tolerances
         if all((x(:,n)./x(:,n-1)) <= 1+tolerance) && all((x(:,n)./x(:,n-1)) >= 1-tolerance)
