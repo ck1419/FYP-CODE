@@ -43,6 +43,11 @@ function final = SinglePhase_SingleArm_Calc(in, max_iteration, tolerance, Pcon, 
 
         %computes the current iteration results
         x(:,n) = x(:,n-1) - (jx^-1 * fx);
+        
+        %forces idc < vdc
+        idc_candidates = roots([R -Vhvdc (x(1,n)*x(3,n)+x(2,n)*x(4,n))]);
+        x(6,n) = min(idc_candidates);
+        x(5,n) = x(6,n)*R - Vhvdc;
 
         %test for whether answer met tolerances
         if all((x(:,n)./x(:,n-1)) <= 1+tolerance) && all((x(:,n)./x(:,n-1)) >= 1-tolerance)
