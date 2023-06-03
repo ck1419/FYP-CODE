@@ -17,8 +17,8 @@ Pconu = 0;
 Pconl = 0;
 Pgrid = 500 * 1e6;
 Qgrid = 0 * 1e6;
-Vgrid_RE = 400 * 1e3;
-Vgrid_IM = 0 * 1e3;
+Vgrid_RE = -400 * 1e3;
+Vgrid_IM = -200 * 1e3;
 Vhvdc = 600 * 1e3;
 Xarm_PU = 0.015;
 Xl_PU = 0.02;
@@ -105,3 +105,15 @@ msg_Iac = ['Im(Iacsum) ref = ' num2str(imiacsum_ref)];
 msg = {msg_Pconu msg_Pconl msg_Sgrid msg_Vgrid msg_Vhvdc msg_XarmPU msg_XlPU msg_RlPU msg_RPU msg_Idc msg_Iac};
 
 plot_AC(vacdif, iacdif, 'Single Phase Two Arm Differential Values', [.67 .2895 .565 .286], msg)
+
+
+%% DEBUG DATA
+
+Vacu = -vacdif + vacsum/2;
+Vdcu = -vdcdif + vdcsum/2;
+Iacu = iacdif/2 + iacsum;
+Idcu = idcdif/2 + idcsum;
+Vacl = vacdif + vacsum/2;
+Vdcl = vdcdif + vdcsum/2;
+Iacl = -iacdif/2 + iacsum;
+Idcl = -idcdif/2 + idcsum;
