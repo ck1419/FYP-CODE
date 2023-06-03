@@ -30,7 +30,13 @@ function final = SinglePhase_TwoArm_Calc(in, max_iteration, tolerance, R, Rl, Xl
         reiacsum = x(9,n-1);     
         imiacsum = x(10,n-1);  
         reiacdif = x(11,n-1);
-        imiacdif = x(12,n-1);     
+        imiacdif = x(12,n-1);   
+
+        %approximates idcsum, helps with converging speed massively
+        if n == 3
+            idcsum_candidates = roots([R -vhvdc (revacdif*reiacdif + imvacdif*imiacdif)]);
+            idcsum = min(idcsum_candidates);
+        end
 
         %computes f(x)
         fx = zeros(12,1);
@@ -64,6 +70,7 @@ function final = SinglePhase_TwoArm_Calc(in, max_iteration, tolerance, R, Rl, Xl
 
         %computes the current iteration results
         x(:,n) = x(:,n-1) - (jx^-1 * fx);
+
 
         %test for whether answer met tolerances
         if all((x(:,n)./x(:,n-1)) <= 1+tolerance) && all((x(:,n)./x(:,n-1)) >= 1-tolerance)

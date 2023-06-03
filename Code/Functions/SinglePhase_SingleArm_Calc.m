@@ -23,6 +23,12 @@ function final = SinglePhase_SingleArm_Calc(in, max_iteration, tolerance, Pcon, 
         vdc = x(5,n-1);
         idc = x(6,n-1);
 
+        %approximates idc, helps with converging speed massively
+        if n == 3
+            idc_candidates = roots([R -Vhvdc (revac*reiac + imvac*imiac)]);
+            idc = min(idc_candidates);
+        end
+
         %computes f(x)
         fx = zeros(6,1);
         fx(1) = (revac*reiac) + (imvac*imiac) + (vdc*idc) - Pcon;
@@ -43,11 +49,6 @@ function final = SinglePhase_SingleArm_Calc(in, max_iteration, tolerance, Pcon, 
 
         %computes the current iteration results
         x(:,n) = x(:,n-1) - (jx^-1 * fx);
-        
-        %forces idc < vdc
-        idc_candidates = roots([R -Vhvdc (x(1,n)*x(3,n)+x(2,n)*x(4,n))]);
-        x(6,n) = min(idc_candidates);
-        x(5,n) = x(6,n)*R - Vhvdc;
 
         %test for whether answer met tolerances
         if all((x(:,n)./x(:,n-1)) <= 1+tolerance) && all((x(:,n)./x(:,n-1)) >= 1-tolerance)

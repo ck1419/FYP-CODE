@@ -119,6 +119,16 @@ function final = ThreePhase_SixArm_Calc(in, max_iteration, tolerance, R, Rl, Xl,
         reiacdif_c = x(35,n-1);
         imiacdif_c = x(36,n-1);    
 
+        %approximates idcsum, helps with converging speed massively
+        if n == 3
+            idcsum_a_candidates = roots([R -vhvdc (revacdif_a*reiacdif_a + imvacdif_a*imiacdif_a)]);
+            idcsum_a = min(idcsum_a_candidates);
+            idcsum_b_candidates = roots([R -vhvdc (revacdif_b*reiacdif_b + imvacdif_b*imiacdif_b)]);
+            idcsum_b = min(idcsum_b_candidates);
+            idcsum_c_candidates = roots([R -vhvdc (revacdif_c*reiacdif_c + imvacdif_c*imiacdif_c)]);
+            idcsum_c = min(idcsum_c_candidates);
+        end
+
         %computes f(x) for phase A
         fx = zeros(36,1);
         fx(1) = vdcsum_a + (idcsum_a * R) - vhvdc;

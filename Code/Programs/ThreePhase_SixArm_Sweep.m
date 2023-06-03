@@ -51,7 +51,7 @@ current_lim = 2500;
 angle_size = 0.5;
 magnitude_steps = 1000;
 change_percentage = 0.05;
-varying = 0; %Vgrid = 0; Vhvdc = 1;
+varying = 1; %Vgrid = 0; Vhvdc = 1;
 
 
 %% PRE-SWEEP CALCULATIONS
@@ -64,7 +64,7 @@ Ref_array = [idcdif_ref_a, imiacsum_ref_a, idcdif_ref_b, imiacsum_ref_b, idcdif_
 %% NEWTON-RHAPSON SWEEP
 
 %Creates the multipliers for the sweep
-exponent_mat = linspace(0.1,1.5,magnitude_steps);
+exponent_mat = linspace(0.9,2.5,magnitude_steps);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
     
 %First loop for change in operating condition
@@ -111,7 +111,7 @@ for nominal_change = 1:3
             Qgrid = magnitude * sind(angle) * change;
             
             %Newton-Raphson calculation
-            final = ThreePhase_SixArm_Calc(in, max_iteration, tolerance, R, Rl, Xl, Xarm, Vhvdc, Vgrid_RE, Vgrid_IM, Pcon_array, Pgrid, Qgrid, Ref_array, b_phase, c_phase);
+            final = ThreePhase_SixArm_Calc(in, max_iteration, tolerance, R, Rl, Xl, Xarm, Vhvdc_temp, Vgrid_RE_temp, Vgrid_IM_temp, Pcon_array, Pgrid, Qgrid, Ref_array, b_phase, c_phase);
 
             %Variable extraction
             vdcsum_a = final(1);
