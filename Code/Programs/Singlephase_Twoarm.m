@@ -10,7 +10,7 @@ addpath("../Functions/")
 
 %Settings for Newton-Rhapson
 max_iteration = 50;
-tolerance = 0.05;   %Tolerance percentage in difference between iterations for final answer
+tolerance = 0.05;
 
 %Operating Points
 Pconu = 0;

@@ -53,5 +53,6 @@ fx(34) = (vdcdif_c + vdcsum_c/2)*(-idcdif_c/2 + idcsum_c) + revacdif_c*(-reiacdi
 fx(35) = idcdif_c - idcdif_ref_c;
 fx(36) = imiacsum_c - imiacsum_ref_c;
 
-
 out = jacobian(fx, state_variables);
+
+disp(out)

@@ -9,15 +9,15 @@ addpath("../Functions/")
 %% CHANGEABLE VARIABLES
 
 %Settings for Newton-Rhapson
-max_iterations = 25;
+max_iterations = 50;
 tolerance = 0.01;
 
 %Operating Points
 Pcon = 0;
 Pgrid = 640 * 1e6;
 Qgrid = 000 * 1e6;
-Vgrid_RE = -525 * 1e3;
-Vgrid_IM = -250 * 1e3;
+Vgrid_RE = 525 * 1e3;
+Vgrid_IM = 0 * 1e3;
 Vhvdc = 800 * 1e3;
 Xarm_PU = 0.04;
 R_PU = 0.02;
@@ -43,14 +43,15 @@ Rarm = Rarm_PU * Z_PUBase;
 in = ones(6,1) * 1000;
 final = SinglePhase_SingleArm_Calc(in, max_iterations, tolerance, Pcon, Xarm, R, Rarm, Vgrid_RE, Vgrid_IM, Vhvdc, Pgrid, Qgrid);
 
-
-%% OTHER CALCULATIONS FOR FINAL ITERATION
-
 %Finds combined Vac/Iac values
 Vac = final(1) + (final(2)*1i);
 Iac = final(3) + (final(4)*1i);
 Vdc = final(5);
 Idc = final(6);
+
+
+
+%% OTHER CALCULATIONS FOR FINAL ITERATION
 
 %Finds the phase of Vac/Iac
 phase_vac = rad2deg( angle(Vac) );
@@ -58,8 +59,7 @@ phase_iac = rad2deg( angle(Iac) );
 phase_dif = phase_vac - phase_iac;
 
 %Finds the reactive power in the converter
-Scon = (Vac * conj(Iac)) + (Vdc * Idc);
-Qcon = Scon - Pcon;
+Qcon = imag(Vac * conj(Iac)) + (Vdc * Idc);
 
 
 %% RESULTS

@@ -32,6 +32,8 @@ current_lim = 2500;
 %Sweep Settings
 angle_size = 0.5;
 magnitude_steps = 1000;
+min_exponent = 0.9;
+max_exponent = 2.5;
 change_percentage = 0.05;
 varying = 0; %Vgrid = 0; Vhvdc = 1;
 
@@ -39,7 +41,7 @@ varying = 0; %Vgrid = 0; Vhvdc = 1;
 %% NEWTON-RHAPSON SWEEP
 
 %Creates the multipliers for the sweep
-exponent_mat = linspace(0.1,1.5,magnitude_steps);
+exponent_mat = linspace(min_exponent,max_exponent,magnitude_steps);
 magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
     
 %First loop for change in operating condition
