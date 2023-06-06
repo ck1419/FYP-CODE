@@ -54,7 +54,6 @@ min_exponent = 0.9;
 max_exponent = 2.5;
 change_percentage = 0.05;
 varying = 1; %Vgrid = 0; Vhvdc = 1;
-halfbridge = 0; %0 = fullbridge; 1 = halfbridge
 
 
 %% PRE-SWEEP CALCULATIONS
@@ -196,13 +195,13 @@ for nominal_change = 1:3
             %% FINISHED UP TO THIS POINT
 
             %Check for limits
-            if check_limit(Vacu_a, Vdcu_a, voltage_lim, halfbridge) || check_limit(Vacl_a, Vdcl_a, voltage_lim, halfbridge) || check_limit(Vacu_b, Vdcu_b, voltage_lim, halfbridge) || check_limit(Vacl_b, Vdcl_b, voltage_lim, halfbridge) || check_limit(Vacu_c, Vdcu_c, voltage_lim, halfbridge) || check_limit(Vacl_c, Vdcl_c, voltage_lim, halfbridge) %FAILED CHECK
+            if check_limit(Vacu_a, Vdcu_a, voltage_lim) == 0 || check_limit(Vacl_a, Vdcl_a, voltage_lim) == 0 || check_limit(Vacu_b, Vdcu_b, voltage_lim) == 0 || check_limit(Vacl_b, Vdcl_b, voltage_lim) == 0 || check_limit(Vacu_c, Vdcu_c, voltage_lim) == 0 || check_limit(Vacl_c, Vdcl_c, voltage_lim) == 0 %FAILED CHECK
                 failed_voltage_angle = [failed_voltage_angle, angle];
                 failed_voltage_magnitude = [failed_voltage_magnitude, magnitude*change];
                 disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(change) ': VOLTAGE LIMIT'])
                 data_collection(:,angle_loop+1) = final;
                 break
-            elseif check_limit(Iacu_a, Idcu_a, current_lim, halfbridge) || check_limit(Iacl_a, Idcl_a, current_lim, halfbridge) || check_limit(Iacu_b, Idcu_b, current_lim, halfbridge) || check_limit(Iacl_b, Idcl_b, current_lim, halfbridge) || check_limit(Iacu_c, Idcu_c, current_lim, halfbridge) || check_limit(Iacl_c, Idcl_c, current_lim, halfbridge)  %FAILED CHECK
+            elseif check_limit(Iacu_a, Idcu_a, current_lim) == 0 || check_limit(Iacl_a, Idcl_a, current_lim) == 0 || check_limit(Iacu_b, Idcu_b, current_lim) == 0 || check_limit(Iacl_b, Idcl_b, current_lim) == 0 || check_limit(Iacu_c, Idcu_c, current_lim) == 0 || check_limit(Iacl_c, Idcl_c, current_lim) == 0 %FAILED CHECK
                 failed_current_angle = [failed_current_angle, angle];
                 failed_current_magnitude = [failed_current_magnitude, magnitude*change];
                 disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(change) ': CURRENT LIMIT'])
