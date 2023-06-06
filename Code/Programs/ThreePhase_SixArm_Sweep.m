@@ -50,8 +50,8 @@ current_lim = 2500;
 %Sweep Settings
 angle_size = 0.5;
 magnitude_steps = 100;
-min_exponent = 0.9;
-max_exponent = 2.5;
+min_exponent = 0.2;
+max_exponent = 3;
 change_percentage = 0.05;
 varying = 1; %Vgrid = 0; Vhvdc = 1;
 
