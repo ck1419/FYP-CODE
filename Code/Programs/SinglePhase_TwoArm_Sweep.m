@@ -36,6 +36,7 @@ min_exponent = 0.9;
 max_exponent = 2.5;
 change_percentage = 0.05;
 varying = 0; %Vgrid = 0; Vhvdc = 1;
+halfbridge = 0; %0 = fullbridge; 1 = halfbridge
 
 
 %% NEWTON-RHAPSON SWEEP
@@ -119,13 +120,13 @@ for nominal_change = 1:3
             Idcl = -idcdif/2 + idcsum;
 
             %Check for limits
-            if check_limit(Vacu, Vdcu, voltage_lim) == 0 || check_limit(Vacl, Vdcl, voltage_lim) == 0 %FAILED CHECK
+            if check_limit(Vacu, Vdcu, voltage_lim, halfbridge) || check_limit(Vacl, Vdcl, voltage_lim, halfbridge) %FAILED CHECK
                 failed_voltage_angle = [failed_voltage_angle, angle];
                 failed_voltage_magnitude = [failed_voltage_magnitude, magnitude*change];
                 disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(change) ': VOLTAGE LIMIT'])
                 data_collection(:,angle_loop+1) = final;
                 break
-            elseif check_limit(Iacu, Idcu, current_lim) == 0 || check_limit(Iacl, Idcl, current_lim) == 0 %FAILED CHECK
+            elseif check_limit(Iacu, Idcu, current_lim, halfbridge) || check_limit(Iacl, Idcl, current_lim, halfbridge) %FAILED CHECK
                 failed_current_angle = [failed_current_angle, angle];
                 failed_current_magnitude = [failed_current_magnitude, magnitude*change];
                 disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(change) ': CURRENT LIMIT'])

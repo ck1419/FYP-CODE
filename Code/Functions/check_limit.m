@@ -1,9 +1,8 @@
 %Checks for the converter's limitations
-%0 = Fail
-function pass = check_limit(ac, dc, rated_voltage)
-    if abs(ac)*sqrt(2) + abs(dc) >= rated_voltage
-        pass = 0;
-    else
+function pass = check_limit(ac, dc, rated, is_halfbridge)
+    if (abs(ac)*sqrt(2) + abs(dc) >= rated) || (abs(ac) - abs(dc) < 0 && is_halfbridge)
         pass = 1;
+    else
+        pass = 0;
     end
 end
