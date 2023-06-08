@@ -77,7 +77,7 @@ for nominal_change = 1:3
     data_collection = zeros(12, (360/angle_size)-1);
     
     %Loop to change Sgrid angle
-    disp('ITERATION / ANGLE / MAGNITUDE MULTIPLIER')
+    disp('ITERATION / ANGLE / MAGNITUDE')
     for angle_loop = 0:(360/angle_size)-1
         angle = angle_loop * angle_size;
         magnitude = 500 * 1e6;
