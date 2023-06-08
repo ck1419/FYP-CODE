@@ -28,8 +28,8 @@ current_lim = 2500;
 %Sweep Settings
 angle_size = 0.5;
 magnitude_steps = 100;
-min_exponent = 0.1;
-max_exponent = 1.5;
+min_magnitude = 0;
+max_magnitude = 1000*1e6;
 change_percentage = 0.05;
 varying = 0; %Vgrid = 0; Vhvdc = 1;
 halfbridge = 0; %fullbridge = 0; halfbridge = 1;
@@ -38,8 +38,7 @@ halfbridge = 0; %fullbridge = 0; halfbridge = 1;
 %% NEWTON-RHAPSON SWEEP
 
 %Creates the multipliers for the sweep
-exponent_mat = linspace(min_exponent,max_exponent,magnitude_steps);
-magnitude_coefficient = (10 .^ exponent_mat - 0.9)/10;
+magnitude_mat = linspace(min_magnitude, max_magnitude, magnitude_steps);
 
 %First loop for change in operating condition
 for nominal_change = 1:3
@@ -67,23 +66,22 @@ for nominal_change = 1:3
 
     %Initial matrix to Solve newton-Raphson with
     in = ones(6,1) * 1000;
-    failed_voltage_angle = 0;
-    failed_voltage_magnitude = 0;
-    failed_current_angle = 0;
-    failed_current_magnitude = 0;
+    failed_voltage_angle = [];
+    failed_voltage_magnitude = [];
+    failed_current_angle = [];
+    failed_current_magnitude = [];
     failed_max = [];
     data_collection = zeros(6, (360/angle_size)-1);
     
     %Loop to change Sgrid angle
-    disp('ITERATION / ANGLE / MAGNITUDE MULTIPLIER')
+    disp('ITERATION / ANGLE / MAGNITUDE')
     for angle_loop = 0:(360/angle_size)-1
         angle = angle_loop * angle_size;
-        magnitude = 500 * 1e6;
     
         %Loop to change Sgrid magnitude
-        for change = magnitude_coefficient
-            Pgrid = magnitude * cosd(angle) * change;
-            Qgrid = magnitude * sind(angle) * change;
+        for magnitude = magnitude_mat
+            Pgrid = magnitude * cosd(angle);
+            Qgrid = magnitude * sind(angle);
             
             %Newton-Raphson calculation
             final = SinglePhase_SingleArm_Calc(in, iterations, tolerance, Pcon, Xarm, R, Rarm, Vgrid_RE_temp, Vgrid_IM_temp, Vhvdc_temp, Pgrid, Qgrid);
@@ -97,17 +95,17 @@ for nominal_change = 1:3
             %Check for limits
             if check_limit(Vac, Vdc, voltage_lim, halfbridge) %FAILED CHECK
                 failed_voltage_angle = [failed_voltage_angle, angle];
-                failed_voltage_magnitude = [failed_voltage_magnitude, magnitude*change];
-                disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(change) ': VOLTAGE LIMIT'])
+                failed_voltage_magnitude = [failed_voltage_magnitude, magnitude];
+                disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(magnitude) ': VOLTAGE LIMIT'])
                 data_collection(:,angle_loop+1) = final;
                 break
             elseif check_limit(Iac, Idc, current_lim, 0) %FAILED CHECK
                 failed_current_angle = [failed_current_angle, angle];
-                failed_current_magnitude = [failed_current_magnitude, magnitude*change];
-                disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(change) ': CURRENT LIMIT'])
+                failed_current_magnitude = [failed_current_magnitude, magnitude];
+                disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(magnitude) ': CURRENT LIMIT'])
                 data_collection(:,angle_loop+1) = final;
                 break
-            elseif change == magnitude_coefficient(end)
+            elseif magnitude == magnitude_mat(end)
                 failed_max = [failed_max, angle];
                 disp([num2str(angle_loop) ', ' num2str(angle) ': MAXED'])
                 data_collection(:,angle_loop+1) = final;
