@@ -24,7 +24,7 @@ function final = ThreePhase_SixArm_Calc(in, max_iteration, tolerance, R, Rl, Xl,
     %applies phase difference to the Vgrids
     vgrid_RE_a = vgrid_RE;
     vgrid_IM_a = vgrid_IM;
-    vgrid_a = vgrid_RE_a + (vgrid_IM_a);
+    vgrid_a = vgrid_RE_a + (vgrid_IM_a*1i);
     vgrid_b = vgrid_a * exp(1i*deg2rad(b_phase));
     vgrid_c = vgrid_a * exp(1i*deg2rad(c_phase));
     vgrid_RE_b = real(vgrid_b);
