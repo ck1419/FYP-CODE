@@ -151,17 +151,23 @@ figure
 hold on
 grid on
 axis equal
-plot(failed_current_p_decrease, failed_current_q_decrease, '.', 'color', "#008000", 'markersize', 5)
-plot(failed_current_p, failed_current_q, '.', 'color', "#FF0000", 'markersize', 5)
-plot(failed_current_p_increase, failed_current_q_increase, '.', 'color', "#0000FF", 'markersize', 5)
-plot(failed_voltage_p_decrease, failed_voltage_q_decrease, '.', 'color', "#7CFC00", 'markersize', 5)
-plot(failed_voltage_p, failed_voltage_q, '.', 'color', "#FF00FF", 'markersize', 5)
-plot(failed_voltage_p_increase, failed_voltage_q_increase, '.', 'color', "#0096FF", 'markersize', 5)
+plot(failed_current_p_decrease/1e6, failed_current_q_decrease/1e6, '.', 'color', "#008000", 'markersize', 5)
+plot(failed_current_p/1e6, failed_current_q/1e6, '.', 'color', "#FF0000", 'markersize', 5)
+plot(failed_current_p_increase/1e6, failed_current_q_increase/1e6, '.', 'color', "#0000FF", 'markersize', 5)
+plot(failed_voltage_p_decrease/1e6, failed_voltage_q_decrease/1e6, '.', 'color', "#7CFC00", 'markersize', 5)
+plot(failed_voltage_p/1e6, failed_voltage_q/1e6, '.', 'color', "#FF00FF", 'markersize', 5)
+plot(failed_voltage_p_increase/1e6, failed_voltage_q_increase/1e6, '.', 'color', "#0096FF", 'markersize', 5)
 
-%Apply axis labels and legend
-xlabel('Pgrid')
-ylabel('Qgrid')
-legend([num2str(change_percentage*100) '% Decrease'], 'Nominal Value', [num2str(change_percentage*100) '% Increase'])
+%Creates legend
+h = zeros(3, 1);
+h(1) = plot(NaN,NaN, '.', 'color', "#008000", 'markersize', 15);
+h(2) = plot(NaN,NaN, '.', 'color', "#FF0000", 'markersize', 15);
+h(3) = plot(NaN,NaN, '.', 'color', "#0000FF", 'markersize', 15);
+legend(h, [num2str(change_percentage*100) '% Decrease'], 'Nominal Value', [num2str(change_percentage*100) '% Increase'])
+
+%Apply axis labels
+xlabel('Pgrid [MW]')
+ylabel('Qgrid [MVAR]')
 if varying == 0
     title('Single-Phase Single-Arm (V_{GRID} Changed)')
 else
