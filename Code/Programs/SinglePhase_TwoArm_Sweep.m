@@ -69,10 +69,10 @@ for nominal_change = 1:3
 
     %Initial matrix to Solve newton-Raphson with
     in = ones(12,1) * 1000;
-    failed_voltage_angle = 0;
-    failed_voltage_magnitude = 0;
-    failed_current_angle = 0;
-    failed_current_magnitude = 0;
+    failed_voltage_angle = [];
+    failed_voltage_magnitude = [];
+    failed_current_angle = [];
+    failed_current_magnitude = [];
     failed_max = [];
     data_collection = zeros(12, (360/angle_size)-1);
     
