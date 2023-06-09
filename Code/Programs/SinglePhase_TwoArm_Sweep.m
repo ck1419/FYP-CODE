@@ -212,7 +212,8 @@ msg_Idc = ['Idcdif ref = ' num2str(idcdif_ref) ' A'];
 msg_Iac = ['Im(Iacsum) ref = ' num2str(imiacsum_ref) ' A'];
 msg_Vlim = ['Voltage Limit = ' num2str(voltage_lim/1e3) ' kV'];
 msg_Ilim = ['Current Limit = ' num2str(current_lim) ' A'];
-msg = {msg_Pconu msg_Pconl msg_Vgrid msg_Vhvdc msg_Xarm msg_Xl msg_Rl msg_R msg_Idc msg_Iac msg_Vlim msg_Ilim};
+msg_half = ['Halfbridge = ' num2str(halfbridge)];
+msg = {msg_Pconu msg_Pconl msg_Vgrid msg_Vhvdc msg_Xarm msg_Xl msg_Rl msg_R msg_Idc msg_Iac msg_Vlim msg_Ilim msg_half};
 annotation('textbox', [.2685 .13 .795 .795],'String',msg,'FitBoxToText','on');
 
 

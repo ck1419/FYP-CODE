@@ -181,7 +181,8 @@ msg_Rarm = ['Rarm = ' num2str(Rarm) ' Ω'];
 msg_Xarm = ['Xarm = ' num2str(Xarm) ' Ω'];
 msg_Vlim = ['Voltage Limit = ' num2str(voltage_lim/1e3) ' kV'];
 msg_Ilim = ['Current Limit = ' num2str(current_lim) ' A'];
-msg = {msg_Pcon msg_Vgrid msg_Vhvdc msg_R msg_Rarm msg_Xarm msg_Vlim msg_Ilim};
+msg_half = ['Halfbridge = ' num2str(halfbridge)];
+msg = {msg_Pcon msg_Vgrid msg_Vhvdc msg_R msg_Rarm msg_Xarm msg_Vlim msg_Ilim msg_half};
 annotation('textbox', [.2685 .13 .795 .795],'String',msg,'FitBoxToText','on');
 
 
