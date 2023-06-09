@@ -13,8 +13,6 @@ max_iteration = 50;
 tolerance = 0.01;   %Tolerance percentage in difference between iterations for final answer
 
 %Global Operating Points
-Pgrid = 500 * 1e6;
-Qgrid = 0 * 1e6;
 Vgrid_RE = 525 * 1e3;           %Phase A reference voltage
 Vgrid_IM = 0 * 1e3;
 Vhvdc = 800 * 1e3;
@@ -200,17 +198,20 @@ for nominal_change = 1:3
                 failed_voltage_magnitude = [failed_voltage_magnitude, magnitude];
                 disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(magnitude) ': VOLTAGE LIMIT'])
                 data_collection(:,angle_loop+1) = final;
+                in = final;
                 break
             elseif check_limit(Iacu_a, Idcu_a, current_lim, 0) || check_limit(Iacl_a, Idcl_a, current_lim, 0) || check_limit(Iacu_b, Idcu_b, current_lim, 0) || check_limit(Iacl_b, Idcl_b, current_lim, 0) || check_limit(Iacu_c, Idcu_c, current_lim, 0) || check_limit(Iacl_c, Idcl_c, current_lim, 0) %FAILED CHECK
                 failed_current_angle = [failed_current_angle, angle];
                 failed_current_magnitude = [failed_current_magnitude, magnitude];
                 disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(magnitude) ': CURRENT LIMIT'])
                 data_collection(:,angle_loop+1) = final;
+                in = final;
                 break
             elseif magnitude == magnitude_mat(end)
                 failed_max = [failed_max, angle];
                 disp([num2str(angle_loop) ', ' num2str(angle) ': MAXED'])
                 data_collection(:,angle_loop+1) = final;
+                in = final;
             end
 
         end

@@ -98,17 +98,20 @@ for nominal_change = 1:3
                 failed_voltage_magnitude = [failed_voltage_magnitude, magnitude];
                 disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(magnitude) ': VOLTAGE LIMIT'])
                 data_collection(:,angle_loop+1) = final;
+                in = final;
                 break
             elseif check_limit(Iac, Idc, current_lim, 0) %FAILED CHECK
                 failed_current_angle = [failed_current_angle, angle];
                 failed_current_magnitude = [failed_current_magnitude, magnitude];
                 disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(magnitude) ': CURRENT LIMIT'])
                 data_collection(:,angle_loop+1) = final;
+                in = final;
                 break
             elseif magnitude == magnitude_mat(end)
                 failed_max = [failed_max, angle];
                 disp([num2str(angle_loop) ', ' num2str(angle) ': MAXED'])
                 data_collection(:,angle_loop+1) = final;
+                in = final;
             end
         end
     end

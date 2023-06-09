@@ -13,8 +13,8 @@ max_iteration = 50;
 tolerance = 0.05;   %Tolerance percentage in difference between iterations for final answer
 
 %Global Operating Points
-Pgrid = 1000000000 * cosd(324);
-Qgrid = 000 * 1e6 * sind(324);
+Pgrid = 640 * 1e6;
+Qgrid = 000 * 1e6;
 Vgrid_RE = 525 * 1e3;       %Phase A reference voltage
 Vgrid_IM = 0 * 1e3;
 Vhvdc = 800 * 1e3;
@@ -166,7 +166,7 @@ disp(['VAC SUM Phase = ' num2str(phase_vacsum_a) '°'])
 disp(['IAC SUM Phase = ' num2str(phase_iacsum_a) '°'])
 fprintf('\nPHASE B: \n')
 disp(['SGRID = ' num2str(real(sgrid_b)/1e6) disp_sign(sgrid_b) num2str(abs(imag(sgrid_b))/1e6) 'i MVA'])
-disp(['VGRID = ' num2str(real(vgrid_b)/1e3) disp_sign(Vgrid) num2str(abs(imag(vgrid_b))/1e3) 'i kV'])
+disp(['VGRID = ' num2str(real(vgrid_b)/1e3) disp_sign(vgrid_b) num2str(abs(imag(vgrid_b))/1e3) 'i kV'])
 disp(['VDC SUM = ' num2str(vdcsum_b/1e3) ' kV'])
 disp(['VAC DIF = ' num2str(real(vacdif_b)/1e3) disp_sign(vacdif_b) num2str(abs(imag(vacdif_b))/1e3') 'i kV'])
 disp(['IDC SUM = ' num2str(idcsum_b) ' A'])
@@ -181,7 +181,7 @@ disp(['VAC SUM Phase = ' num2str(phase_vacsum_b) '°'])
 disp(['IAC SUM Phase = ' num2str(phase_iacsum_b) '°'])
 fprintf('\nPHASE C: \n')
 disp(['SGRID = ' num2str(real(sgrid_c)/1e6) disp_sign(sgrid_c) num2str(abs(imag(sgrid_c))/1e6) 'i MVA'])
-disp(['VGRID = ' num2str(real(vgrid_c)/1e3) disp_sign(Vgrid) num2str(abs(imag(vgrid_c))/1e3) 'i kV'])
+disp(['VGRID = ' num2str(real(vgrid_c)/1e3) disp_sign(vgrid_c) num2str(abs(imag(vgrid_c))/1e3) 'i kV'])
 disp(['VDC SUM = ' num2str(vdcsum_c/1e3) ' kV'])
 disp(['VAC DIF = ' num2str(real(vacdif_c)/1e3) disp_sign(vacdif_c) num2str(abs(imag(vacdif_c))/1e3') 'i kV'])
 disp(['IDC SUM = ' num2str(idcsum_c) ' A'])
