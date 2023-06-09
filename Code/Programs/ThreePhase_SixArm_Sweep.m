@@ -10,18 +10,18 @@ addpath("../Functions/")
 
 %Settings for Newton-Rhapson
 max_iteration = 50;
-tolerance = 0.05;   %Tolerance percentage in difference between iterations for final answer
+tolerance = 0.01;   %Tolerance percentage in difference between iterations for final answer
 
 %Global Operating Points
 Pgrid = 500 * 1e6;
 Qgrid = 0 * 1e6;
-Vgrid_RE = 400 * 1e3;
+Vgrid_RE = 525 * 1e3;           %Phase A reference voltage
 Vgrid_IM = 0 * 1e3;
-Vhvdc = 600 * 1e3;
-Xarm = 5;
-Xl = 8;
-R = 2;
-Rl = 4;
+Vhvdc = 800 * 1e3;
+Xarm = 72.35;
+Xl = 36.15;
+R = 2.15;
+Rl = 1.1;
 
 %Phase A Operating Points
 Pconu_a = 0;
@@ -34,24 +34,24 @@ Pconu_b = 0;
 Pconl_b = 0;
 idcdif_ref_b = 0;
 imiacsum_ref_b = 0;
-b_phase = 120;  %Relative to A in degrees
+b_phase = -120;  %Relative to A in degrees
 
 %Phase C Operating Points
 Pconu_c = 0;
 Pconl_c = 0;
 idcdif_ref_c = 0;
 imiacsum_ref_c = 0;
-c_phase = -120; %Relative to A in degrees
+c_phase = 120; %Relative to A in degrees
 
 %Converter Limits
-voltage_lim = 900*1e3;
-current_lim = 2500;
+voltage_lim = 1700e3;
+current_lim = 2750;
 
 %Sweep Settings
-angle_size = 0.5;
-magnitude_steps = 100;
-min_magnitude = 0;
-max_magnitude = 8000*1e6;
+angle_size = 1;
+magnitude_steps = 50;
+min_magnitude = 000;
+max_magnitude = 7000*1e6;
 change_percentage = 0.05;
 varying = 0; %Vgrid = 0; Vhvdc = 1;
 halfbridge = 0; %fullbridge = 0; halfbridge = 1;
@@ -271,9 +271,9 @@ legend(h, [num2str(change_percentage*100) '% Decrease'], 'Nominal Value', [num2s
 xlabel('Pgrid [MW]')
 ylabel('Qgrid [MVAR]')
 if varying == 0
-    title('Single-Phase Two-Arm (V_{GRID} Changed)')
+    title('Three-Phase Six-Arm (V_{GRID} Changed)')
 else
-    title('Single-Phase Two-Arm (V_{HVDC} Changed)')
+    title('Three-Phase Six-Arm (V_{HVDC} Changed)')
 end
 
 % %Adds textbox with nominal operating conditions

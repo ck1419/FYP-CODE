@@ -15,28 +15,28 @@ tolerance = 0.05;   %Used to check results
 %Operating Points
 Pconu = 0;
 Pconl = 0;
-Vgrid_RE = 400 * 1e3;
+Vgrid_RE = 525 * 1e3;
 Vgrid_IM = 0 * 1e3;
-Vhvdc = 600 * 1e3;
+Vhvdc = 800 * 1e3;
 idcdif_ref = 0;
 imiacsum_ref = 0;
-Xarm = 5;
-Xl = 8;
-R = 2;
-Rl = 4;
+Xarm = 72.35;
+Xl = 36.15;
+R = 2.15;
+Rl = 1.1;
 
 %Converter Limits
-voltage_lim = 900*1e3;
-current_lim = 2500;
+voltage_lim = 1700e3;
+current_lim = 2750;
 
 %Sweep Settings
 angle_size = 0.5;
-magnitude_steps = 100;
+magnitude_steps = 1000;
 min_magnitude = 0;
-max_magnitude = 2000*1e6;
-change_percentage = 0.05;
-varying = 0; %Vgrid = 0; Vhvdc = 1;
-halfbridge = 0; %fullbridge = 0; halfbridge = 1;
+max_magnitude = 4000*1e6;
+change_percentage = 0.95;
+varying = 1; %Vgrid = 0; Vhvdc = 1;
+halfbridge = 1; %fullbridge = 0; halfbridge = 1;
 
 
 %% NEWTON-RHAPSON SWEEP
@@ -214,7 +214,7 @@ msg_Vlim = ['Voltage Limit = ' num2str(voltage_lim/1e3) ' kV'];
 msg_Ilim = ['Current Limit = ' num2str(current_lim) ' A'];
 msg_half = ['Halfbridge = ' num2str(halfbridge)];
 msg = {msg_Pconu msg_Pconl msg_Vgrid msg_Vhvdc msg_Xarm msg_Xl msg_Rl msg_R msg_Idc msg_Iac msg_Vlim msg_Ilim msg_half};
-annotation('textbox', [.2685 .13 .795 .795],'String',msg,'FitBoxToText','on');
+annotation('textbox', [.131 .131 .795 .795],'String',msg,'FitBoxToText','on');
 
 
 

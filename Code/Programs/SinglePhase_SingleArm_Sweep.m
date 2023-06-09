@@ -17,22 +17,22 @@ Pcon = 0;
 Vgrid_RE = 400 * 1e3;
 Vgrid_IM = 0 * 1e3;
 Vhvdc = 600 * 1e3;
-Xarm = 8;
-Rarm = 4;
-R = 4;
+Xarm = 15.25;
+Rarm = 0.4;
+R = 2;
 
 %Converter Limits
-voltage_lim = 1175e3;
-current_lim = 2500;
+voltage_lim = 1250e3;
+current_lim = 6050;
 
 %Sweep Settings
 angle_size = 0.5;
-magnitude_steps = 100;
+magnitude_steps = 1250;
 min_magnitude = 0;
-max_magnitude = 1000*1e6;
-change_percentage = 0.05;
-varying = 0; %Vgrid = 0; Vhvdc = 1;
-halfbridge = 0; %fullbridge = 0; halfbridge = 1;
+max_magnitude = 2000*1e6;
+change_percentage = 0.045;
+varying = 1; %Vgrid = 0; Vhvdc = 1;
+halfbridge = 1; %fullbridge = 0; halfbridge = 1;
 
 
 %% NEWTON-RHAPSON SWEEP
@@ -183,7 +183,7 @@ msg_Vlim = ['Voltage Limit = ' num2str(voltage_lim/1e3) ' kV'];
 msg_Ilim = ['Current Limit = ' num2str(current_lim) ' A'];
 msg_half = ['Halfbridge = ' num2str(halfbridge)];
 msg = {msg_Pcon msg_Vgrid msg_Vhvdc msg_R msg_Rarm msg_Xarm msg_Vlim msg_Ilim msg_half};
-annotation('textbox', [.2685 .13 .795 .795],'String',msg,'FitBoxToText','on');
+annotation('textbox', [.131 .131 .795 .795],'String',msg,'FitBoxToText','on');
 
 
 

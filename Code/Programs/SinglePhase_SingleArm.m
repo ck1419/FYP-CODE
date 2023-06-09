@@ -14,14 +14,14 @@ tolerance = 0.01;
 
 %Operating Points
 Pcon = 0;
-Pgrid = 640 * 1e6;
+Pgrid = 1050 * 1e6;
 Qgrid = 000 * 1e6;
-Vgrid_RE = 525 * 1e3;
+Vgrid_RE = 400 * 1e3;
 Vgrid_IM = 0 * 1e3;
-Vhvdc = 800 * 1e3;
-Xarm_PU = 0.04;
-R_PU = 0.02;
-Rarm_PU = 0.01;
+Vhvdc = 600 * 1e3;
+Xarm_PU = 0.2;
+R_PU = 0.055;
+Rarm_PU = 0.005;
 
 
 %% PRE-ITERATION CALCULATIONS
@@ -59,7 +59,7 @@ phase_iac = rad2deg( angle(Iac) );
 phase_dif = phase_vac - phase_iac;
 
 %Finds the reactive power in the converter
-Qcon = imag(Vac * conj(Iac)) + (Vdc * Idc);
+Qcon = imag(Vac * conj(Iac));
 
 
 %% RESULTS
@@ -71,7 +71,7 @@ disp(['IAC = ' num2str(real(Iac)) disp_sign(Iac) num2str(abs(imag(Iac))) 'i A'])
 disp(['VDC = ' num2str(Vdc/1e3) ' kV'])
 disp(['IDC = ' num2str(Idc) ' A'])
 fprintf('\nCALCULATED RESULTS: \n')
-disp(['QCON = ' num2str(imag(Qcon)/1e3') ' MVAR'])
+disp(['QCON = ' num2str(Qcon/1e6') ' MVAR'])
 disp(['VAC Phase = ' num2str(phase_vac) '°'])
 disp(['IAC Phase = ' num2str(phase_iac) '°'])
 fprintf('\n')
@@ -90,4 +90,4 @@ msg_RarmPU = ['Rarm = ' num2str(Rarm_PU) ' PU'];
 msg = {msg_Pcon msg_Sgrid msg_Vgrid msg_Vhvdc msg_XarmPU msg_RarmPU msg_RPU};
 
 %AC Phasor Plot
-plot_AC(Vac, Iac, 'Single Phase Single Arm', [.2685 .13 .795 .795], msg)
+plot_AC(Vac, Iac, 'Single Phase Single Arm', [.131 .131 .795 .795], msg)

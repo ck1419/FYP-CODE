@@ -15,15 +15,15 @@ tolerance = 0.05;
 %Operating Points
 Pconu = 0;
 Pconl = 0;
-Pgrid = 500 * 1e6;
-Qgrid = 0 * 1e6;
-Vgrid_RE = 400 * 1e3;
-Vgrid_IM = 00 * 1e3;
-Vhvdc = 600 * 1e3;
-Xarm_PU = 0.2;
-Xl_PU = 0.02;
-R_PU = 0.01;
-Rl_PU = 0.01;
+Pgrid = 640 * 1e6;
+Qgrid = 000 * 1e6;
+Vgrid_RE = 525 * 1e3;
+Vgrid_IM = 0 * 1e3;
+Vhvdc = 800 * 1e3;
+Xarm_PU = 0.168;
+Xl_PU = 0.084;
+R_PU = 0.005;
+Rl_PU = 0.0025;
 idcdif_ref = 0;
 imiacsum_ref = 0;
 
@@ -72,9 +72,18 @@ vacdif = revacdif + (imvacdif * 1i);
 iacdif = reiacdif + (imiacdif * 1i);
 iacsum = reiacsum + (imiacsum * 1i);
 
+Vacu = -vacdif + vacsum/2;
+Vdcu = -vdcdif + vdcsum/2;
+Iacu = iacdif/2 + iacsum;
+Idcu = idcdif/2 + idcsum;
+Vacl = vacdif + vacsum/2;
+Vdcl = vdcdif + vdcsum/2;
+Iacl = -iacdif/2 + iacsum;
+Idcl = -idcdif/2 + idcsum;
+
 %Finds the reactive power in the converter
-Qconu = imag( ((vdcsum/2) * (idcsum - idcdif/2)) - (vacdif*conj(iacdif)/2) - (vacsum*conj(iacsum)) );
-Qconl = imag( ((vdcsum/2) * (idcsum - idcdif/2)) - (vacdif*conj(iacdif)/2) + (vacsum*conj(iacsum)) );
+Qconu = imag( Vacu*conj(Iacu) + Vdcu*Idcu );
+Qconl = imag( Vacl*conj(Iacl) + Vdcl*Idcl );
 
 %Finds the phases
 phase_vacdif = rad2deg( angle(vacdif) );
@@ -117,7 +126,7 @@ msg_Idc = ['Idcdif ref = ' num2str(idcdif_ref) ' A'];
 msg_Iac = ['Im(Iacsum) ref = ' num2str(imiacsum_ref) ' A'];
 msg = {msg_Pconu msg_Pconl msg_Sgrid msg_Vgrid msg_Vhvdc msg_XarmPU msg_XlPU msg_RlPU msg_RPU msg_Idc msg_Iac};
 
-plot_AC(vacdif, iacdif, 'Single Phase Two Arm Differential Values', [.2685 .13 .795 .795], msg)
+plot_AC(vacdif, iacdif, 'Single Phase Two Arm Differential Values', [.131 .131 .795 .795], msg)
 
 
 %% DEBUG DATA
