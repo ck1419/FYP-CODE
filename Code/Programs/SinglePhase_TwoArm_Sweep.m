@@ -200,20 +200,20 @@ else
 end
 
 %Adds textbox with nominal operating conditions
-msg_Pconu = ['Pconu = ' num2str(Pconu, '%.2e')];
-msg_Pconl = ['Pconu = ' num2str(Pconl, '%.2e')];
-msg_Vgrid = ['Vgrid = ' num2str(Vgrid, '%.2e')];
-msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc, '%.2e')];
-msg_XarmPU = ['Xarm = ' num2str(Xarm)];
-msg_RPU = ['R = ' num2str(R)];
-msg_RlPU = ['Rl = ' num2str(Rl)];
-msg_XlPU = ['Xl = ' num2str(Xl)];
-msg_Idc = ['Idcdif ref = ' num2str(idcdif_ref)];
-msg_Iac = ['Im(Iacsum) ref = ' num2str(imiacsum_ref)];
-msg_Vlim = ['Voltage Limit = ' num2str(voltage_lim, '%.2e')];
-msg_Ilim = ['Current Limit = ' num2str(current_lim, '%.2e')];
-msg = {msg_Pconu msg_Pconl msg_Vgrid msg_Vhvdc msg_XarmPU msg_XlPU msg_RlPU msg_RPU msg_Idc msg_Iac msg_Vlim msg_Ilim};
-annotation('textbox', [.131 .131 .795 .795],'String',msg,'FitBoxToText','on');
+msg_Pconu = ['Pconu = ' num2str(Pconu/1e6) ' MW'];
+msg_Pconl = ['Pconu = ' num2str(Pconl/1e6') ' MW'];
+msg_Vgrid = ['Vgrid = ' num2str(Vgrid/1e3) ' kV'];
+msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc/1e3) ' kV'];
+msg_Xarm = ['Xarm = ' num2str(Xarm) ' Ω'];
+msg_R = ['R = ' num2str(R) ' Ω'];
+msg_Rl = ['Rl = ' num2str(Rl) ' Ω'];
+msg_Xl = ['Xl = ' num2str(Xl) ' Ω'];
+msg_Idc = ['Idcdif ref = ' num2str(idcdif_ref) ' A'];
+msg_Iac = ['Im(Iacsum) ref = ' num2str(imiacsum_ref) ' A'];
+msg_Vlim = ['Voltage Limit = ' num2str(voltage_lim/1e3) ' kV'];
+msg_Ilim = ['Current Limit = ' num2str(current_lim) ' A'];
+msg = {msg_Pconu msg_Pconl msg_Vgrid msg_Vhvdc msg_Xarm msg_Xl msg_Rl msg_R msg_Idc msg_Iac msg_Vlim msg_Ilim};
+annotation('textbox', [.2685 .13 .795 .795],'String',msg,'FitBoxToText','on');
 
 
 

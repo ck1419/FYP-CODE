@@ -7,11 +7,11 @@ function plot_AC(Vac, Iac, heading, pos, msg)
     axis equal
 
     %Plots points as arrows with a legend
-    quiver(0, 0, real(Vac)/100, imag(Vac)/100)
+    quiver(0, 0, real(Vac)/1000, imag(Vac)/1000)
     quiver(0, 0, real(Iac), imag(Iac))
     xlabel('Real')
     ylabel('Imaginary')
-    legend('Vac/100 (V)', 'Iac (A)')
+    legend('Vac (kV)', 'Iac (A)')
     title(heading)
 
     %Adds text box with custom message at a custom position

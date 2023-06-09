@@ -173,15 +173,16 @@ else
 end
 
 %Adds textbox with nominal operating conditions
-msg_Vgrid = ['Vgrid = ' num2str(Vgrid, '%.2e')];
-msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc, '%.2e')];
-msg_RPU = ['R = ' num2str(R)];
-msg_RarmPU = ['Rarm = ' num2str(Rarm)];
-msg_XarmPU = ['Xarm = ' num2str(Xarm)];
-msg_Vlim = ['Voltage Limit = ' num2str(voltage_lim, '%.2e')];
-msg_Ilim = ['Current Limit = ' num2str(current_lim, '%.2e')];
-msg = {msg_Vgrid msg_Vhvdc msg_RPU msg_RarmPU msg_XarmPU msg_Vlim msg_Ilim};
-annotation('textbox', [.131 .131 .795 .795],'String',msg,'FitBoxToText','on');
+msg_Pcon = ['Pconu = ' num2str(Pcon/1e6) ' MW'];
+msg_Vgrid = ['Vgrid = ' num2str(Vgrid/1e3) ' kV'];
+msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc/1e3) ' kV'];
+msg_R = ['R = ' num2str(R) ' Ω'];
+msg_Rarm = ['Rarm = ' num2str(Rarm) ' Ω'];
+msg_Xarm = ['Xarm = ' num2str(Xarm) ' Ω'];
+msg_Vlim = ['Voltage Limit = ' num2str(voltage_lim/1e3) ' kV'];
+msg_Ilim = ['Current Limit = ' num2str(current_lim) ' A'];
+msg = {msg_Pcon msg_Vgrid msg_Vhvdc msg_R msg_Rarm msg_Xarm msg_Vlim msg_Ilim};
+annotation('textbox', [.2685 .13 .795 .795],'String',msg,'FitBoxToText','on');
 
 
 

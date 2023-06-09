@@ -10,16 +10,16 @@ addpath("../Functions/")
 
 %Settings for Newton-Rhapson
 max_iteration = 50;
-tolerance = 0.05;   %Tolerance percentage in difference between iterations for final answer
+tolerance = 0.001;   %Tolerance percentage in difference between iterations for final answer
 
 %Global Operating Points
 Pgrid = 500 * 1e6;
 Qgrid = 0 * 1e6;
-Vgrid_RE = 400 * 1e3;
+Vgrid_RE = 400 * 1e3;       %Phase A reference voltage
 Vgrid_IM = 0 * 1e3;
 Vhvdc = 600 * 1e3;
-Xarm_PU = 0.015;
-Xl_PU = 0.02;
+Xarm_PU = 0.2;
+Xl_PU = 0.05;
 R_PU = 0.01;
 Rl_PU = 0.01;
 
@@ -34,14 +34,14 @@ Pconu_b = 0;
 Pconl_b = 0;
 idcdif_ref_b = 0;
 imiacsum_ref_b = 0;
-b_phase = 120;  %Relative to A in degrees
+b_phase = -120;  %Relative to A in degrees
 
 %Phase C Operating Points
 Pconu_c = 0;
 Pconl_c = 0;
 idcdif_ref_c = 0;
 imiacsum_ref_c = 0;
-c_phase = -120; %Relative to A in degrees
+c_phase = 120; %Relative to A in degrees
 
 
 %% PRE-ITERATION CALCULATIONS
@@ -65,7 +65,7 @@ Ref_array = [idcdif_ref_a, imiacsum_ref_a, idcdif_ref_b, imiacsum_ref_b, idcdif_
 %% NEWTON-RHAPSON CALCULATION
 
 in = ones(36,1) * 1000;
-final = ThreePhase_SixArm_Calc(in, max_iteration, tolerance, R, Rl, Xl, Xarm, Vhvdc, Vgrid_RE, Vgrid_IM, Pcon_array, Pgrid, Qgrid, Ref_array, b_phase, c_phase);
+final = ThreePhase_SixArm_Calc_3(in, max_iteration, tolerance, R, Rl, Xl, Xarm, Vhvdc, Vgrid_RE, Vgrid_IM, Pcon_array, Pgrid, Qgrid, Ref_array, b_phase, c_phase);
 
 
 %% SEPARATE VARIABLES
@@ -135,36 +135,37 @@ iacsum_c = reiacsum_c + (imiacsum_c * 1i);
 
 %Displays results
 fprintf('\nPHASE A: \n')
-disp(['VGRID = ' num2str(real(Vgrid), '%3.3e') disp_sign(Vgrid) num2str(abs(imag(Vgrid)), '%3.3e') 'i'])
-disp(['VDC SUM = ' num2str(vdcsum_a, '%3.3e')])
-disp(['VAC DIF = ' num2str(real(vacdif_a), '%3.3e') disp_sign(vacdif_a) num2str(abs(imag(vacdif_a)), '%3.3e') 'i'])
-disp(['IDC SUM = ' num2str(idcsum_a, '%3.3e')])
-disp(['IAC DIF = ' num2str(real(iacdif_a), '%3.3e') disp_sign(iacdif_a) num2str(abs(imag(iacdif_a)), '%3.3e') 'i'])
-disp(['VAC SUM = ' num2str(real(vacsum_a), '%3.3e') disp_sign(vacsum_a) num2str(abs(imag(vacsum_a)), '%3.3e') 'i'])
-disp(['VDC DIF = ' num2str(vdcdif_a, '%3.3e')])
-disp(['IAC SUM = ' num2str(real(iacsum_a), '%3.3e') disp_sign(iacsum_a) num2str(abs(imag(iacsum_a)), '%3.3e') 'i'])
-disp(['IDC DIF = ' num2str(idcdif_a, '%3.3e')])
+disp(['VGRID = ' num2str(real(Vgrid)/1e3) disp_sign(Vgrid) num2str(abs(imag(Vgrid))/1e3) 'i kV'])
+disp(['VDC SUM = ' num2str(vdcsum_a/1e3) ' kV'])
+disp(['VAC DIF = ' num2str(real(vacdif_a)/1e3) disp_sign(vacdif_a) num2str(abs(imag(vacdif_a))/1e3') 'i kV'])
+disp(['IDC SUM = ' num2str(idcsum_a) ' A'])
+disp(['IAC DIF = ' num2str(real(iacdif_a)) disp_sign(iacdif_a) num2str(abs(imag(iacdif_a))) 'i A'])
+disp(['VAC SUM = ' num2str(real(vacsum_a)/1e3) disp_sign(vacsum_a) num2str(abs(imag(vacsum_a))/1e3) 'i kV'])
+disp(['VDC DIF = ' num2str(vdcdif_a/1e3) ' kV'])
+disp(['IAC SUM = ' num2str(real(iacsum_a)) disp_sign(iacsum_a) num2str(abs(imag(iacsum_a))) 'i A'])
+disp(['IDC DIF = ' num2str(idcdif_a) ' A'])
 
 fprintf('\nPHASE B: \n')
-disp(['VGRID = ' num2str(real(vgrid_b), '%3.3e') disp_sign(vgrid_b) num2str(abs(imag(vgrid_b)), '%3.3e') 'i'])
-disp(['VDC SUM = ' num2str(vdcsum_b, '%3.3e')])
-disp(['VAC DIF = ' num2str(real(vacdif_b), '%3.3e') disp_sign(vacdif_b) num2str(abs(imag(vacdif_b)), '%3.3e') 'i'])
-disp(['IDC SUM = ' num2str(idcsum_b, '%3.3e')])
-disp(['IAC DIF = ' num2str(real(iacdif_b), '%3.3e') disp_sign(iacdif_b) num2str(abs(imag(iacdif_b)), '%3.3e') 'i'])
-disp(['VAC SUM = ' num2str(real(vacsum_b), '%3.3e') disp_sign(vacsum_b) num2str(abs(imag(vacsum_b)), '%3.3e') 'i'])
-disp(['VDC DIF = ' num2str(vdcdif_b, '%3.3e')])
-disp(['IAC SUM = ' num2str(real(iacsum_b), '%3.3e') disp_sign(iacsum_b) num2str(abs(imag(iacsum_b)), '%3.3e') 'i'])
-disp(['IDC DIF = ' num2str(idcdif_b, '%3.3e')])
+disp(['VGRID = ' num2str(real(vgrid_b)/1e3) disp_sign(Vgrid) num2str(abs(imag(vgrid_b))/1e3) 'i kV'])
+disp(['VDC SUM = ' num2str(vdcsum_b/1e3) ' kV'])
+disp(['VAC DIF = ' num2str(real(vacdif_b)/1e3) disp_sign(vacdif_b) num2str(abs(imag(vacdif_b))/1e3') 'i kV'])
+disp(['IDC SUM = ' num2str(idcsum_b) ' A'])
+disp(['IAC DIF = ' num2str(real(iacdif_b)) disp_sign(iacdif_b) num2str(abs(imag(iacdif_b))) 'i A'])
+disp(['VAC SUM = ' num2str(real(vacsum_b)/1e3) disp_sign(vacsum_b) num2str(abs(imag(vacsum_b))/1e3) 'i kV'])
+disp(['VDC DIF = ' num2str(vdcdif_b/1e3) ' kV'])
+disp(['IAC SUM = ' num2str(real(iacsum_b)) disp_sign(iacsum_b) num2str(abs(imag(iacsum_b))) 'i A'])
+disp(['IDC DIF = ' num2str(idcdif_b) ' A'])
 
 fprintf('\nPHASE C: \n')
-disp(['VGRID = ' num2str(real(vgrid_c), '%3.3e') disp_sign(vgrid_c) num2str(abs(imag(vgrid_c)), '%3.3e') 'i'])
-disp(['VDC SUM = ' num2str(vdcsum_c, '%3.3e')])
-disp(['VAC DIF = ' num2str(real(vacdif_c), '%3.3e') disp_sign(vacdif_c) num2str(abs(imag(vacdif_c)), '%3.3e') 'i'])
-disp(['IDC SUM = ' num2str(idcsum_c, '%3.3e')])
-disp(['IAC DIF = ' num2str(real(iacdif_c), '%3.3e') disp_sign(iacdif_c) num2str(abs(imag(iacdif_c)), '%3.3e') 'i'])
-disp(['VAC SUM = ' num2str(real(vacsum_c), '%3.3e') disp_sign(vacsum_c) num2str(abs(imag(vacsum_c)), '%3.3e') 'i'])
-disp(['VDC DIF = ' num2str(vdcdif_c, '%3.3e')])
-disp(['IAC SUM = ' num2str(real(iacsum_c), '%3.3e') disp_sign(iacsum_c) num2str(abs(imag(iacsum_c)), '%3.3e') 'i'])
-disp(['IDC DIF = ' num2str(idcdif_c, '%3.3e')])
+disp(['VGRID = ' num2str(real(vgrid_c)/1e3) disp_sign(Vgrid) num2str(abs(imag(vgrid_c))/1e3) 'i kV'])
+disp(['VDC SUM = ' num2str(vdcsum_c/1e3) ' kV'])
+disp(['VAC DIF = ' num2str(real(vacdif_c)/1e3) disp_sign(vacdif_c) num2str(abs(imag(vacdif_c))/1e3') 'i kV'])
+disp(['IDC SUM = ' num2str(idcsum_c) ' A'])
+disp(['IAC DIF = ' num2str(real(iacdif_c)) disp_sign(iacdif_c) num2str(abs(imag(iacdif_c))) 'i A'])
+disp(['VAC SUM = ' num2str(real(vacsum_c)/1e3) disp_sign(vacsum_c) num2str(abs(imag(vacsum_c))/1e3) 'i kV'])
+disp(['VDC DIF = ' num2str(vdcdif_c/1e3) ' kV'])
+disp(['IAC SUM = ' num2str(real(iacsum_c)) disp_sign(iacsum_c) num2str(abs(imag(iacsum_c))) 'i A'])
+disp(['IDC DIF = ' num2str(idcdif_c) ' A'])
 
 plot_3AC(vacdif_a, iacdif_a, vacdif_b, iacdif_b, vacdif_c, iacdif_c, 'Three Phase Six Arm Differential Values')
+% iacdif_a + iacdif_b + iacdif_c

@@ -66,29 +66,28 @@ Qcon = imag(Vac * conj(Iac)) + (Vdc * Idc);
 
 %Displays results
 fprintf('\nFINAL ITERATION RESULTS: \n')
-disp(['Vac = ' num2str(real(Vac), '%3.3e') disp_sign(Vac) num2str(abs(imag(Vac)), '%3.3e') 'i'])
-disp(['Iac = ' num2str(real(Iac), '%3.3e') disp_sign(Iac) num2str(abs(imag(Iac)), '%3.3e') 'i'])
-disp(['Vdc = ' num2str(Vdc, '%3.3e')])
-disp(['Idc = ' num2str(Idc, '%3.3e')])
+disp(['VAC = ' num2str(real(Vac)/1e3) disp_sign(Vac) num2str(abs(imag(Vac))/1e3) 'i kV'])
+disp(['IAC = ' num2str(real(Iac)) disp_sign(Iac) num2str(abs(imag(Iac))) 'i A'])
+disp(['VDC = ' num2str(Vdc/1e3) ' kV'])
+disp(['IDC = ' num2str(Idc) ' A'])
 fprintf('\nCALCULATED RESULTS: \n')
-disp(['Vac Phase = ' num2str(phase_vac) '°'])
-disp(['Iac Phase = ' num2str(phase_iac) '°'])
-disp(['Phase Difference = ' num2str(phase_dif) '°'])
-disp(['Converter Reactive Power = ' num2str(imag(Qcon), '%3.3e')])
+disp(['QCON = ' num2str(imag(Qcon)/1e3') ' MVAR'])
+disp(['VAC Phase = ' num2str(phase_vac) '°'])
+disp(['IAC Phase = ' num2str(phase_iac) '°'])
 fprintf('\n')
 
 
 %% PLOTS
 
 %Creates the textbox message
-msg_Pcon = ['Pcon = ' num2str(Pcon, '%.2e')];
-msg_Sgrid = ['Sgrid = ' num2str(Sgrid, '%.2e')];
-msg_Vgrid = ['Vgrid = ' num2str(Vgrid, '%.2e')];
-msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc, '%.2e')];
-msg_XarmPU = ['Xarm PU = ' num2str(Xarm_PU)];
-msg_RPU = ['R PU = ' num2str(R_PU)];
-msg_RarmPU = ['Rarm PU = ' num2str(Rarm_PU)];
+msg_Pcon = ['Pcon = ' num2str(Pcon/1e6) ' MW'];
+msg_Sgrid = ['Sgrid = ' num2str(Sgrid/1e6) ' MVA'];
+msg_Vgrid = ['Vgrid = ' num2str(Vgrid/1e3) ' kV'];
+msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc/1e3) ' kV'];
+msg_XarmPU = ['Xarm = ' num2str(Xarm_PU) ' PU'];
+msg_RPU = ['R = ' num2str(R_PU) ' PU'];
+msg_RarmPU = ['Rarm = ' num2str(Rarm_PU) ' PU'];
 msg = {msg_Pcon msg_Sgrid msg_Vgrid msg_Vhvdc msg_XarmPU msg_RarmPU msg_RPU};
 
 %AC Phasor Plot
-plot_AC(Vac, Iac, 'Single Phase Single Arm', [.131 .131 .795 .795], msg)
+plot_AC(Vac, Iac, 'Single Phase Single Arm', [.2685 .13 .795 .795], msg)
