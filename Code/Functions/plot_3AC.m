@@ -15,7 +15,7 @@ function plot_3AC(Vac_a, Iac_a, Vac_b, Iac_b, Vac_c, Iac_c, heading, pos, msg)
     quiver(0, 0, real(Iac_c), imag(Iac_c))
     xlabel('Real')
     ylabel('Imaginary')
-    legend('[A] Vac/100 (kV)', '[A] Iac (A)', '[B] Vac (kV)', '[B] Iac (A)', '[C] Vac (kV)', '[C] Iac (A)')
+    legend('[A] Vac (kV)', '[A] Iac (A)', '[B] Vac (kV)', '[B] Iac (A)', '[C] Vac (kV)', '[C] Iac (A)')
     title(heading)
 
     %Adds text box with custom message at a custom position
