@@ -201,7 +201,7 @@ end
 
 %Adds textbox with nominal operating conditions
 msg_Pconu = ['Pconu = ' num2str(Pconu/1e6) ' MW'];
-msg_Pconl = ['Pconu = ' num2str(Pconl/1e6') ' MW'];
+msg_Pconl = ['Pconl = ' num2str(Pconl/1e6') ' MW'];
 msg_Vgrid = ['Vgrid = ' num2str(Vgrid/1e3) ' kV'];
 msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc/1e3) ' kV'];
 msg_Xarm = ['Xarm = ' num2str(Xarm) ' Ω'];
