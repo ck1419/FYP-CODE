@@ -1,5 +1,5 @@
 %3-Phase AC Phasor Plot
-function plot_3AC(Vac_a, Iac_a, Vac_b, Iac_b, Vac_c, Iac_c, heading)
+function plot_3AC(Vac_a, Iac_a, Vac_b, Iac_b, Vac_c, Iac_c, heading, pos, msg)
     %Initializes plot and forces equal axis
     figure
     hold on
@@ -18,6 +18,6 @@ function plot_3AC(Vac_a, Iac_a, Vac_b, Iac_b, Vac_c, Iac_c, heading)
     legend('[A] Vac/100 (V)', '[A] Iac (A)', '[B] Vac/100 (V)', '[B] Iac (A)', '[C] Vac/100 (V)', '[C] Iac (A)')
     title(heading)
 
-%     %Adds text box with custom message at a custom position
-%     annotation('textbox', pos,'String',msg,'FitBoxToText','on');
+    %Adds text box with custom message at a custom position
+    annotation('textbox', pos,'String',msg,'FitBoxToText','on');
 end

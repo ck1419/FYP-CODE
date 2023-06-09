@@ -144,7 +144,6 @@ disp(['VAC SUM = ' num2str(real(vacsum_a)/1e3) disp_sign(vacsum_a) num2str(abs(i
 disp(['VDC DIF = ' num2str(vdcdif_a/1e3) ' kV'])
 disp(['IAC SUM = ' num2str(real(iacsum_a)) disp_sign(iacsum_a) num2str(abs(imag(iacsum_a))) 'i A'])
 disp(['IDC DIF = ' num2str(idcdif_a) ' A'])
-
 fprintf('\nPHASE B: \n')
 disp(['VGRID = ' num2str(real(vgrid_b)/1e3) disp_sign(Vgrid) num2str(abs(imag(vgrid_b))/1e3) 'i kV'])
 disp(['VDC SUM = ' num2str(vdcsum_b/1e3) ' kV'])
@@ -155,7 +154,6 @@ disp(['VAC SUM = ' num2str(real(vacsum_b)/1e3) disp_sign(vacsum_b) num2str(abs(i
 disp(['VDC DIF = ' num2str(vdcdif_b/1e3) ' kV'])
 disp(['IAC SUM = ' num2str(real(iacsum_b)) disp_sign(iacsum_b) num2str(abs(imag(iacsum_b))) 'i A'])
 disp(['IDC DIF = ' num2str(idcdif_b) ' A'])
-
 fprintf('\nPHASE C: \n')
 disp(['VGRID = ' num2str(real(vgrid_c)/1e3) disp_sign(Vgrid) num2str(abs(imag(vgrid_c))/1e3) 'i kV'])
 disp(['VDC SUM = ' num2str(vdcsum_c/1e3) ' kV'])
@@ -167,5 +165,27 @@ disp(['VDC DIF = ' num2str(vdcdif_c/1e3) ' kV'])
 disp(['IAC SUM = ' num2str(real(iacsum_c)) disp_sign(iacsum_c) num2str(abs(imag(iacsum_c))) 'i A'])
 disp(['IDC DIF = ' num2str(idcdif_c) ' A'])
 
-plot_3AC(vacdif_a, iacdif_a, vacdif_b, iacdif_b, vacdif_c, iacdif_c, 'Three Phase Six Arm Differential Values')
+%Creates the textbox message
+msg_Sgrid = ['Sgrid = ' num2str(Sgrid/1e6) ' MVA'];
+msg_Vgrid = ['Vgrid = ' num2str(Vgrid/1e3) ' kV'];
+msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc/1e3) ' kV'];
+msg_XarmPU = ['Xarm = ' num2str(Xarm_PU) ' PU'];
+msg_RPU = ['R = ' num2str(R_PU) ' PU'];
+msg_RlPU = ['Rl = ' num2str(Rl_PU) ' PU'];
+msg_XlPU = ['Xl = ' num2str(Xl_PU) ' PU'];
+msg_Pconu_a = ['[A] Pconu = ' num2str(Pconu_a/1e6) ' MW'];
+msg_Pconl_a = ['[A] Pconl = ' num2str(Pconl_a/1e6) ' MW'];
+msg_Idc_a = ['[A] Idcdif ref = ' num2str(idcdif_ref_a) ' A'];
+msg_Iac_a = ['[A] Im(Iacsum) ref = ' num2str(imiacsum_ref_a) ' A'];
+msg_Pconu_b = ['[B] Pconu = ' num2str(Pconu_b/1e6) ' MW'];
+msg_Pconl_b = ['[B] Pconl = ' num2str(Pconl_b/1e6) ' MW'];
+msg_Idc_b = ['[B] Idcdif ref = ' num2str(idcdif_ref_b) ' A'];
+msg_Iac_b = ['[B] Im(Iacsum) ref = ' num2str(imiacsum_ref_b) ' A'];
+msg_Pconu_c = ['[C] Pconu = ' num2str(Pconu_c/1e6) ' MW'];
+msg_Pconl_c = ['[C] Pconl = ' num2str(Pconl_c/1e6) ' MW'];
+msg_Idc_c = ['[C] Idcdif ref = ' num2str(idcdif_ref_c) ' A'];
+msg_Iac_c = ['[C] Im(Iacsum) ref = ' num2str(imiacsum_ref_c) ' A'];
+msg = {msg_Sgrid msg_Vgrid msg_Vhvdc msg_XarmPU msg_XlPU msg_RlPU msg_RPU msg_Pconu_a msg_Pconl_a msg_Idc_a msg_Iac_a msg_Pconu_b msg_Pconl_b msg_Idc_b msg_Iac_b msg_Pconu_c msg_Pconl_c msg_Idc_c msg_Iac_c};
+
+plot_3AC(vacdif_a, iacdif_a, vacdif_b, iacdif_b, vacdif_c, iacdif_c, 'Three Phase Six Arm Differential Values', [.2685 .13 .795 .795], msg)
 % iacdif_a + iacdif_b + iacdif_c
