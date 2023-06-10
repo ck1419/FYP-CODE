@@ -115,6 +115,10 @@ vacsum_a = revacsum_a + (imvacsum_a * 1i);
 vacdif_a = revacdif_a + (imvacdif_a * 1i);
 iacdif_a = reiacdif_a + (imiacdif_a * 1i);
 iacsum_a = reiacsum_a + (imiacsum_a * 1i);
+Vacu_a = -vacdif_a + vacsum_a/2;
+Iacu_a = iacdif_a/2 + iacsum_a;
+Vacl_a = vacdif_a + vacsum_a/2;
+Iacl_a = -iacdif_a/2 + iacsum_a;
 sgrid_a = Sgrid/3;
 phase_vacdif_a = rad2deg( angle(vacdif_a) );
 phase_iacdif_a = rad2deg( angle(iacdif_a) );
@@ -127,6 +131,10 @@ vacsum_b = revacsum_b + (imvacsum_b * 1i);
 vacdif_b = revacdif_b + (imvacdif_b * 1i);
 iacdif_b = reiacdif_b + (imiacdif_b * 1i);
 iacsum_b = reiacsum_b + (imiacsum_b * 1i);
+Vacu_b = -vacdif_b + vacsum_b/2;
+Iacu_b = iacdif_b/2 + iacsum_b;
+Vacl_b = vacdif_b + vacsum_b/2;
+Iacl_b = -iacdif_b/2 + iacsum_b;
 sgrid_b = Sgrid/3;
 phase_vacdif_b = rad2deg( angle(vacdif_b) );
 phase_iacdif_b = rad2deg( angle(iacdif_b) );
@@ -139,11 +147,23 @@ vacsum_c = revacsum_c + (imvacsum_c * 1i);
 vacdif_c = revacdif_c + (imvacdif_c * 1i);
 iacdif_c = reiacdif_c + (imiacdif_c * 1i);
 iacsum_c = reiacsum_c + (imiacsum_c * 1i);
+Vacu_c = -vacdif_c + vacsum_c/2;
+Iacu_c = iacdif_c/2 + iacsum_c;
+Vacl_c = vacdif_c + vacsum_c/2;
+Iacl_c = -iacdif_c/2 + iacsum_c;
 sgrid_c = Sgrid/3;
 phase_vacdif_c = rad2deg( angle(vacdif_c) );
 phase_iacdif_c = rad2deg( angle(iacdif_c) );
 phase_vacsum_c = rad2deg( angle(vacsum_c) );
 phase_iacsum_c = rad2deg( angle(iacsum_c) );
+
+%Calculates reactive power
+Qconu_a = imag(Vacu_a*conj(Iacu_a));
+Qconl_a = imag(Vacl_a*conj(Iacl_a));
+Qconu_b = imag(Vacu_b*conj(Iacu_b));
+Qconl_b = imag(Vacl_b*conj(Iacl_b));
+Qconu_c = imag(Vacu_c*conj(Iacu_c));
+Qconl_c = imag(Vacl_c*conj(Iacl_c));
 
 
 %% DISPLAY OUTPUTS
@@ -164,6 +184,8 @@ disp(['VAC DIF Phase = ' num2str(phase_vacdif_a) '°'])
 disp(['IAC DIF Phase = ' num2str(phase_iacdif_a) '°'])
 disp(['VAC SUM Phase = ' num2str(phase_vacsum_a) '°'])
 disp(['IAC SUM Phase = ' num2str(phase_iacsum_a) '°'])
+disp(['QCON U = ' num2str(Qconu_a/1e6) ' MVAR'])
+disp(['QCON L = ' num2str(Qconl_a/1e6) ' MVAR'])
 fprintf('\nPHASE B: \n')
 disp(['SGRID = ' num2str(real(sgrid_b)/1e6) disp_sign(sgrid_b) num2str(abs(imag(sgrid_b))/1e6) 'i MVA'])
 disp(['VGRID = ' num2str(real(vgrid_b)/1e3) disp_sign(vgrid_b) num2str(abs(imag(vgrid_b))/1e3) 'i kV'])
@@ -179,6 +201,8 @@ disp(['VAC DIF Phase = ' num2str(phase_vacdif_b) '°'])
 disp(['IAC DIF Phase = ' num2str(phase_iacdif_b) '°'])
 disp(['VAC SUM Phase = ' num2str(phase_vacsum_b) '°'])
 disp(['IAC SUM Phase = ' num2str(phase_iacsum_b) '°'])
+disp(['QCON U = ' num2str(Qconu_b/1e6) ' MVAR'])
+disp(['QCON L = ' num2str(Qconl_b/1e6) ' MVAR'])
 fprintf('\nPHASE C: \n')
 disp(['SGRID = ' num2str(real(sgrid_c)/1e6) disp_sign(sgrid_c) num2str(abs(imag(sgrid_c))/1e6) 'i MVA'])
 disp(['VGRID = ' num2str(real(vgrid_c)/1e3) disp_sign(vgrid_c) num2str(abs(imag(vgrid_c))/1e3) 'i kV'])
@@ -194,6 +218,8 @@ disp(['VAC DIF Phase = ' num2str(phase_vacdif_c) '°'])
 disp(['IAC DIF Phase = ' num2str(phase_iacdif_c) '°'])
 disp(['VAC SUM Phase = ' num2str(phase_vacsum_c) '°'])
 disp(['IAC SUM Phase = ' num2str(phase_iacsum_c) '°'])
+disp(['QCON U = ' num2str(Qconu_c/1e6) ' MVAR'])
+disp(['QCON L = ' num2str(Qconl_c/1e6) ' MVAR'])
 
 plot_3AC(vacdif_a, iacdif_a, vacdif_b, iacdif_b, vacdif_c, iacdif_c, 'Three Phase Six Arm Differential Values')
 iacdif_a + iacdif_b + iacdif_c
