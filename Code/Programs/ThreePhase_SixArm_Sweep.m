@@ -10,7 +10,7 @@ addpath("../Functions/")
 
 %Settings for Newton-Rhapson
 max_iteration = 50;
-tolerance = 0.01;   %Tolerance percentage in difference between iterations for final answer
+tolerance = 0.05;   %Tolerance percentage in difference between iterations for final answer
 
 %Global Operating Points
 Vgrid_RE = 525 * 1e3;           %Phase A reference voltage
@@ -46,11 +46,11 @@ voltage_lim = 1700e3;
 current_lim = 2750;
 
 %Sweep Settings
-angle_size = 1;
-magnitude_steps = 50;
-min_magnitude = 000;
-max_magnitude = 7000*1e6;
-change_percentage = 0.05;
+angle_size = 0.5;
+magnitude_steps = 800;
+min_magnitude = 1000*1e6;
+max_magnitude = 10000*1e6;
+change_percentage = 0.5;
 varying = 0; %Vgrid = 0; Vhvdc = 1;
 halfbridge = 0; %fullbridge = 0; halfbridge = 1;
 
@@ -100,7 +100,7 @@ for nominal_change = 1:3
     data_collection = zeros(36, (360/angle_size)-1);
     
     %Loop to change Sgrid angle
-    disp('ITERATION / ANGLE / MAGNITUDE')
+    disp('CALCULATION / ITERATION / ANGLE / MAGNITUDE')
     for angle_loop = 0:(360/angle_size)-1
         angle = angle_loop * angle_size;
         magnitude = 500 * 1e6;
@@ -196,20 +196,20 @@ for nominal_change = 1:3
             if check_limit(Vacu_a, Vdcu_a, voltage_lim, halfbridge) || check_limit(Vacl_a, Vdcl_a, voltage_lim, halfbridge) || check_limit(Vacu_b, Vdcu_b, voltage_lim, halfbridge) || check_limit(Vacl_b, Vdcl_b, voltage_lim, halfbridge) || check_limit(Vacu_c, Vdcu_c, voltage_lim, halfbridge) || check_limit(Vacl_c, Vdcl_c, voltage_lim, halfbridge) %FAILED CHECK
                 failed_voltage_angle = [failed_voltage_angle, angle];
                 failed_voltage_magnitude = [failed_voltage_magnitude, magnitude];
-                disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(magnitude) ': VOLTAGE LIMIT'])
+                disp([num2str(nominal_change) ', ' num2str(angle_loop) ', ' num2str(angle, '%.1f') ', ' num2str(magnitude/1e6, '%.2f') ': VOLTAGE LIMIT'])
                 data_collection(:,angle_loop+1) = final;
                 in = final;
                 break
             elseif check_limit(Iacu_a, Idcu_a, current_lim, 0) || check_limit(Iacl_a, Idcl_a, current_lim, 0) || check_limit(Iacu_b, Idcu_b, current_lim, 0) || check_limit(Iacl_b, Idcl_b, current_lim, 0) || check_limit(Iacu_c, Idcu_c, current_lim, 0) || check_limit(Iacl_c, Idcl_c, current_lim, 0) %FAILED CHECK
                 failed_current_angle = [failed_current_angle, angle];
                 failed_current_magnitude = [failed_current_magnitude, magnitude];
-                disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(magnitude) ': CURRENT LIMIT'])
+                disp([num2str(nominal_change) ', ' num2str(angle_loop) ', ' num2str(angle, '%.1f') ', ' num2str(magnitude/1e6, '%.2f') ': CURRENT LIMIT'])
                 data_collection(:,angle_loop+1) = final;
                 in = final;
                 break
             elseif magnitude == magnitude_mat(end)
                 failed_max = [failed_max, angle];
-                disp([num2str(angle_loop) ', ' num2str(angle) ': MAXED'])
+                disp([num2str(nominal_change) ', ' num2str(angle_loop) ', ' num2str(angle, '%.1f') ': MAXED'])
                 data_collection(:,angle_loop+1) = final;
                 in = final;
             end

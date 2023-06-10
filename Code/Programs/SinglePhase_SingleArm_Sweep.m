@@ -74,7 +74,7 @@ for nominal_change = 1:3
     data_collection = zeros(6, (360/angle_size)-1);
     
     %Loop to change Sgrid angle
-    disp('ITERATION / ANGLE / MAGNITUDE')
+    disp('CALCULATION / ITERATION / ANGLE / MAGNITUDE')
     for angle_loop = 0:(360/angle_size)-1
         angle = angle_loop * angle_size;
     
@@ -96,20 +96,20 @@ for nominal_change = 1:3
             if check_limit(Vac, Vdc, voltage_lim, halfbridge) %FAILED CHECK
                 failed_voltage_angle = [failed_voltage_angle, angle];
                 failed_voltage_magnitude = [failed_voltage_magnitude, magnitude];
-                disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(magnitude) ': VOLTAGE LIMIT'])
+                disp([num2str(nominal_change) ', ' num2str(angle_loop) ', ' num2str(angle) ', ' num2str(magnitude) ': VOLTAGE LIMIT'])
                 data_collection(:,angle_loop+1) = final;
                 in = final;
                 break
             elseif check_limit(Iac, Idc, current_lim, 0) %FAILED CHECK
                 failed_current_angle = [failed_current_angle, angle];
                 failed_current_magnitude = [failed_current_magnitude, magnitude];
-                disp([num2str(angle_loop) ', ' num2str(angle) ', ' num2str(magnitude) ': CURRENT LIMIT'])
+                disp([num2str(nominal_change) ', ' num2str(angle_loop) ', ' num2str(angle) ', ' num2str(magnitude) ': CURRENT LIMIT'])
                 data_collection(:,angle_loop+1) = final;
                 in = final;
                 break
             elseif magnitude == magnitude_mat(end)
                 failed_max = [failed_max, angle];
-                disp([num2str(angle_loop) ', ' num2str(angle) ': MAXED'])
+                disp([num2str(nominal_change) ', ' num2str(angle_loop) ', ' num2str(angle) ': MAXED'])
                 data_collection(:,angle_loop+1) = final;
                 in = final;
             end
