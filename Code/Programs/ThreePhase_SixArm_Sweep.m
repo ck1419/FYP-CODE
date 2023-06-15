@@ -13,13 +13,13 @@ max_iteration = 50;
 tolerance = 0.05;   %Tolerance percentage in difference between iterations for final answer
 
 %Global Operating Points
-Vgrid_RE = 525 * 1e3;           %Phase A reference voltage
+Vgrid_RE = 220 * 1e3;           %Phase A reference voltage
 Vgrid_IM = 0 * 1e3;
 Vhvdc = 800 * 1e3;
-Xarm = 72.35;
-Xl = 36.15;
-R = 2.15;
-Rl = 1.1;
+Xarm = 12.7;
+Xl = 6.35;
+R = 0.38;
+Rl = 0.19;
 
 %Phase A Operating Points
 Pconu_a = 0;
@@ -42,16 +42,16 @@ imiacsum_ref_c = 0;
 c_phase = 120; %Relative to A in degrees
 
 %Converter Limits
-voltage_lim = 1700e3;
-current_lim = 2750;
+voltage_lim = 1200e3;
+current_lim = 1800;
 
 %Sweep Settings
 angle_size = 0.5;
-magnitude_steps = 800;
-min_magnitude = 1000*1e6;
-max_magnitude = 10000*1e6;
-change_percentage = 0.5;
-varying = 0; %Vgrid = 0; Vhvdc = 1;
+magnitude_steps = 750;
+min_magnitude = 0*1e6;
+max_magnitude = 2200*1e6;
+change_percentage = 0.25;
+varying = 1; %Vgrid = 0; Vhvdc = 1;
 halfbridge = 0; %fullbridge = 0; halfbridge = 1;
 
 
@@ -271,29 +271,17 @@ legend(h, [num2str(change_percentage*100) '% Decrease'], 'Nominal Value', [num2s
 %Apply axis labels
 xlabel('Pgrid [MW]')
 ylabel('Qgrid [MVAR]')
-if varying == 0
-    title('Three-Phase Six-Arm (V_{GRID} Changed)')
+if halfbridge == 1
+    halfbridge_text = ' Half-Bridge ';
 else
-    title('Three-Phase Six-Arm (V_{HVDC} Changed)')
+    halfbridge_text = ' Full-Bridge ';
 end
-
-% %Adds textbox with nominal operating conditions
-% msg_Pconu = ['Pconu = ' num2str(Pconu, '%.2e')];
-% msg_Pconl = ['Pconu = ' num2str(Pconl, '%.2e')];
-% msg_Vgrid = ['Vgrid = ' num2str(Vgrid, '%.2e')];
-% msg_Vhvdc = ['Vhvdc = ' num2str(Vhvdc, '%.2e')];
-% msg_XarmPU = ['Xarm = ' num2str(Xarm)];
-% msg_RPU = ['R = ' num2str(R)];
-% msg_RlPU = ['Rl = ' num2str(Rl)];
-% msg_XlPU = ['Xl = ' num2str(Xl)];
-% msg_Idc = ['Idcdif ref = ' num2str(idcdif_ref)];
-% msg_Iac = ['Im(Iacsum) ref = ' num2str(imiacsum_ref)];
-% msg_Vlim = ['Voltage Limit = ' num2str(voltage_lim, '%.2e')];
-% msg_Ilim = ['Current Limit = ' num2str(current_lim, '%.2e')];
-% msg = {msg_Pconu msg_Pconl msg_Vgrid msg_Vhvdc msg_XarmPU msg_XlPU msg_RlPU msg_RPU msg_Idc msg_Iac msg_Vlim msg_Ilim};
-% annotation('textbox', [.131 .131 .795 .795],'String',msg,'FitBoxToText','on');
-
-
+if varying == 1
+    varying_text = '(V_{HVDC} Changed)';
+else
+    varying_text = '(V_{GRID} Changed)';
+end
+title(['Three-Phase Six-Arm' halfbridge_text varying_text])
 
 
 %% DATA FOR DEBUG

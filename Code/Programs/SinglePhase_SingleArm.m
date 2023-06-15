@@ -14,13 +14,13 @@ tolerance = 0.01;
 
 %Operating Points
 Pcon = 0;
-Pgrid = 1050 * 1e6;
+Pgrid = 640/3 * 1e6;
 Qgrid = 000 * 1e6;
-Vgrid_RE = 400 * 1e3;
+Vgrid_RE = 220 * 1e3;
 Vgrid_IM = 0 * 1e3;
-Vhvdc = 600 * 1e3;
-Xarm_PU = 0.2;
-R_PU = 0.055;
+Vhvdc = 800 * 1e3;
+Xarm_PU = 0.168;
+R_PU = 0.005;
 Rarm_PU = 0.005;
 
 

@@ -15,7 +15,7 @@ tolerance = 0.05;   %Tolerance percentage in difference between iterations for f
 %Global Operating Points
 Pgrid = 640 * 1e6;
 Qgrid = 000 * 1e6;
-Vgrid_RE = 525 * 1e3;       %Phase A reference voltage
+Vgrid_RE = 220 * 1e3;       %Phase A reference voltage
 Vgrid_IM = 0 * 1e3;
 Vhvdc = 800 * 1e3;
 Xarm_PU = 0.168;
@@ -222,4 +222,3 @@ disp(['QCON U = ' num2str(Qconu_c/1e6) ' MVAR'])
 disp(['QCON L = ' num2str(Qconl_c/1e6) ' MVAR'])
 
 plot_3AC(vacdif_a, iacdif_a, vacdif_b, iacdif_b, vacdif_c, iacdif_c, 'Three Phase Six Arm Differential Values')
-iacdif_a + iacdif_b + iacdif_c

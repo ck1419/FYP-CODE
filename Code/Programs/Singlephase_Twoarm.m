@@ -15,9 +15,9 @@ tolerance = 0.05;
 %Operating Points
 Pconu = 0;
 Pconl = 0;
-Pgrid = 640 * 1e6;
+Pgrid = 640/3 * 1e6;
 Qgrid = 000 * 1e6;
-Vgrid_RE = 525 * 1e3;
+Vgrid_RE = 220 * 1e3;
 Vgrid_IM = 0 * 1e3;
 Vhvdc = 800 * 1e3;
 Xarm_PU = 0.168;

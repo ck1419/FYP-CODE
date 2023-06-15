@@ -10,8 +10,6 @@ syms vdcsum_c vdcdif_c idcdif_c idcsum_c revacsum_c imvacsum_c revacdif_c imvacd
 
 state_variables = [vdcsum_a vdcdif_a idcdif_a idcsum_a revacsum_a imvacsum_a revacdif_a imvacdif_a reiacsum_a imiacsum_a reiacdif_a imiacdif_a vdcsum_b vdcdif_b idcdif_b idcsum_b revacsum_b imvacsum_b revacdif_b imvacdif_b reiacsum_b imiacsum_b reiacdif_b imiacdif_b vdcsum_c vdcdif_c idcdif_c idcsum_c revacsum_c imvacsum_c revacdif_c imvacdif_c reiacsum_c imiacsum_c reiacdif_c imiacdif_c];
 
-
-%computes f(x) for phase A
 fx(1) = vdcsum_a + (idcsum_a * R) - vhvdc;
 fx(2) = vdcdif_a - (idcdif_a * Rl);
 fx(3) = revacdif_a + (imiacdif_a * (Xl + Xarm/2)) - (reiacdif_a*Rl) - vgrid_RE_a;
@@ -24,8 +22,6 @@ fx(9) = (-vdcdif_a + vdcsum_a/2)*(idcdif_a/2 + idcsum_a) - revacdif_a*(reiacdif_
 fx(10) = (vdcdif_a + vdcsum_a/2)*(-idcdif_a/2 + idcsum_a) + revacdif_a*(-reiacdif_a/2+reiacsum_a) + imvacdif_a*(-imiacdif_a/2+imiacsum_a) + 0.5*revacsum_a*(-reiacdif_a/2+reiacsum_a) + 0.5*imvacsum_a*(-imiacdif_a/2+imiacsum_a) - pconl_a;    
 fx(11) = idcdif_a - idcdif_ref_a;
 fx(12) = imiacsum_a - imiacsum_ref_a;
-
-%computes f(x) for phase B
 fx(13) = vdcsum_b + (idcsum_b * R) - vhvdc;
 fx(14) = vdcdif_b - (idcdif_b * Rl);
 fx(15) = revacdif_b + (imiacdif_b * (Xl + Xarm/2)) - (reiacdif_b*Rl) - vgrid_RE_b;
@@ -38,8 +34,6 @@ fx(21) = (-vdcdif_b + vdcsum_b/2)*(idcdif_b/2 + idcsum_b) - revacdif_b*(reiacdif
 fx(22) = (vdcdif_b + vdcsum_b/2)*(-idcdif_b/2 + idcsum_b) + revacdif_b*(-reiacdif_b/2+reiacsum_b) + imvacdif_b*(-imiacdif_b/2+imiacsum_b) + 0.5*revacsum_b*(-reiacdif_b/2+reiacsum_b) + 0.5*imvacsum_b*(-imiacdif_b/2+imiacsum_b) - pconl_b;    
 fx(23) = idcdif_b - idcdif_ref_b;
 fx(24) = imiacsum_b - imiacsum_ref_b;
-
-%computes f(x) for phase C
 fx(25) = vdcsum_c + (idcsum_c * R) - vhvdc;
 fx(26) = vdcdif_c - (idcdif_c * Rl);
 fx(27) = revacdif_c + (imiacdif_c * (Xl + Xarm/2)) - (reiacdif_c*Rl) - vgrid_RE_c;
@@ -54,5 +48,4 @@ fx(35) = idcdif_c - idcdif_ref_c;
 fx(36) = imiacsum_c - imiacsum_ref_c;
 
 out = jacobian(fx, state_variables);
-
 disp(out)

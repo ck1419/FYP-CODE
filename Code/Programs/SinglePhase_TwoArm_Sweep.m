@@ -15,27 +15,27 @@ tolerance = 0.05;   %Used to check results
 %Operating Points
 Pconu = 0;
 Pconl = 0;
-Vgrid_RE = 525 * 1e3;
+Vgrid_RE = 220 * 1e3;
 Vgrid_IM = 0 * 1e3;
 Vhvdc = 800 * 1e3;
 idcdif_ref = 0;
 imiacsum_ref = 0;
-Xarm = 72.35;
-Xl = 36.15;
-R = 2.15;
-Rl = 1.1;
+Xarm = 38.11;
+Xl = 19.05;
+R = 1.15;
+Rl = 0.55;
 
 %Converter Limits
-voltage_lim = 1700e3;
-current_lim = 2750;
+voltage_lim = 1200e3;
+current_lim = 1800;
 
 %Sweep Settings
 angle_size = 0.5;
-magnitude_steps = 1000;
+magnitude_steps = 1250;
 min_magnitude = 0;
-max_magnitude = 4000*1e6;
-change_percentage = 0.95;
-varying = 1; %Vgrid = 0; Vhvdc = 1;
+max_magnitude = 800*1e6;
+change_percentage = 0.1;
+varying = 0; %Vgrid = 0; Vhvdc = 1;
 halfbridge = 1; %fullbridge = 0; halfbridge = 1;
 
 
@@ -122,14 +122,14 @@ for nominal_change = 1:3
             if check_limit(Vacu, Vdcu, voltage_lim, halfbridge) || check_limit(Vacl, Vdcl, voltage_lim, halfbridge) %FAILED CHECK
                 failed_voltage_angle = [failed_voltage_angle, angle];
                 failed_voltage_magnitude = [failed_voltage_magnitude, magnitude];
-                disp([num2str(nominal_change) ', ' num2str(angle_loop) ', ' num2str(angle) ', ' num2str(magnitude) ': VOLTAGE LIMIT'])
+                disp([num2str(nominal_change) ', ' num2str(angle_loop) ', ' num2str(angle) ', ' num2str(magnitude/1e6) ': VOLTAGE LIMIT'])
                 data_collection(:,angle_loop+1) = final;
                 in = final;
                 break
             elseif check_limit(Iacu, Idcu, current_lim, 0) || check_limit(Iacl, Idcl, current_lim, 0) %FAILED CHECK
                 failed_current_angle = [failed_current_angle, angle];
                 failed_current_magnitude = [failed_current_magnitude, magnitude];
-                disp([num2str(nominal_change) ', ' num2str(angle_loop) ', ' num2str(angle) ', ' num2str(magnitude) ': CURRENT LIMIT'])
+                disp([num2str(nominal_change) ', ' num2str(angle_loop) ', ' num2str(angle) ', ' num2str(magnitude/1e6) ': CURRENT LIMIT'])
                 data_collection(:,angle_loop+1) = final;
                 in = final;
                 break
@@ -196,11 +196,17 @@ legend(h, [num2str(change_percentage*100) '% Decrease'], 'Nominal Value', [num2s
 %Apply axis labels
 xlabel('Pgrid [MW]')
 ylabel('Qgrid [MVAR]')
-if varying == 0
-    title('Single-Phase Two-Arm (V_{GRID} Changed)')
+if halfbridge == 1
+    halfbridge_text = ' Half-Bridge ';
 else
-    title('Single-Phase Two-Arm (V_{HVDC} Changed)')
+    halfbridge_text = ' Full-Bridge ';
 end
+if varying == 1
+    varying_text = '(V_{HVDC} Changed)';
+else
+    varying_text = '(V_{GRID} Changed)';
+end
+title(['Single-Phase Two-Arm' halfbridge_text varying_text])
 
 %Adds textbox with nominal operating conditions
 msg_Pconu = ['Pconu = ' num2str(Pconu/1e6) ' MW'];
@@ -215,8 +221,7 @@ msg_Idc = ['Idcdif ref = ' num2str(idcdif_ref) ' A'];
 msg_Iac = ['Im(Iacsum) ref = ' num2str(imiacsum_ref) ' A'];
 msg_Vlim = ['Voltage Limit = ' num2str(voltage_lim/1e3) ' kV'];
 msg_Ilim = ['Current Limit = ' num2str(current_lim) ' A'];
-msg_half = ['Halfbridge = ' num2str(halfbridge)];
-msg = {msg_Pconu msg_Pconl msg_Vgrid msg_Vhvdc msg_Xarm msg_Xl msg_Rl msg_R msg_Idc msg_Iac msg_Vlim msg_Ilim msg_half};
+msg = {msg_Pconu msg_Pconl msg_Vgrid msg_Vhvdc msg_Xarm msg_Xl msg_Rl msg_R msg_Idc msg_Iac msg_Vlim msg_Ilim};
 annotation('textbox', [.131 .131 .795 .795],'String',msg,'FitBoxToText','on');
 
 

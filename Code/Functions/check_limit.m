@@ -1,9 +1,8 @@
 %Checks for the converter's limitations
-%0 = Fail
 function pass = check_limit(ac, dc, rated, halfbridge)
     if (abs(ac)*sqrt(2) + abs(dc) >= rated) || ((abs(dc) - abs(ac)*sqrt(2) < 0) && halfbridge)
-        pass = 1;
+        pass = true;
     else
-        pass = 0;
+        pass = false;
     end
 end
