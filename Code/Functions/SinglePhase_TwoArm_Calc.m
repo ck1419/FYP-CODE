@@ -34,7 +34,7 @@ function final = SinglePhase_TwoArm_Calc(in, max_iteration, tolerance, R, Rl, Xl
 
         %approximates idcsum, helps with converging speed massively
         if n == 3
-            idcsum_candidates = roots([R -vhvdc (revacdif*reiacdif + imvacdif*imiacdif)]);
+            idcsum_candidates = real(roots([R -vhvdc (revacdif*reiacdif + imvacdif*imiacdif)]));
             idcsum = min(idcsum_candidates);
         end
 

@@ -25,7 +25,7 @@ function final = SinglePhase_SingleArm_Calc(in, max_iteration, tolerance, Pcon, 
 
         %approximates idc, helps with converging speed massively
         if n == 3
-            idc_candidates = roots([R -Vhvdc (revac*reiac + imvac*imiac)]);
+            idc_candidates = real(roots([R -Vhvdc (revac*reiac + imvac*imiac)]));
             idc = min(idc_candidates);
         end
 

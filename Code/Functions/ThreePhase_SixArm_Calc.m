@@ -121,11 +121,11 @@ function final = ThreePhase_SixArm_Calc(in, max_iteration, tolerance, R, Rl, Xl,
 
         %approximates idcsum, helps with converging speed massively
         if n == 3
-            idcsum_a_candidates = roots([R -vhvdc (revacdif_a*reiacdif_a + imvacdif_a*imiacdif_a)]);
+            idcsum_a_candidates = real(roots([R -vhvdc (revacdif_a*reiacdif_a + imvacdif_a*imiacdif_a)]));
             idcsum_a = min(idcsum_a_candidates);
-            idcsum_b_candidates = roots([R -vhvdc (revacdif_b*reiacdif_b + imvacdif_b*imiacdif_b)]);
+            idcsum_b_candidates = real(roots([R -vhvdc (revacdif_b*reiacdif_b + imvacdif_b*imiacdif_b)]));
             idcsum_b = min(idcsum_b_candidates);
-            idcsum_c_candidates = roots([R -vhvdc (revacdif_c*reiacdif_c + imvacdif_c*imiacdif_c)]);
+            idcsum_c_candidates = real(roots([R -vhvdc (revacdif_c*reiacdif_c + imvacdif_c*imiacdif_c)]));
             idcsum_c = min(idcsum_c_candidates);
         end
 
