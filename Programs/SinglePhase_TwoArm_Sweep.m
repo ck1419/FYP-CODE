@@ -36,7 +36,7 @@ min_magnitude = 0;
 max_magnitude = 800*1e6;
 change_percentage = 0.1;
 varying = 0; %Vgrid = 0; Vhvdc = 1;
-halfbridge = 1; %fullbridge = 0; halfbridge = 1;
+halfbridge = 0; %fullbridge = 0; halfbridge = 1;
 
 
 %% NEWTON-RHAPSON SWEEP
