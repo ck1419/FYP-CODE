@@ -1,3 +1,5 @@
+%% STARTUP
+
 clear
 clc
 
@@ -7,8 +9,10 @@ syms vgrid_RE_c vgrid_IM_c pconu_c pconl_c pgrid_c qgrid_c idcdif_ref_c imiacsum
 syms vdcsum_a vdcdif_a idcdif_a idcsum_a revacsum_a imvacsum_a revacdif_a imvacdif_a reiacsum_a imiacsum_a reiacdif_a imiacdif_a
 syms vdcsum_b vdcdif_b idcdif_b idcsum_b revacsum_b imvacsum_b revacdif_b imvacdif_b reiacsum_b imiacsum_b reiacdif_b imiacdif_b
 syms vdcsum_c vdcdif_c idcdif_c idcsum_c revacsum_c imvacsum_c revacdif_c imvacdif_c reiacsum_c imiacsum_c reiacdif_c imiacdif_c
-
 state_variables = [vdcsum_a vdcdif_a idcdif_a idcsum_a revacsum_a imvacsum_a revacdif_a imvacdif_a reiacsum_a imiacsum_a reiacdif_a imiacdif_a vdcsum_b vdcdif_b idcdif_b idcsum_b revacsum_b imvacsum_b revacdif_b imvacdif_b reiacsum_b imiacsum_b reiacdif_b imiacdif_b vdcsum_c vdcdif_c idcdif_c idcsum_c revacsum_c imvacsum_c revacdif_c imvacdif_c reiacsum_c imiacsum_c reiacdif_c imiacdif_c];
+
+
+%% CHANGE THESE TO MAKE NEW JACOBIAN
 
 fx(1) = vdcsum_a + (idcsum_a * R) - vhvdc;
 fx(2) = vdcdif_a - (idcdif_a * Rl);
@@ -46,6 +50,9 @@ fx(33) = (-vdcdif_c + vdcsum_c/2)*(idcdif_c/2 + idcsum_c) - revacdif_c*(reiacdif
 fx(34) = (vdcdif_c + vdcsum_c/2)*(-idcdif_c/2 + idcsum_c) + revacdif_c*(-reiacdif_c/2+reiacsum_c) + imvacdif_c*(-imiacdif_c/2+imiacsum_c) + 0.5*revacsum_c*(-reiacdif_c/2+reiacsum_c) + 0.5*imvacsum_c*(-imiacdif_c/2+imiacsum_c) - pconl_c;    
 fx(35) = idcdif_c - idcdif_ref_c;
 fx(36) = imiacsum_c - imiacsum_ref_c;
+
+
+%% OUTPUT JACOBIAN
 
 out = jacobian(fx, state_variables);
 disp(out)

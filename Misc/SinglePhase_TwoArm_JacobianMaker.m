@@ -1,10 +1,14 @@
+%% STARTUP
+
 clear
 clc
 
 syms in R Rl Xl Xarm vhvdc vgrid pconu pconl sgrid idcdif_ref imiacsum_ref vgrid_RE vgrid_IM pgrid qgrid
 syms vdcsum vdcdif idcdif idcsum revacsum imvacsum revacdif imvacdif reiacsum imiacsum reiacdif imiacdif 
-
 state_variables = [vdcsum vdcdif idcdif idcsum revacsum imvacsum revacdif imvacdif reiacsum imiacsum reiacdif imiacdif];
+
+
+%% CHANGE THESE TO MAKE NEW JACOBIAN
 
 fx(1) = vdcsum + (idcsum * R) - vhvdc;
 fx(2) = vdcdif - (idcdif * Rl);
@@ -19,6 +23,8 @@ fx(10) = (vdcdif + vdcsum/2)*(-idcdif/2 + idcsum) + revacdif*(-reiacdif/2+reiacs
 fx(11) = idcdif - idcdif_ref;
 fx(12) = imiacsum - imiacsum_ref;
 
-out = jacobian(fx, state_variables);
 
+%% OUTPUT JACOBIAN
+
+out = jacobian(fx, state_variables);
 disp(out)
