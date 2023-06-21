@@ -46,13 +46,13 @@ voltage_lim = 1200e3;
 current_lim = 1800;
 
 %Sweep Settings
-angle_size = 0.5;
-magnitude_steps = 750;
+angle_size = 2;
+magnitude_steps = 100;
 min_magnitude = 0*1e6;
-max_magnitude = 2200*1e6;
+max_magnitude = 3000*1e6;
 change_percentage = 0.25;
-varying = 1; %Vgrid = 0; Vhvdc = 1;
-halfbridge = 0; %fullbridge = 0; halfbridge = 1;
+varying = 0; %Vgrid = 0; Vhvdc = 1;
+halfbridge = 1; %fullbridge = 0; halfbridge = 1;
 
 
 %% PRE-SWEEP CALCULATIONS
